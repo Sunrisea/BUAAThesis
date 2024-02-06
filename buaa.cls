@@ -548,7 +548,7 @@
 \newcommand{\TranDegree}[1]{%职称翻译
   \frenchspacing
   \ifthenelse{\equal{#1}{教授}}{Prof.}{%
-  \ifthenelse{\equal{#1}{副教授}}{Prof.}{%
+  \ifthenelse{\equal{#1}{副教授}}{Assoc. Prof.}{%
   \ifthenelse{\equal{#1}{讲师}}{Teacher}{%
   \ifthenelse{\equal{#1}{高工}}{Engineer}{%
   \ifthenelse{\equal{#1}{研究员}}{Researcher}{%

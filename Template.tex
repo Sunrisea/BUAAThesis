@@ -77,7 +77,7 @@
 
 % !TeX program = xelatex
 
-\documentclass[master,privacy,twoside,win]{buaa}
+\documentclass[master,privacy,oneside,win]{buaa}
 
 %=================================================================
 % 开启/关闭引用编号颜色：参考文献，公式，图，表，算法 等……
@@ -85,7 +85,7 @@
 % 摘要和正文从右侧页开始
 \beginright{off} % 开启: on[默认]; 关闭: off;
 % 空白页留字
-\emptypagewords{[ -- This page is a preset empty page -- ]}
+% \emptypagewords{[ -- This page is a preset empty page -- ]}
 
 %=================================================================
 % buaa模板已内嵌以下LaTeX工具包:
@@ -115,34 +115,34 @@
 
 %%=================================================================
 % 论文题目及副标题-{中文}{英文}
-\Title{北航硕博士学位论文~\LaTeX{}模板\BUAAThesis{}}{\LaTeX{} Template of Beihang University Thesis \BUAAThesis{}}
-\Subtitle{版本 \BUAAThesisVer{}}{Version \BUAAThesisVer{}}
+\Title{基于Transformer的知识图谱补全算法研究}{Research of Knowledge Graph Completion Algorithm Based on Transformer}
+% \Subtitle{版本 \BUAAThesisVer{}}{Version \BUAAThesisVer{}}
 
 % 学科大类,默认工学
 % \Branch{工学}
 
 % 院系,专业及研究方向
-\Department{宇航学院}
-\Major{控制科学与工程}
-\Feild{模式识别与智能系统}
+\Department{软件学院}
+\Major{软件工程}
+\Feild{软件工程}
 
 % 导师信息-{中文名}{英文名}{职称}
-\Tutor{导师姓名}{Tutor}{教授}
-\Cotutor{副导师姓名}{Cotutor}{高工}
+\Tutor{谭火彬}{Tan Huobin}{副教授}
+% \Cotutor{副导师姓名}{Cotutor}{高工}
 
 % 学生姓名-{中文名}{英文名}
-\Author{学生姓名}{Student}
+\Author{朱桐}{Zhu Tong}
 % 学生学号
-\StudentID{ID123456}
+\StudentID{SY2121127}
 
 % 中图分类号
 \CLC{TP391.4}
 
 % 时间节点-{月}{日}{年}
-\DateEnroll{09}{01}{2015}
-\DateGraduate{03}{31}{2018}
-\DateSubmit{01}{10}{2018}
-\DateDefence{03}{01}{2018}
+\DateEnroll{09}{01}{2021}
+\DateGraduate{05}{16}{2024}
+\DateSubmit{01}{10}{2024}
+\DateDefence{03}{01}{2024}
 
 %%=================================================================
 % 摘要-{中文}{英文}
@@ -202,6 +202,8 @@
 %%=================================================================
 
 % 绪论
+\input{tex/chap_introduction}
+
 \input{tex/chap_intro}
 
 % 说明
