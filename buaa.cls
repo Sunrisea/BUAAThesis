@@ -400,7 +400,7 @@
   aboveskip=6pt, belowskip=-15pt, justification=centerlast}
 \captionsetup[table]{
   position=top, margin=0mm, format=tabfigformat,
-  aboveskip=0pt, belowskip=0pt, justification=centerlast}
+  aboveskip=6pt, belowskip=0pt, justification=centerlast}
 
 \captionsetup[figure][bi-first]{name=图}      %设置图的中文前缀
 \captionsetup[table][bi-first]{name=表}       %设置表的中文前缀
@@ -412,7 +412,7 @@
   aboveskip=6pt, belowskip=-15pt, justification=centerlast}
 \captionsetup[table][bi]{
   position=top, margin=0mm, format=tabfigformat,
-  aboveskip=0pt, belowskip=0pt, justification=centerlast}
+  aboveskip=6pt, belowskip=0pt, justification=centerlast}
 
 %出现在页面中间的浮动对象与上下方文本之间的垂直距离
 %缺省为 12pt plus 2pt minus 2pt。
