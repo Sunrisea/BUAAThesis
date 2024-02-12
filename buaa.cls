@@ -396,11 +396,11 @@
 \DeclareCaptionFormat{tabfigformat}{\bf\songti\zihao{5}{#1~~#3}}
 
 \captionsetup[figure]{
-  position=bottom, margin=0mm, format=tabfigformat,
-  aboveskip=6pt, belowskip=-15pt, justification=centerlast}
+  position=bottom,  format=tabfigformat,
+   justification=centerlast}
 \captionsetup[table]{
-  position=top, margin=0mm, format=tabfigformat,
-  aboveskip=6pt, belowskip=0pt, justification=centerlast}
+  position=top,  format=tabfigformat,
+   justification=centerlast}
 
 \captionsetup[figure][bi-first]{name=图}      %设置图的中文前缀
 \captionsetup[table][bi-first]{name=表}       %设置表的中文前缀
@@ -408,11 +408,11 @@
 \captionsetup[table][bi-second]{name=Tab.}   %设置表的英文前缀
 
 \captionsetup[figure][bi]{
-  position=bottom, margin=0mm, format=tabfigformat,
-  aboveskip=6pt, belowskip=-15pt, justification=centerlast}
+  position=bottom,  format=tabfigformat,
+  justification=centerlast}
 \captionsetup[table][bi]{
-  position=top, margin=0mm, format=tabfigformat,
-  aboveskip=6pt, belowskip=0pt, justification=centerlast}
+  position=top,  format=tabfigformat,
+   justification=centerlast}
 
 %出现在页面中间的浮动对象与上下方文本之间的垂直距离
 %缺省为 12pt plus 2pt minus 2pt。
