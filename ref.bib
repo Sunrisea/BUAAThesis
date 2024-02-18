@@ -1,82 +1,746 @@
-@article{Ruel_2012,
-    author  = {Ruel, StÃ©phane and Luu, Tim and Berube, Andrew},
-    title   = {Space shuttle testing of the TriDAR 3D rendezvous and docking sensor},
-    journal = {Journal of Field robotics},
-    volume  = {29},
-    number  = {4},
-    pages   = {535-553},
-    ISSN    = {1556-4967},
-    year    = {2012},
-    type    = {Journal Article}
+@misc{googlekg,
+  author   = {Amit Singhal},
+  title    = {Introducing the knowledge graph: things, not strings},
+  url      = {https://www.blog.google/products/search/introducing-knowledge-graph-things-not/},
+  year     = {2012},
+  citedate = {1922}
 }
 
-@article{knuth84,
-  author    = {Donald E. Knuth},
-  title     = {Literate Programming},
-  journal   = {The Computer Journal},
-  year      = {1984},
+@article{Wikidata,
+  author     = {Vrande\v{c}i\'{c}, Denny and Kr\"{o}tzsch, Markus},
+  title      = {Wikidata: a free collaborative knowledgebase},
+  year       = {2014},
+  issue_date = {October 2014},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {57},
+  number     = {10},
+  issn       = {0001-0782},
+  abstract   = {This collaboratively edited knowledgebase provides a common source of data for Wikipedia, and everyone else.},
+  journal    = {Commun. ACM},
+  month      = {sep},
+  pages      = {78–85},
+  numpages   = {8}
+}
+
+@@inproceedings{yuyisousuo,
+  author    = {Xiong, Chenyan and Power, Russell and Callan, Jamie},
+  title     = {Explicit Semantic Ranking for Academic Search via Knowledge Graph Embedding},
+  year      = {2017},
+  isbn      = {9781450349130},
+  publisher = {International World Wide Web Conferences Steering Committee},
+  address   = {Republic and Canton of Geneva, CHE},
+  abstract  = {This paper introduces Explicit Semantic Ranking (ESR), a new ranking technique that leverages knowledge graph embedding. Analysis of the query log from our academic search engine, SemanticScholar.org, reveals that a major error source is its inability to understand the meaning of research concepts in queries. To addresses this challenge, ESR represents queries and documents in the entity space and ranks them based on their semantic connections from their knowledge graph embedding. Experiments demonstrate ESR's ability in improving Semantic Scholar's online production system, especially on hard queries where word-based ranking fails.},
+  booktitle = {Proceedings of the 26th International Conference on World Wide Web},
+  pages     = {1271–1279},
+  numpages  = {9},
+  keywords  = {academic search, entity-based ranking, knowledge graph},
+  location  = {Perth, Australia},
+  series    = {WWW '17}
+}
+
+@inproceedings{wenda,
+  author    = {Kaiser, Magdalena and Saha Roy, Rishiraj and Weikum, Gerhard},
+  title     = {Reinforcement Learning from Reformulations in Conversational Question Answering over Knowledge Graphs},
+  year      = {2021},
+  isbn      = {9781450380379},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {The rise of personal assistants has made conversational question answering (ConvQA) a very popular mechanism for user-system interaction. State-of-the-art methods for ConvQA over knowledge graphs (KGs) can only learn from crisp question-answer pairs found in popular benchmarks. In reality, however, such training data is hard to come by: users would rarely mark answers explicitly as correct or wrong. In this work, we take a step towards a more natural learning paradigm - from noisy and implicit feedback via question reformulations. A reformulation is likely to be triggered by an incorrect system response, whereas a new follow-up question could be a positive signal on the previous turn's answer. We present a reinforcement learning model, termed CONQUER, that can learn from a conversational stream of questions and reformulations. CONQUER models the answering process as multiple agents walking in parallel on the KG, where the walks are determined by actions sampled using a policy network. This policy network takes the question along with the conversational context as inputs and is trained via noisy rewards obtained from the reformulation likelihood. To evaluate CONQUER, we create and release ConvRef, a benchmark with about 11k natural conversations containing around 205k reformulations. Experiments show that CONQUER successfully learns from noisy reward signals, significantly improving over a state-of-the-art baseline.},
+  booktitle = {Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages     = {459–469},
+  numpages  = {11},
+  keywords  = {question answering, knowledge graphs, feedback, conversations},
+  location  = {<conf-loc>, <city>Virtual Event</city>, <country>Canada</country>, </conf-loc>},
+  series    = {SIGIR '21}
+}
+
+@inproceedings{recommendation_system,
+  author    = {Wang, Xiang and Huang, Tinglin and Wang, Dingxian and Yuan, Yancheng and Liu, Zhenguang and He, Xiangnan and Chua, Tat-Seng},
+  title     = {Learning Intents behind Interactions with Knowledge Graph for Recommendation},
+  year      = {2021},
+  isbn      = {9781450383127},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {Knowledge graph (KG) plays an increasingly important role in recommender systems. A recent technical trend is to develop end-to-end models founded on graph neural networks (GNNs). However, existing GNN-based models are coarse-grained in relational modeling, failing to (1) identify user-item relation at a fine-grained level of intents, and (2) exploit relation dependencies to preserve the semantics of long-range connectivity. In this study, we explore intents behind a user-item interaction by using auxiliary item knowledge, and propose a new model, Knowledge Graph-based Intent Network (KGIN). Technically, we model each intent as an attentive combination of KG relations, encouraging the independence of different intents for better model capability and interpretability. Furthermore, we devise a new information aggregation scheme for GNN, which recursively integrates the relation sequences of long-range connectivity (i.e., relational paths). This scheme allows us to distill useful information about user intents and encode them into the representations of users and items. Experimental results on three benchmark datasets show that, KGIN achieves significant improvements over the state-of-the-art methods like KGAT&nbsp;[41], KGNN-LS&nbsp;[38], and CKAN&nbsp;[47]. Further analyses show that KGIN offers interpretable explanations for predictions by identifying influential intents and relational paths. The implementations are available at https://github.com/huangtinglin/Knowledge_Graph_based_Intent_Network.},
+  booktitle = {Proceedings of the Web Conference 2021},
+  pages     = {878–887},
+  numpages  = {10},
+  keywords  = {Graph Neural Networks, Knowledge Graph, Recommendation},
+  location  = {Ljubljana, Slovenia},
+  series    = {WWW '21}
+}
+
+@inproceedings{freebase,
+  author    = {Bollacker, Kurt and Evans, Colin and Paritosh, Praveen and Sturge, Tim and Taylor, Jamie},
+  title     = {Freebase: a collaboratively created graph database for structuring human knowledge},
+  year      = {2008},
+  isbn      = {9781605581026},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {Freebase is a practical, scalable tuple database used to structure general human knowledge. The data in Freebase is collaboratively created, structured, and maintained. Freebase currently contains more than 125,000,000 tuples, more than 4000 types, and more than 7000 properties. Public read/write access to Freebase is allowed through an HTTP-based graph-query API using the Metaweb Query Language (MQL) as a data query and manipulation language. MQL provides an easy-to-use object-oriented interface to the tuple data in Freebase and is designed to facilitate the creation of collaborative, Web-based data-oriented applications.},
+  booktitle = {Proceedings of the 2008 ACM SIGMOD International Conference on Management of Data},
+  pages     = {1247–1250},
+  numpages  = {4},
+  keywords  = {tuple store, semantic network, collaborative systems},
+  location  = {Vancouver, Canada},
+  series    = {SIGMOD '08}
+}
+
+@article{DBpedia,
+  author    = {Jens Lehmann and
+               Robert Isele and
+               Max Jakob and
+               Anja Jentzsch and
+               Dimitris Kontokostas and
+               Pablo N. Mendes and
+               Sebastian Hellmann and
+               Mohamed Morsey and
+               Patrick van Kleef and
+               S{\"{o}}ren Auer and
+               Christian Bizer},
+  title     = {DBpedia - {A} large-scale, multilingual knowledge base extracted from
+               Wikipedia},
+  journal   = {Semantic Web},
+  volume    = {6},
   number    = {2},
-  volume    = {27},
-  pages     = {97--111},
+  pages     = {167--195},
+  year      = {2015},
+  timestamp = {Wed, 07 Dec 2022 23:03:27 +0100},
+  biburl    = {https://dblp.org/rec/journals/semweb/LehmannIJJKMHMK15.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@book{knuth86a,
-  author    = {Donald E. Knuth},
-  title     = {The {\TeX}book},
-  volume    = {A},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA, USA},
-  year      = {1986},
-  series    = {Computers and Typesetting},
+@inproceedings{YAGO,
+  author    = {Suchanek, Fabian M. and Kasneci, Gjergji and Weikum, Gerhard},
+  title     = {Yago: a core of semantic knowledge},
+  year      = {2007},
+  isbn      = {9781595936547},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {We present YAGO, a light-weight and extensible ontology with high coverage and quality. YAGO builds on entities and relations and currently contains more than 1 million entities and 5 million facts. This includes the Is-A hierarchy as well as non-taxonomic relations between entities (such as HASONEPRIZE). The facts have been automatically extracted from Wikipedia and unified with WordNet, using a carefully designed combination of rule-based and heuristic methods described in this paper. The resulting knowledge base is a major step beyond WordNet: in quality by adding knowledge about individuals like persons, organizations, products, etc. with their semantic relationships - and in quantity by increasing the number of facts by more than an order of magnitude. Our empirical evaluation of fact correctness shows an accuracy of about 95\%. YAGO is based on a logically clean model, which is decidable, extensible, and compatible with RDFS. Finally, we show how YAGO can be further extended by state-of-the-art information extraction techniques.},
+  booktitle = {Proceedings of the 16th International Conference on World Wide Web},
+  pages     = {697–706},
+  numpages  = {10},
+  keywords  = {wikipedia, WordNet},
+  location  = {Banff, Alberta, Canada},
+  series    = {WWW '07}
 }
 
-@book{lamport94,
-  author    = {Leslie Lamport},
-  title     = {{\LaTeX}: a Document Preparation System},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA, USA},
-  edition   = {2},
-  year      = {1994},
+@inproceedings{TransE,
+  author    = {Bordes, Antoine and Usunier, Nicolas and Garcia-Dur\'{a}n, Alberto and Weston, Jason and Yakhnenko, Oksana},
+  title     = {Translating embeddings for modeling multi-relational data},
+  year      = {2013},
+  publisher = {Curran Associates Inc.},
+  address   = {Red Hook, NY, USA},
+  abstract  = {We consider the problem of embedding entities and relationships of multi-relational data in low-dimensional vector spaces. Our objective is to propose a canonical model which is easy to train, contains a reduced number of parameters and can scale up to very large databases. Hence, we propose TransE, a method which models relationships by interpreting them as translations operating on the low-dimensional embeddings of the entities. Despite its simplicity, this assumption proves to be powerful since extensive experiments show that TransE significantly outperforms state-of-the-art methods in link prediction on two knowledge bases. Besides, it can be successfully trained on a large scale data set with 1M entities, 25k relationships and more than 17M training samples.},
+  booktitle = {Proceedings of the 26th International Conference on Neural Information Processing Systems - Volume 2},
+  pages     = {2787–2795},
+  numpages  = {9},
+  location  = {Lake Tahoe, Nevada},
+  series    = {NIPS'13}
 }
 
-@book{tlc2,
-  author    = {Frank Mittelbach and Michel Goossens and Johannes
-                 Braams and David Carlisle},
-  title     = {The {\LaTeX} Companion},
-  publisher = {Addison-Wesley},
-  address   = {Reading, MA, USA},
-  edition   = {2},
-  year      = {2004},
+@inproceedings{RESCAL,
+  author    = {Nickel, Maximilian and Tresp, Volker and Kriegel, Hans-Peter},
+  title     = {A three-way model for collective learning on multi-relational data},
+  year      = {2011},
+  isbn      = {9781450306195},
+  publisher = {Omnipress},
+  address   = {Madison, WI, USA},
+  abstract  = {Relational learning is becoming increasingly important in many areas of application. Here, we present a novel approach to relational learning based on the factorization of a three-way tensor. We show that unlike other tensor approaches, our method is able to perform collective learning via the latent components of the model and provide an efficient algorithm to compute the factorization. We substantiate our theoretical considerations regarding the collective learning capabilities of our model by the means of experiments on both a new dataset and a dataset commonly used in entity resolution. Furthermore, we show on common benchmark datasets that our approach achieves better or on-par results, if compared to current state-of-the-art relational learning solutions, while it is significantly faster to compute.},
+  booktitle = {Proceedings of the 28th International Conference on International Conference on Machine Learning},
+  pages     = {809–816},
+  numpages  = {8},
+  location  = {Bellevue, Washington, USA},
+  series    = {ICML'11}
 }
 
-@article{twh,
-  author    = {{The White House}},
-  journal   = {Technology for Economic Growth},
-  address   = {Washington},
-  year      = {1993},
+
+@inproceedings{ConvE,
+  author    = {Dettmers, Tim and Minervini, Pasquale and Stenetorp, Pontus and Riedel, Sebastian},
+  title     = {Convolutional 2D knowledge graph embeddings},
+  year      = {2018},
+  isbn      = {978-1-57735-800-8},
+  publisher = {AAAI Press},
+  abstract  = {Link prediction for knowledge graphs is the task of predicting missing relationships between entities. Previous work on link prediction has focused on shallow, fast models which can scale to large knowledge graphs. However, these models learn less expressive features than deep, multi-layer models-which potentially limits performance. In this work we introduce ConvE, a multi-layer convolutional network model for link prediction, and report state-of-the-art results for several established datasets. We also show that the model is highly parameter efficient, yielding the same performance as DistMult and R-GCN with 8x and 17x fewer parameters. Analysis of our model suggests that it is particularly effective at modelling nodes with high indegree - which are common in highly-connected, complex knowledge graphs such as Freebase and YAGO3. In addition, it has been noted that the WN18 and FB15k datasets suffer from test set leakage, due to inverse relations from the training set being present in the test set -however, the extent of this issue has so far not been quantified. We find this problem to be severe: a simple rule-based model can achieve state-of-the-art results on both WN18 and FB15k. To ensure that models are evaluated on datasets where simply exploiting inverse relations cannot yield competitive results, we investigate and validate several commonly used datasets - deriving robust variants where necessary. We then perform experiments on these robust datasets for our own and several previously proposed models, and find that ConvE achieves state-of-the-art Mean Reciprocal Rank across all datasets.},
+  booktitle = {Proceedings of the Thirty-Second AAAI Conference on Artificial Intelligence and Thirtieth Innovative Applications of Artificial Intelligence Conference and Eighth AAAI Symposium on Educational Advances in Artificial Intelligence},
+  articleno = {221},
+  numpages  = {8},
+  location  = {New Orleans, Louisiana, USA},
+  series    = {AAAI'18/IAAI'18/EAAI'18}
 }
 
-@article{huston,
-  author    = {Hutson, J M},
-  journal   = {J. Phys. Chem.},
-  year      = {1992},
-  volume    = {96},
-  pages     = {4237},
+@inproceedings{R-GCN,
+  author    = {Schlichtkrull, Michael and Kipf, Thomas N. and Bloem, Peter and van&nbsp;den Berg, Rianne and Titov, Ivan and Welling, Max},
+  title     = {Modeling Relational Data with Graph Convolutional Networks},
+  year      = {2018},
+  isbn      = {978-3-319-93416-7},
+  publisher = {Springer-Verlag},
+  address   = {Berlin, Heidelberg},
+  abstract  = {Knowledge graphs enable a wide variety of applications, including question answering and information retrieval. Despite the great effort invested in their creation and maintenance, even the largest (e.g., Yago, DBPedia or Wikidata) remain incomplete. We introduce Relational Graph Convolutional Networks (R-GCNs) and apply them to two standard knowledge base completion tasks: Link prediction (recovery of missing facts, i.e.&nbsp;subject-predicate-object triples) and entity classification (recovery of missing entity attributes). R-GCNs are related to a recent class of neural networks operating on graphs, and are developed specifically to handle the highly multi-relational data characteristic of realistic knowledge bases. We demonstrate the effectiveness of R-GCNs as a stand-alone model for entity classification. We further show that factorization models for link prediction such as DistMult can be significantly improved through the use of an R-GCN encoder model to accumulate evidence over multiple inference steps in the graph, demonstrating a large improvement of 29.8\% on FB15k-237 over a decoder-only baseline.},
+  booktitle = {The Semantic Web: 15th International Conference, ESWC 2018, Heraklion, Crete, Greece, June 3–7, 2018, Proceedings},
+  pages     = {593–607},
+  numpages  = {15},
+  location  = {Heraklion, Greece}
 }
 
-@article{zhangzhiqiang2013,
-title={众包质量控制策略及评估算法研究},
-author={张志强 and 逄居升 and 谢晓芹 and 周永},
-journal={计算机学报},
-volume={36},
-number={8},
-pages={1636-1649},
-year={2013},
+@inproceedings{KBGAT,
+  title     = {Learning Attention-based Embeddings for Relation Prediction in Knowledge Graphs},
+  author    = {Nathani, Deepak  and
+               Chauhan, Jatin  and
+               Sharma, Charu  and
+               Kaul, Manohar},
+  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
+  month     = jul,
+  year      = {2019},
+  address   = {Florence, Italy},
+  publisher = {Association for Computational Linguistics},
+  pages     = {4710--4723},
+  abstract  = {The recent proliferation of knowledge graphs (KGs) coupled with incomplete or partial information, in the form of missing relations (links) between entities, has fueled a lot of research on knowledge base completion (also known as relation prediction). Several recent works suggest that convolutional neural network (CNN) based models generate richer and more expressive feature embeddings and hence also perform well on relation prediction. However, we observe that these KG embeddings treat triples independently and thus fail to cover the complex and hidden information that is inherently implicit in the local neighborhood surrounding a triple. To this effect, our paper proposes a novel attention-based feature embedding that captures both entity and relation features in any given entity{'}s neighborhood. Additionally, we also encapsulate relation clusters and multi-hop relations in our model. Our empirical study offers insights into the efficacy of our attention-based model and we show marked performance gains in comparison to state-of-the-art methods on all datasets.}
 }
-@misc{db,
-  author={王明亮},
-  title = {中国学系统工程的},
-  url={http://www.cajcd.cn/put/980810-2.html},
-  year = {1998},
-  citedate = {1922},
+
+@article{over-smoothing,
+  title        = {Measuring and Relieving the Over-Smoothing Problem for Graph Neural Networks from the Topological View},
+  volume       = {34},
+  abstractnote = {&lt;p&gt;Graph Neural Networks (GNNs) have achieved promising performance on a wide range of graph-based tasks. Despite their success, one severe limitation of GNNs is the over-smoothing issue (indistinguishable representations of nodes in different classes). In this work, we present a systematic and quantitative study on the over-smoothing issue of GNNs. First, we introduce two quantitative metrics, MAD and MADGap, to measure the smoothness and over-smoothness of the graph nodes representations, respectively. Then, we verify that smoothing is the nature of GNNs and the critical factor leading to over-smoothness is the low information-to-noise ratio of the message received by the nodes, which is partially determined by the graph topology. Finally, we propose two methods to alleviate the over-smoothing issue from the topological view: (1) MADReg which adds a MADGap-based regularizer to the training objective; (2) AdaEdge which optimizes the graph topology based on the model predictions. Extensive experiments on 7 widely-used graph datasets with 10 typical GNN models show that the two proposed methods are effective for relieving the over-smoothing issue, thus improving the performance of various GNN models.&lt;/p&gt;},
+  number       = {04},
+  journal      = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  author       = {Chen, Deli and Lin, Yankai and Li, Wei and Li, Peng and Zhou, Jie and Sun, Xu},
+  year         = {2020},
+  month        = {Apr.},
+  pages        = {3438-3445}
+}
+
+@inproceedings{TransH,
+  author    = {Wang, Zhen and Zhang, Jianwen and Feng, Jianlin and Chen, Zheng},
+  title     = {Knowledge graph embedding by translating on hyperplanes},
+  year      = {2014},
+  publisher = {AAAI Press},
+  abstract  = {We deal with embedding a large scale knowledge graph composed of entities and relations into a continuous vector space. TransE is a promising method proposed recently, which is very efficient while achieving state-of-the-art predictive performance. We discuss some mapping properties of relations which should be considered in embedding, such as reflexive, one-to-many, many-to-one, and many-to-many. We note that TransE does not do well in dealing with these properties. Some complex models are capable of preserving these mapping properties but sacrifice efficiency in the process. To make a good trade-off between model capacity and efficiency, in this paper we propose TransH which models a relation as a hyperplane together with a translation operation on it. In this way, we can well preserve the above mapping properties of relations with almost the same model complexity of TransE. Additionally, as a practical knowledge graph is often far from completed, how to construct negative examples to reduce false negative labels in training is very important. Utilizing the one-to-many/many-to-one mapping property of a relation, we propose a simple trick to reduce the possibility of false negative labeling. We conduct extensive experiments on link prediction, triplet classification and fact extraction on benchmark datasets like WordNet and Freebase. Experiments show TransH delivers significant improvements over TransE on predictive accuracy with comparable capability to scale up.},
+  booktitle = {Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence},
+  pages     = {1112–1119},
+  numpages  = {8},
+  location  = {Qu\'{e}bec City, Qu\'{e}bec, Canada},
+  series    = {AAAI'14}
+}
+
+@inproceedings{TransR,
+  author    = {Lin, Yankai and Liu, Zhiyuan and Sun, Maosong and Liu, Yang and Zhu, Xuan},
+  title     = {Learning entity and relation embeddings for knowledge graph completion},
+  year      = {2015},
+  isbn      = {0262511290},
+  publisher = {AAAI Press},
+  abstract  = {Knowledge graph completion aims to perform link prediction between entities. In this paper, we consider the approach of knowledge graph embeddings. Recently, models such as TransE and TransH build entity and relation embeddings by regarding a relation as translation from head entity to tail entity. We note that these models simply put both entities and relations within the same semantic space. In fact, an entity may have multiple aspects and various relations may focus on different aspects of entities, which makes a common space insufficient for modeling. In this paper, we propose TransR to build entity and relation embeddings in separate entity space and relation spaces. Afterwards, we learn embeddings by first projecting entities from entity space to corresponding relation space and then building translations between projected entities. In experiments, we evaluate our models on three tasks including link prediction, triple classification and relational fact extraction. Experimental results show significant and consistent improvements compared to state-of-the-art baselines including TransE and TransH. The source code of this paper can be obtained from https://github.com/mrlyk423/relation_extraction.},
+  booktitle = {Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  pages     = {2181–2187},
+  numpages  = {7},
+  location  = {Austin, Texas},
+  series    = {AAAI'15}
+}
+
+@inproceedings{TransD,
+  title     = {Knowledge Graph Embedding via Dynamic Mapping Matrix},
+  author    = {Ji, Guoliang  and
+               He, Shizhu  and
+               Xu, Liheng  and
+               Liu, Kang  and
+               Zhao, Jun},
+  booktitle = {Proceedings of the 53rd Annual Meeting of the Association for Computational Linguistics and the 7th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2015},
+  address   = {Beijing, China},
+  publisher = {Association for Computational Linguistics},
+  pages     = {687--696}
+}
+
+@article{DistMult,
+  title   = {Embedding Entities and Relations for Learning and Inference in Knowledge Bases},
+  author  = {Bishan Yang and Wen-tau Yih and Xiaodong He and Jianfeng Gao and Li Deng},
+  journal = {CoRR},
+  year    = {2014},
+  volume  = {abs/1412.6575}
+}
+
+@inproceedings{ComplEx,
+  author    = {Trouillon, Th\'{e}o and Welbl, Johannes and Riedel, Sebastian and Gaussier, \'{E}ric and Bouchard, Guillaume},
+  title     = {Complex embeddings for simple link prediction},
+  year      = {2016},
+  abstract  = {In statistical relational learning, the link prediction problem is key to automatically understand the structure of large knowledge bases. As in previous studies, we propose to solve this problem through latent factorization. However, here we make use of complex valued embeddings. The composition of complex embeddings can handle a large variety of binary relations, among them symmetric and antisymmetric relations. Compared to state-of-the-art models such as Neural Tensor Network and Holographic Embeddings, our approach based on complex embeddings is arguably simpler, as it only uses the Hermitian dot product, the complex counterpart of the standard dot product between real vectors. Our approach is scalable to large datasets as it remains linear in both space and time, while consistently outperforming alternative approaches on standard link prediction benchmarks.},
+  booktitle = {Proceedings of the 33rd International Conference on International Conference on Machine Learning - Volume 48},
+  pages     = {2071–2080},
+  numpages  = {10},
+  location  = {New York, NY, USA},
+  series    = {ICML'16}
+}
+
+@inproceedings{ANALOGY,
+  author    = {Liu, Hanxiao and Wu, Yuexin and Yang, Yiming},
+  title     = {Analogical inference for multi-relational embeddings},
+  year      = {2017},
+  abstract  = {Large-scale multi-relational embedding refers to the task of learning the latent representations for entities and relations in large knowledge graphs. An effective and scalable solution for this problem is crucial for the true success of knowledge-based inference in a broad range of applications. This paper proposes a novel framework for optimizing the latent representations with respect to the analogical properties of the embedded entities and relations. By formulating the learning objective in a differentiable fashion, our model enjoys both theoretical power and computational scalability, and significantly outperformed a large number of representative baseline methods on benchmark datasets. Furthermore, the model offers an elegant unification of several well-known methods in multi-relational embedding, which can be proven to be special instantiations of our framework.},
+  booktitle = {Proceedings of the 34th International Conference on Machine Learning - Volume 70},
+  pages     = {2168–2178},
+  numpages  = {11},
+  location  = {Sydney, NSW, Australia},
+  series    = {ICML'17}
+}
+
+@article{SME,
+  author    = {Bordes, Antoine and Glorot, Xavier and Weston, Jason and Bengio, Yoshua},
+  title     = {A semantic matching energy function for learning with multi-relational data},
+  year      = {2014},
+  publisher = {Kluwer Academic Publishers},
+  address   = {USA},
+  volume    = {94},
+  number    = {2},
+  abstract  = {Large-scale relational learning becomes crucial for handling the huge amounts of structured data generated daily in many application domains ranging from computational biology or information retrieval, to natural language processing. In this paper, we present a new neural network architecture designed to embed multi-relational graphs into a flexible continuous vector space in which the original data is kept and enhanced. The network is trained to encode the semantics of these graphs in order to assign high probabilities to plausible components. We empirically show that it reaches competitive performance in link prediction on standard datasets from the literature as well as on data from a real-world knowledge base (WordNet). In addition, we present how our method can be applied to perform word-sense disambiguation in a context of open-text semantic parsing, where the goal is to learn to assign a structured meaning representation to almost any sentence of free text, demonstrating that it can scale up to tens of thousands of nodes and thousands of types of relation.},
+  journal   = {Mach. Learn.},
+  month     = {feb},
+  pages     = {233–259},
+  numpages  = {27},
+  keywords  = {Word-sense disambiguation, Neural networks, Multi-relational data}
+}
+
+@inproceedings{NTN,
+  author    = {Socher, Richard and Chen, Danqi and Manning, Christopher D. and Ng, Andrew Y.},
+  title     = {Reasoning with neural tensor networks for knowledge base completion},
+  year      = {2013},
+  publisher = {Curran Associates Inc.},
+  address   = {Red Hook, NY, USA},
+  abstract  = {Knowledge bases are an important resource for question answering and other tasks but often suffer from incompleteness and lack of ability to reason over their discrete entities and relationships. In this paper we introduce an expressive neural tensor network suitable for reasoning over relationships between two entities. Previous work represented entities as either discrete atomic units or with a single entity vector representation. We show that performance can be improved when entities are represented as an average of their constituting word vectors. This allows sharing of statistical strength between, for instance, facts involving the "Sumatran tiger" and "Bengal tiger." Lastly, we demonstrate that all models improve when these word vectors are initialized with vectors learned from unsupervised large corpora. We assess the model by considering the problem of predicting additional true relations between entities given a subset of the knowledge base. Our model outperforms previous models and can classify unseen relationships in WordNet and FreeBase with an accuracy of 86.2\% and 90.0\%, respectively.},
+  booktitle = {Proceedings of the 26th International Conference on Neural Information Processing Systems - Volume 1},
+  pages     = {926–934},
+  numpages  = {9},
+  location  = {Lake Tahoe, Nevada},
+  series    = {NIPS'13}
+}
+
+@inproceedings{MLP,
+  author    = {Dong, Xin and Gabrilovich, Evgeniy and Heitz, Geremy and Horn, Wilko and Lao, Ni and Murphy, Kevin and Strohmann, Thomas and Sun, Shaohua and Zhang, Wei},
+  title     = {Knowledge vault: a web-scale approach to probabilistic knowledge fusion},
+  year      = {2014},
+  isbn      = {9781450329569},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {Recent years have witnessed a proliferation of large-scale knowledge bases, including Wikipedia, Freebase, YAGO, Microsoft's Satori, and Google's Knowledge Graph. To increase the scale even further, we need to explore automatic methods for constructing knowledge bases. Previous approaches have primarily focused on text-based extraction, which can be very noisy. Here we introduce Knowledge Vault, a Web-scale probabilistic knowledge base that combines extractions from Web content (obtained via analysis of text, tabular data, page structure, and human annotations) with prior knowledge derived from existing knowledge repositories. We employ supervised machine learning methods for fusing these distinct information sources. The Knowledge Vault is substantially bigger than any previously published structured knowledge repository, and features a probabilistic inference system that computes calibrated probabilities of fact correctness. We report the results of multiple studies that explore the relative utility of the different information sources and extraction methods.},
+  booktitle = {Proceedings of the 20th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  pages     = {601–610},
+  numpages  = {10},
+  keywords  = {information extraction, knowledge bases, machine learning, probabilistic models},
+  location  = {New York, New York, USA},
+  series    = {KDD '14}
+}
+
+@inproceedings{ConvKB,
+  title     = {A Novel Embedding Model for Knowledge Base Completion Based on Convolutional Neural Network},
+  author    = {Nguyen, Dai Quoc  and
+               Nguyen, Tu Dinh  and
+               Nguyen, Dat Quoc  and
+               Phung, Dinh},
+  booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 2 (Short Papers)},
+  month     = jun,
+  year      = {2018},
+  address   = {New Orleans, Louisiana},
+  publisher = {Association for Computational Linguistics},
+  pages     = {327--333},
+  abstract  = {In this paper, we propose a novel embedding model, named ConvKB, for knowledge base completion. Our model ConvKB advances state-of-the-art models by employing a convolutional neural network, so that it can capture global relationships and transitional characteristics between entities and relations in knowledge bases. In ConvKB, each triple (head entity, relation, tail entity) is represented as a 3-column matrix where each column vector represents a triple element. This 3-column matrix is then fed to a convolution layer where multiple filters are operated on the matrix to generate different feature maps. These feature maps are then concatenated into a single feature vector representing the input triple. The feature vector is multiplied with a weight vector via a dot product to return a score. This score is then used to predict whether the triple is valid or not. Experiments show that ConvKB achieves better link prediction performance than previous state-of-the-art embedding models on two benchmark datasets WN18RR and FB15k-237.}
+}
+
+@inproceedings{ConvR,
+  title     = {Adaptive Convolution for Multi-Relational Learning},
+  author    = {Jiang, Xiaotian  and
+               Wang, Quan  and
+               Wang, Bin},
+  booktitle = {Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)},
+  month     = jun,
+  year      = {2019},
+  address   = {Minneapolis, Minnesota},
+  publisher = {Association for Computational Linguistics},
+  pages     = {978--987},
+  abstract  = {We consider the problem of learning distributed representations for entities and relations of multi-relational data so as to predict missing links therein. Convolutional neural networks have recently shown their superiority for this problem, bringing increased model expressiveness while remaining parameter efficient. Despite the success, previous convolution designs fail to model full interactions between input entities and relations, which potentially limits the performance of link prediction. In this work we introduce ConvR, an adaptive convolutional network designed to maximize entity-relation interactions in a convolutional fashion. ConvR adaptively constructs convolution filters from relation representations, and applies these filters across entity representations to generate convolutional features. As such, ConvR enables rich interactions between entity and relation representations at diverse regions, and all the convolutional features generated will be able to capture such interactions. We evaluate ConvR on multiple benchmark datasets. Experimental results show that: (1) ConvR performs substantially better than competitive baselines in almost all the metrics and on all the datasets; (2) Compared with state-of-the-art convolutional models, ConvR is not only more effective but also more efficient. It offers a 7{\%} increase in MRR and a 6{\%} increase in Hits@10, while saving 12{\%} in parameter storage.}
+}
+
+@article{InteractE,
+  title        = {InteractE: Improving Convolution-Based Knowledge Graph Embeddings by Increasing Feature Interactions},
+  volume       = {34},
+  abstractnote = {&lt;p&gt;Most existing knowledge graphs suffer from incompleteness, which can be alleviated by inferring missing links based on known facts. One popular way to accomplish this is to generate low-dimensional embeddings of entities and relations, and use these to make inferences. ConvE, a recently proposed approach, applies convolutional filters on 2D reshapings of entity and relation embeddings in order to capture rich interactions between their components. However, the number of interactions that ConvE can capture is limited. In this paper, we analyze how increasing the number of these interactions affects link prediction performance, and utilize our observations to propose InteractE. InteractE is based on three key ideas – feature permutation, a novel feature reshaping, and circular convolution. Through extensive experiments, we find that InteractE outperforms state-of-the-art convolutional link prediction baselines on FB15k-237. Further, InteractE achieves an MRR score that is 9%, 7.5%, and 23% better than ConvE on the FB15k-237, WN18RR and YAGO3-10 datasets respectively. The results validate our central hypothesis – that increasing feature interaction is beneficial to link prediction performance. We make the source code of InteractE available to encourage reproducible research.&lt;/p&gt;},
+  number       = {03},
+  journal      = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  author       = {Vashishth, Shikhar and Sanyal, Soumya and Nitin, Vikram and Agrawal, Nilesh and Talukdar, Partha},
+  year         = {2020},
+  month        = {Apr.},
+  pages        = {3009-3016}
+}
+
+@inproceedings{SACN,
+  author    = {Shang, Chao and Tang, Yun and Huang, Jing and Bi, Jinbo and He, Xiaodong and Zhou, Bowen},
+  title     = {End-to-end structure-aware convolutional networks for knowledge base completion},
+  year      = {2019},
+  isbn      = {978-1-57735-809-1},
+  publisher = {AAAI Press},
+  abstract  = {Knowledge graph embedding has been an active research topic for knowledge base completion, with progressive improvement from the initial TransE, TransH, DistMult et al to the current state-of-the-art ConvE. ConvE uses 2D convolution over embeddings and multiple layers of nonlinear features to model knowledge graphs. The model can be efficiently trained and scalable to large knowledge graphs. However, there is no structure enforcement in the embedding space of ConvE. The recent graph convolutional network (GCN) provides another way of learning graph node embedding by successfully utilizing graph connectivity structure. In this work, we propose a novel end-to-end Structure-Aware Convolutional Network (SACN) that takes the benefit of GCN and ConvE together. SACN consists of an encoder of a weighted graph convolutional network (WGCN), and a decoder of a convolutional network called Conv-TransE. WGCN utilizes knowledge graph node structure, node attributes and edge relation types. It has learnable weights that adapt the amount of information from neighbors used in local aggregation, leading to more accurate embeddings of graph nodes. Node attributes in the graph are represented as additional nodes in the WGCN. The decoder Conv-TransE enables the state-of-the-art ConvE to be translational between entities and relations while keeps the same link prediction performance as ConvE. We demonstrate the effectiveness of the proposed SACN on standard FB15k-237 and WN18RR datasets, and it gives about 10\% relative improvement over the state-of-the-art ConvE in terms of HITS@ 1, HITS@3 and HITS@10.},
+  booktitle = {Proceedings of the Thirty-Third AAAI Conference on Artificial Intelligence and Thirty-First Innovative Applications of Artificial Intelligence Conference and Ninth AAAI Symposium on Educational Advances in Artificial Intelligence},
+  articleno = {376},
+  numpages  = {8},
+  location  = {Honolulu, Hawaii, USA},
+  series    = {AAAI'19/IAAI'19/EAAI'19}
+}
+
+@inproceedings{TransGCN,
+  author    = {Cai, Ling and Yan, Bo and Mai, Gengchen and Janowicz, Krzysztof and Zhu, Rui},
+  title     = {TransGCN: Coupling Transformation Assumptions with Graph Convolutional Networks for Link Prediction},
+  year      = {2019},
+  isbn      = {9781450370080},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {Link prediction is an important and frequently studied task that contributes to an understanding of the structure of knowledge graphs (KGs) in statistical relational learning. Inspired by the success of graph convolutional networks (GCN) in modeling graph data, we propose a unified GCN framework, named TransGCN, to address this task, in which relation and entity embeddings are learned simultaneously. To handle heterogeneous relations in KGs, we introduce a novel way of representing heterogeneous neighborhood by introducing transformation assumptions on the relationship between the subject, the relation, and the object of a triple. Specifically, a relation is treated as a transformation operator transforming a head entity to a tail entity. Both translation assumption in TransE and rotation assumption in RotatE are explored in our framework. Additionally, instead of only learning entity embeddings in the convolution-based encoder while learning relation embeddings in the decoder as done by the state-of-art models, e.g., R-GCN, the TransGCN framework trains relation embeddings and entity embeddings simultaneously during the graph convolution operation, thus having fewer parameters compared with R-GCN. Experiments show that our models outperform the-state-of-arts methods on both FB15K-237 and WN18RR.},
+  booktitle = {Proceedings of the 10th International Conference on Knowledge Capture},
+  pages     = {131–138},
+  numpages  = {8},
+  keywords  = {transformation assumption, neighborhood, link prediction, knowledge graph embedding, graph convolutional network},
+  location  = {Marina Del Rey, CA, USA},
+  series    = {K-CAP '19}
+}
+
+@article{RGHAT,
+  title        = {Relational Graph Neural Network with Hierarchical Attention for Knowledge Graph Completion},
+  volume       = {34},
+  abstractnote = {&lt;p&gt;The rapid proliferation of knowledge graphs (KGs) has changed the paradigm for various AI-related applications. Despite their large sizes, modern KGs are far from complete and comprehensive. This has motivated the research in knowledge graph completion (KGC), which aims to infer missing values in incomplete knowledge triples. However, most existing KGC models treat the triples in KGs independently without leveraging the inherent and valuable information from the local neighborhood surrounding an entity. To this end, we propose a Relational Graph neural network with Hierarchical ATtention (RGHAT) for the KGC task. The proposed model is equipped with a two-level attention mechanism: (i) the first level is the relation-level attention, which is inspired by the intuition that different relations have different weights for indicating an entity; (ii) the second level is the entity-level attention, which enables our model to highlight the importance of different neighboring entities under the same relation. The hierarchical attention mechanism makes our model more effective to utilize the neighborhood information of an entity. Finally, we extensively validate the superiority of RGHAT against various state-of-the-art baselines.&lt;/p&gt;},
+  number       = {05},
+  journal      = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  author       = {Zhang, Zhao and Zhuang, Fuzhen and Zhu, Hengshu and Shi, Zhiping and Xiong, Hui and He, Qing},
+  year         = {2020},
+  month        = {Apr.},
+  pages        = {9612-9619}
+}
+
+@article{EIGAT,
+  title     = {EIGAT: Incorporating global information in local attention for knowledge representation learning},
+  author    = {Zhao, Yu and Feng, Huali and Zhou, Han and Yang, Yanruo and Chen, Xingyan and Xie, Ruobing and Zhuang, Fuzhen and Li, Qing},
+  journal   = {Knowledge-Based Systems},
+  volume    = {237},
+  pages     = {107909},
+  year      = {2022},
+  publisher = {Elsevier}
+}
+
+@inproceedings{TransE-Comp,
+  title     = {Traversing Knowledge Graphs in Vector Space},
+  author    = {Guu, Kelvin  and
+               Miller, John  and
+               Liang, Percy},
+  booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing},
+  month     = sep,
+  year      = {2015},
+  address   = {Lisbon, Portugal},
+  publisher = {Association for Computational Linguistics},
+  pages     = {318--327}
+}
+
+@inproceedings{PTransE,
+  title     = {Modeling Relation Paths for Representation Learning of Knowledge Bases},
+  author    = {Lin, Yankai  and
+               Liu, Zhiyuan  and
+               Luan, Huanbo  and
+               Sun, Maosong  and
+               Rao, Siwei  and
+               Liu, Song},
+  booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing},
+  month     = sep,
+  year      = {2015},
+  address   = {Lisbon, Portugal},
+  publisher = {Association for Computational Linguistics},
+  pages     = {705--714}
+}
+
+@inproceedings{Chain,
+  title     = {Chains of Reasoning over Entities, Relations, and Text using Recurrent Neural Networks},
+  author    = {Das, Rajarshi  and
+               Neelakantan, Arvind  and
+               Belanger, David  and
+               McCallum, Andrew},
+  booktitle = {Proceedings of the 15th Conference of the {E}uropean Chapter of the Association for Computational Linguistics: Volume 1, Long Papers},
+  month     = apr,
+  year      = {2017},
+  address   = {Valencia, Spain},
+  publisher = {Association for Computational Linguistics},
+  pages     = {132--141},
+  abstract  = {Our goal is to combine the rich multi-step inference of symbolic logical reasoning with the generalization capabilities of neural networks. We are particularly interested in complex reasoning about entities and relations in text and large-scale knowledge bases (KBs). Neelakantan et al. (2015) use RNNs to compose the distributed semantics of multi-hop paths in KBs; however for multiple reasons, the approach lacks accuracy and practicality. This paper proposes three significant modeling advances: (1) we learn to jointly reason about relations, \textit{entities, and entity-types}; (2) we use neural attention modeling to incorporate \textit{multiple paths}; (3) we learn to \textit{share strength in a single RNN} that represents logical composition across all relations. On a large-scale Freebase+ClueWeb prediction task, we achieve 25{\%} error reduction, and a 53{\%} error reduction on sparse relations due to shared strength. On chains of reasoning in WordNet we reduce error in mean quantile by 84{\%} versus previous state-of-the-art.}
+}
+
+@inproceedings{RSN,
+  title     = {Learning to Exploit Long-term Relational Dependencies in Knowledge Graphs},
+  author    = {Guo, Lingbing and Sun, Zequn and Hu, Wei},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  pages     = {2505--2514},
+  year      = {2019},
+  volume    = {97},
+  series    = {Proceedings of Machine Learning Research},
+  month     = {09--15 Jun},
+  abstract  = {We study the problem of knowledge graph (KG) embedding. A widely-established assumption to this problem is that similar entities are likely to have similar relational roles. However, existing related methods derive KG embeddings mainly based on triple-level learning, which lack the capability of capturing long-term relational dependencies of entities. Moreover, triple-level learning is insufficient for the propagation of semantic information among entities, especially for the case of cross-KG embedding. In this paper, we propose recurrent skipping networks (RSNs), which employ a skipping mechanism to bridge the gaps between entities. RSNs integrate recurrent neural networks (RNNs) with residual learning to efficiently capture the long-term relational dependencies within and between KGs. We design an end-to-end framework to support RSNs on different tasks. Our experimental results showed that RSNs outperformed state-of-the-art embedding-based methods for entity alignment and achieved competitive performance for KG completion.}
+}
+
+@inproceedings{Interstellar,
+  author    = {Zhang, Yongqi and Yao, Quanming and Chen, Lei},
+  title     = {Interstellar: searching recurrent architecture for knowledge graph embedding},
+  year      = {2020},
+  isbn      = {9781713829546},
+  publisher = {Curran Associates Inc.},
+  address   = {Red Hook, NY, USA},
+  abstract  = {Knowledge graph (KG) embedding is well-known in learning representations of KGs. Many models have been proposed to learn the interactions between entities and relations of the triplets. However, long-term information among multiple triplets is also important to KG. In this work, based on the relational paths, which are composed of a sequence of triplets, we define the Interstellar as a recurrent neural architecture search problem for the short-term and long-term information along the paths. First, we analyze the difficulty of using a unified model to work as the Interstellar. Then, we propose to search for recurrent architecture as the Interstellar for different KG tasks. A case study on synthetic data illustrates the importance of the defined search problem. Experiments on real datasets demonstrate the effectiveness of the searched models and the efficiency of the proposed hybrid-search algorithm.1},
+  booktitle = {Proceedings of the 34th International Conference on Neural Information Processing Systems},
+  articleno = {841},
+  numpages  = {11},
+  location  = {Vancouver, BC, Canada},
+  series    = {NIPS'20}
+}
+
+@inproceedings{Transformer,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, \L{}ukasz and Polosukhin, Illia},
+  title     = {Attention is all you need},
+  year      = {2017},
+  isbn      = {9781510860964},
+  publisher = {Curran Associates Inc.},
+  address   = {Red Hook, NY, USA},
+  abstract  = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.0 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.},
+  booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+  pages     = {6000–6010},
+  numpages  = {11},
+  location  = {Long Beach, California, USA},
+  series    = {NIPS'17}
+}
+
+@article{KG-BERT,
+  author     = {Liang Yao and
+                Chengsheng Mao and
+                Yuan Luo},
+  title      = {{KG-BERT:} {BERT} for Knowledge Graph Completion},
+  journal    = {CoRR},
+  volume     = {abs/1909.03193},
+  year       = {2019},
+  eprinttype = {arXiv},
+  eprint     = {1909.03193},
+  timestamp  = {Tue, 11 Jan 2022 16:58:16 +0100}
+}
+
+@inproceedings{HittER,
+  title     = {{H}itt{ER}: Hierarchical Transformers for Knowledge Graph Embeddings},
+  author    = {Chen, Sanxing  and
+               Liu, Xiaodong  and
+               Gao, Jianfeng  and
+               Jiao, Jian  and
+               Zhang, Ruofei  and
+               Ji, Yangfeng},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  month     = nov,
+  year      = {2021},
+  address   = {Online and Punta Cana, Dominican Republic},
+  publisher = {Association for Computational Linguistics},
+  pages     = {10395--10407},
+  abstract  = {This paper examines the challenging problem of learning representations of entities and relations in a complex multi-relational knowledge graph. We propose HittER, a Hierarchical Transformer model to jointly learn Entity-relation composition and Relational contextualization based on a source entity{'}s neighborhood. Our proposed model consists of two different Transformer blocks: the bottom block extracts features of each entity-relation pair in the local neighborhood of the source entity and the top block aggregates the relational information from outputs of the bottom block. We further design a masked entity prediction task to balance information from the relational context and the source entity itself. Experimental results show that HittER achieves new state-of-the-art results on multiple link prediction datasets. We additionally propose a simple approach to integrate HittER into BERT and demonstrate its effectiveness on two Freebase factoid question answering datasets.}
+}
+
+@article{Relphormer,
+  title    = {Relphormer: Relational Graph Transformer for Knowledge Graph Representations},
+  journal  = {Neurocomputing},
+  volume   = {566},
+  pages    = {127044},
+  year     = {2024},
+  issn     = {0925-2312},
+  author   = {Zhen Bi and Siyuan Cheng and Jing Chen and Xiaozhuan Liang and Feiyu Xiong and Ningyu Zhang},
+  keywords = {Knowledge graph, Knowledge graph representation, Transformer},
+  abstract = {Transformers have achieved remarkable performance in widespread fields, including natural language processing, computer vision and graph mining. However, vanilla Transformer architectures have not yielded promising improvements in the Knowledge Graph (KG) representations, where the translational distance paradigm dominates this area. Note that vanilla Transformer architectures struggle to capture the intrinsically heterogeneous structural and semantic information of knowledge graphs. To this end, we propose a new variant of Transformer for knowledge graph representations dubbed Relphormer. Specifically, we introduce Triple2Seq which can dynamically sample contextualized sub-graph sequences as the input to alleviate the heterogeneity issue. We propose a novel structure-enhanced self-attention mechanism to encode the relational information and keep the semantic information within entities and relations. Moreover, we utilize masked knowledge modeling for general knowledge graph representation learning, which can be applied to various KG-based tasks including knowledge graph completion, question answering, and recommendation. Experimental results on six datasets show that Relphormer can obtain better performance compared with baselines.22Code is available in https://github.com/zjunlp/Relphormer.}
+}
+
+@inproceedings{BERT,
+  title     = {{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding},
+  author    = {Devlin, Jacob  and
+               Chang, Ming-Wei  and
+               Lee, Kenton  and
+               Toutanova, Kristina},
+  booktitle = {Proceedings of the 2019 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)},
+  month     = jun,
+  year      = {2019},
+  address   = {Minneapolis, Minnesota},
+  publisher = {Association for Computational Linguistics},
+  pages     = {4171--4186},
+  abstract  = {We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models (Peters et al., 2018a; Radford et al., 2018), BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5 (7.7 point absolute improvement), MultiNLI accuracy to 86.7{\%} (4.6{\%} absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement).}
+}
+
+@inproceedings{LMKE,
+  title     = {Language Models as Knowledge Embeddings},
+  author    = {Wang, Xintao and He, Qianyu and Liang, Jiaqing and Xiao, Yanghua},
+  booktitle = {Proceedings of the Thirty-First International Joint Conference on
+               Artificial Intelligence, {IJCAI-22}},
+  pages     = {2291--2297},
+  year      = {2022},
+  month     = {7},
+  note      = {Main Track}
+}
+
+@inproceedings{TagReal,
+  title     = {Text Augmented Open Knowledge Graph Completion via Pre-Trained Language Models},
+  author    = {Jiang, Pengcheng  and
+               Agarwal, Shivam  and
+               Jin, Bowen  and
+               Wang, Xuan  and
+               Sun, Jimeng  and
+               Han, Jiawei},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2023},
+  month     = jul,
+  year      = {2023},
+  address   = {Toronto, Canada},
+  publisher = {Association for Computational Linguistics},
+  pages     = {11161--11180},
+  abstract  = {The mission of open knowledge graph (KG) completion is to draw new findings from known facts. Existing works that augment KG completion require either (1) factual triples to enlarge the graph reasoning space or (2) manually designed prompts to extract knowledge from a pre-trained language model (PLM), exhibiting limited performance and requiring expensive efforts from experts. To this end, we propose TagReal that automatically generates quality query prompts and retrieves support information from large text corpora to probe knowledge from PLM for KG completion. The results show that TagReal achieves state-of-the-art performance on two benchmark datasets. We find that TagReal has superb performance even with limited training data, outperforming existing embedding-based, graph-based, and PLM-based methods.}
+}
+
+@inproceedings{TTransE,
+  author    = {Leblay, Julien and Chekol, Melisachew Wudage},
+  title     = {Deriving Validity Time in Knowledge Graph},
+  year      = {2018},
+  isbn      = {9781450356404},
+  publisher = {International World Wide Web Conferences Steering Committee},
+  address   = {Republic and Canton of Geneva, CHE},
+  abstract  = {Knowledge Graphs (KGs) are a popular means to represent knowledge on the Web, typically in the form of node/edge labelled directed graphs. We consider temporal KGs, in which edges are further annotated with time intervals, reflecting when the relationship between entities held in time. In this paper, we focus on the task of predicting time validity for unannotated edges. We introduce the problem as a variation of relational embedding. We adapt existing approaches, and explore the importance example selection and the incorporation of side information in the learning process. We present our experimental evaluation in details.},
+  booktitle = {Companion Proceedings of the The Web Conference 2018},
+  pages     = {1771–1776},
+  numpages  = {6},
+  keywords  = {temporal knowledge graph, factorization machines},
+  location  = {Lyon, France},
+  series    = {WWW '18}
+}
+
+@inproceedings{TeAST,
+  title     = {{T}e{AST}: Temporal Knowledge Graph Embedding via Archimedean Spiral Timeline},
+  author    = {Li, Jiang  and
+               Su, Xiangdong  and
+               Gao, Guanglai},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2023},
+  address   = {Toronto, Canada},
+  publisher = {Association for Computational Linguistics},
+  pages     = {15460--15474},
+  abstract  = {Temporal knowledge graph embedding (TKGE) models are commonly utilized to infer the missing facts and facilitate reasoning and decision-making in temporal knowledge graph based systems. However, existing methods fuse temporal information into entities, potentially leading to the evolution of entity information and limiting the link prediction performance of TKG. Meanwhile, current TKGE models often lack the ability to simultaneously model important relation patterns and provide interpretability, which hinders their effectiveness and potential applications. To address these limitations, we propose a novel TKGE model which encodes \textbf{T}emporal knowledge graph \textbf{e}mbeddings via \textbf{A}rchimedean \textbf{S}piral \textbf{T}imeline (TeAST), which maps relations onto the corresponding Archimedean spiral timeline and transforms the quadruples completion to 3th-order tensor completion problem. Specifically, the Archimedean spiral timeline ensures that relations that occur simultaneously are placed on the same timeline, and all relations evolve over time. Meanwhile, we present a novel temporal spiral regularizer to make the spiral timeline orderly. In addition, we provide mathematical proofs to demonstrate the ability of TeAST to encode various relation patterns. Experimental results show that our proposed model significantly outperforms existing TKGE methods. Our code is available at \url{https://github.com/IMU-MachineLearningSXD/TeAST}.}
+}
+
+@inproceedings{GraphTrans,
+  author    = {Wu, Zhanghao and Jain, Paras and Wright, Matthew and Mirhoseini, Azalia and Gonzalez, Joseph E and Stoica, Ion},
+  booktitle = {Advances in Neural Information Processing Systems},
+  pages     = {13266--13279},
+  title     = {Representing Long-Range Context for Graph Neural Networks with Global Attention},
+  volume    = {34},
+  year      = {2021}
+}
+
+@inproceedings{Grover,
+  author    = {Rong, Yu and Bian, Yatao and Xu, Tingyang and Xie, Weiyang and WEI, Ying and Huang, Wenbing and Huang, Junzhou},
+  booktitle = {Advances in Neural Information Processing Systems},
+  pages     = {12559--12571},
+  title     = {Self-Supervised Graph Transformer on Large-Scale Molecular Data},
+  volume    = {33},
+  year      = {2020}
+}
+
+@inproceedings{Graphormer,
+  author    = {Ying, Chengxuan and Cai, Tianle and Luo, Shengjie and Zheng, Shuxin and Ke, Guolin and He, Di and Shen, Yanming and Liu, Tie-Yan},
+  booktitle = {Advances in Neural Information Processing Systems},
+  pages     = {28877--28888},
+  title     = {Do Transformers Really Perform Badly for Graph Representation?},
+  volume    = {34},
+  year      = {2021}
+}
+
+@inproceedings{FB15k-237,
+  title     = {Observed versus latent features for knowledge base and text inference},
+  author    = {Toutanova, Kristina and Chen, Danqi},
+  booktitle = {Proceedings of the 3rd workshop on continuous vector space models and their compositionality},
+  pages     = {57--66},
+  year      = {2015}
+}
+
+@inproceedings{RotatE,
+  author    = {Zhiqing Sun and
+               Zhi{-}Hong Deng and
+               Jian{-}Yun Nie and
+               Jian Tang},
+  title     = {RotatE: Knowledge Graph Embedding by Relational Rotation in Complex
+               Space},
+  booktitle = {7th International Conference on Learning Representations, {ICLR} 2019,
+               New Orleans, LA, USA, May 6-9, 2019},
+  year      = {2019}
+}
+
+@inproceedings{CompGCN,
+  author    = {Shikhar Vashishth and
+               Soumya Sanyal and
+               Vikram Nitin and
+               Partha P. Talukdar},
+  title     = {Composition-based Multi-Relational Graph Convolutional Networks},
+  booktitle = {8th International Conference on Learning Representations, {ICLR} 2020,
+               Addis Ababa, Ethiopia, April 26-30, 2020},
+  year      = {2020}
+}
+
+@inproceedings{SE-GNN,
+  title     = {How does knowledge graph embedding extrapolate to unseen data: a semantic evidence view},
+  author    = {Li, Ren and Cao, Yanan and Zhu, Qiannan and Bi, Guanqun and Fang, Fang and Liu, Yi and Li, Qian},
+  booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume    = {36},
+  number    = {5},
+  pages     = {5781--5791},
+  year      = {2022}
+}
+
+@article{MRGAT,
+  title     = {Multi-relational graph attention networks for knowledge graph completion},
+  author    = {Li, Zhifei and Zhao, Yue and Zhang, Yan and Zhang, Zhaoli},
+  journal   = {Knowledge-Based Systems},
+  volume    = {251},
+  pages     = {109262},
+  year      = {2022},
+  publisher = {Elsevier}
+}
+
+@inproceedings{StAR,
+  title     = {Structure-augmented text representation learning for efficient knowledge graph completion},
+  author    = {Wang, Bo and Shen, Tao and Long, Guodong and Zhou, Tianyi and Wang, Ying and Chang, Yi},
+  booktitle = {Proceedings of the Web Conference 2021},
+  pages     = {1737--1748},
+  year      = {2021}
+}
+
+@inproceedings{Adamax,
+  author    = {Diederik P. Kingma and
+               Jimmy Ba},
+  title     = {Adam: {A} Method for Stochastic Optimization},
+  booktitle = {3rd International Conference on Learning Representations, {ICLR} 2015,
+               San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings},
+  year      = {2015}
+}
+
+@inproceedings{49,
+  author    = {Daniel Ruffinelli and
+               Samuel Broscheit and
+               Rainer Gemulla},
+  title     = {You {CAN} Teach an Old Dog New Tricks! On Training Knowledge Graph
+               Embeddings},
+  booktitle = {8th International Conference on Learning Representations, {ICLR} 2020,
+               Addis Ababa, Ethiopia, April 26-30, 2020},
+  year      = {2020}
+}
+
+@inproceedings{50,
+  author    = {Zhiqing Sun and
+               Shikhar Vashishth and
+               Soumya Sanyal and
+               Partha P. Talukdar and
+               Yiming Yang},
+  title     = {A Re-evaluation of Knowledge Graph Completion Methods},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational
+               Linguistics, {ACL} 2020, Online, July 5-10, 2020},
+  pages     = {5516--5522},
+  year      = {2020}
 }

@@ -164,6 +164,8 @@
 \RequirePackage{soul}         % To highlight text
 \RequirePackage[sort&compress]{natbib}              % BibTex
 \RequirePackage{lmodern}      % 用于消除Font shape `OMX/cmex/m/n' in size <xxxx> not available 的警告
+\RequirePackage{amssymb}
+\RequirePackage{url}
 \DeclareGraphicsExtensions{.eps,.ps,.png,.jpg,.bmp} % 声明使用图像格式
 \newcommand{\highlight}[1]{\colorbox{yellow}{#1}}   % 高亮注释
 
@@ -973,7 +975,7 @@
 }
 \newcommand{\summary}{%结论
   \ctexset{chapter/numbering=false}
-  \chapter{结~~~~论}
+  \chapter{总结与展望}
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
   \setcounter{subsubsection}{0}%
