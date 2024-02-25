@@ -744,3 +744,35 @@
   pages     = {5516--5522},
   year      = {2020}
 }
+
+
+@inproceedings{MAGNN,
+  title     = {Double-Branch Multi-Attention based Graph Neural Network for Knowledge Graph Completion},
+  author    = {Xu, Hongcai  and
+               Bao, Junpeng  and
+               Liu, Wenbo},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = jul,
+  year      = {2023},
+  address   = {Toronto, Canada},
+  publisher = {Association for Computational Linguistics},
+  pages     = {15257--15271},
+  abstract  = {Graph neural networks (GNNs), which effectively use topological structures in the knowledge graphs (KG) to embed entities and relations in low-dimensional spaces, have shown great power in knowledge graph completion (KGC). KG has abundant global and local structural information, however, many GNN-based KGC models cannot capture these two types of information about the graph structure by designing complex aggregation schemes, and are not designed well to learn representations of seen entities with sparse neighborhoods in isolated subgraphs. In this paper, we find that a simple attention-based method can outperform a general GNN-based approach for KGC. We then propose a double-branch multi-attention based graph neural network (MA-GNN) to learn more expressive entity representations which contain rich global-local structural information. Specifically, we first explore the graph attention network-based local aggregator to learn entity representations. Furthermore, we propose a snowball local attention mechanism by leveraging the semantic similarity between two-hop neighbors to enrich the entity embedding. Finally, we use Transformer-based self-attention to learn long-range dependence between entities to obtain richer representations with the global graph structure and entity features. Experimental results on five benchmark datasets show that MA-GNN achieves significant improvements over strong baselines for inductive KGC.}
+}
+
+
+@inproceedings{social,
+  author    = {Yang, Liangwei and Liu, Zhiwei and Dou, Yingtong and Ma, Jing and Yu, Philip S.},
+  title     = {ConsisRec: Enhancing GNN for Social Recommendation via Consistent Neighbor Aggregation},
+  year      = {2021},
+  isbn      = {9781450380379},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  abstract  = {Social recommendation aims to fuse social links with user-item interactions to alleviate the cold-start problem for rating prediction. Recent developments of Graph Neural Networks (GNNs) motivate endeavors to design GNN-based social recommendation frameworks to aggregate both social and user-item interaction information simultaneously. However, most existing methods neglect the social inconsistency problem, which intuitively suggests that social links are not necessarily consistent with the rating prediction process. Social inconsistency can be observed from both context-level and relation-level. Therefore, we intend to empower the GNN model with the ability to tackle the social inconsistency problem. We propose to sample consistent neighbors by relating sampling probability with consistency scores between neighbors. Besides, we employ the relation attention mechanism to assign consistent relations with high importance factors for aggregation. Experiments on two real-world datasets verify the model effectiveness.},
+  booktitle = {Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages     = {2141–2145},
+  numpages  = {5},
+  keywords  = {social recommendation, recommender system, graph neural network},
+  location  = {<conf-loc>, <city>Virtual Event</city>, <country>Canada</country>, </conf-loc>},
+  series    = {SIGIR '21}
+}
