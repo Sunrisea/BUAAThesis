@@ -54,6 +54,7 @@
 
 \setlength{\tabcolsep}{20pt}
 
+\renewcommand\arraystretch{1.5}
 \begin{longtable}[htbp]{cc}
   % 首页表头
   \caption{NATLP模型中的符号定义}
@@ -75,6 +76,7 @@
   % 续页表尾
   \bottomrule
   \endlastfoot
+  
   $\mathcal{G}$   &   知识图谱      \\
   $\mathcal{E}, \mathcal{R}, \mathcal{T}$   &   实体集合、关系集合、边集合      \\
   $\mathcal{G}^\prime$  &  拓展后的知识图谱      \\
@@ -116,7 +118,26 @@
 
 链路预测任务的目标是利用知识图谱中已有的事实去预测未知事实在知识图谱中的存在概率。为了能够充分利用邻域信息来帮助预测三元组中缺失的尾实体，NATLP需要获得局部邻域中邻居实体向中心实体传递的信息。知识图谱中的关系反映着实体和实体之间不同的交互方式，但标准的Transformer模型没有办法直接对关系进行编码。为了解决这个问题，受到基于图神经网络的知识图谱嵌入方法中的消息传递模型的启发，NATLP首先基于连接的关系完成邻居实体的消息构造后，再将消息传递到Transformer模型中进行学习。
 
-但是，目前基于图神经网络的知识图谱嵌入方法中采用的消息构造函数存在着一些不足。本文调研了部分基于图神经网络的知识图谱嵌入方法采用的消息构造函数，具体内容见表
+但是，目前基于图神经网络的知识图谱嵌入方法中采用的消息构造函数存在着一些不足。本文调研了部分基于图神经网络的知识图谱嵌入方法采用的消息构造函数，具体内容见表\ref{message_Function}。
+
+\begin{table}[htbp]
+  \renewcommand\arraystretch{1.5}
+  \caption{部分基于图神经网络的知识图谱嵌入方法采用的消息构造函数}
+  \label{message_Function}
+  \centering
+  \begin{tabular}{cc}
+    \toprule
+    知识图谱嵌入方法 & 采用的消息构造函数\\
+    \midrule
+    R-GCN\upcite{R-GCN} & $\mathbf{W}_re$\\
+    SACN\upcite{SACN} & $\mathbf{W}e$\\
+    Graph2Seq\upcite{Graph2Seq} & $\mathbf{W}_{in}\left[e_i,r_k,e_j\right] \ \mbox{or} \ \mathbf{W}_{out}\left[e_i, r_k, e_j\right]$\\
+    CompGCN\upcite{CompGCN} & $\mathbf{W}_{dir(r)}e_i\star e_k$\\
+    KBGAT\upcite{KBGAT} & $\mathbf{W}\left[e_i, e_j, r_k\right] $\\
+    RGHAT\upcite{RGHAT} & $\mathbf{W}_2\left[\mathbf{W}_1\left[e_i, r\right], e_j\right]$\\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 可以发现，除了R-GCN\upcite{R-GCN}之外，其余的方法对于实体通过不同关系传递的信息，采用的都是同样的网络参数进行编码。但是，同一个实体和不同的关系相连，表达的语义信息可能完全不一样。例如（姚明，出生于，上海）和（姚明，职业，篮球运动员），传递的信息就有着很大不同。采用同样的参数进行编码，会导致模型难以捕获实体中和不同关系相关的特定特征。针对关系的这个特点，R-GCN模型为每个关系都定义了单独的网络参数，但是这样的方法也存在问题：一方面，每类关系的网络参数需要单独进行学习，对于数量较少的关系可能会出现训练不充分的情况；另一方面，这样的方法会容易导致关系之间的内在相关性被忽略。TransCoRe\upcite{TransCoRe}对TransE/TransH/TransR学习到的关系嵌入进行了分析，发现关系之间的相关性通过嵌入表示上的低秩结构显示出来，即不同种类的关系之间存在某种共同的特点。
 

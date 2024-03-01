@@ -59,13 +59,14 @@ R-GCN\upcite{R-GCN}是第一个利用图卷积神经网络学习知识图谱表�
 \subsection{对比分析}
 通过调研国内外知识图谱嵌入方法，本文对于各类知识图谱嵌入方法进行了总结与对比，各种方法的优缺点如表\ref{ComparativeAnalysis}所示。
 \begin{table}[htbp]
+  \renewcommand\arraystretch{1.5}
   \caption{各类知识图谱嵌入方法对比分析}
   \label{ComparativeAnalysis}
   \centering
-  \renewcommand\arraystretch{1.5}
+  
   \begin{tabular}{lp{6cm}p{5cm}}
     \toprule
-    \multicolumn{1}{c}{\textbf{方法类型}} & \multicolumn{1}{c}{\textbf{优点}} & \multicolumn{1}{c}{\textbf{缺点}}\\
+    \multicolumn{1}{c}{方法类型} & \multicolumn{1}{c}{优点} & \multicolumn{1}{c}{缺点}\\
     \midrule
     基于翻译 & 结构简单，计算速度快，可解释性较强& 模型表达能力弱\\
     基于张量分解 & 可解释性较强，能够捕捉实体与关系之间的双线性关系 & 模型表达能力较弱\\
