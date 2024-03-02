@@ -54,7 +54,7 @@
 
 \setlength{\tabcolsep}{20pt}
 
-\renewcommand\arraystretch{1.5}
+\renewcommand\arraystretch{1.2}
 \begin{longtable}[htbp]{cc}
   % 首页表头
   \caption{NATLP模型中的符号定义}
@@ -91,7 +91,21 @@
   $r^{-1}$   &   关系$r$的逆关系      \\
   $\boldsymbol{s},\boldsymbol{o}$ & 头实体嵌入和尾实体嵌入\\
   $\boldsymbol{e},\boldsymbol{r}$ & 实体嵌入和关系嵌入\\
-
+  $d$ &嵌入维度\\
+  $\phi_{chk}$ & 棋盘式特征重组\\
+  $\circledast$ & 循环卷积操作\\
+  $f(\cdot )$ & ReLU激活函数\\
+  $vec(\cdot)$ & 二维张量转化为一维向量\\
+  $k_{size}$ &卷积核的边长\\
+  $n_{conv}$ &卷积核的数量\\
+  $\omega_r$ & 特定于关系$r$的卷积层参数\\
+  $\mathbf{W}_r$ &特定于关系$r$的全连接层参数\\
+  $\mathbf{M}_{conv}$ & 卷积层参数生成网络\\
+  $\mathbf{M}_{fc}$ & 全连接层参数生成网络\\
+  $\boldsymbol{r}_{global}$ & 全局关系嵌入\\
+  $\mbox{Re3D}(\cdot)$ & 一维向量转化为三维张量\\
+  $\mbox{Re2D}(\cdot)$ & 一维向量转化为二维张量\\
+  $m_{e,r}$ & 邻居实体$e$通过关系$r$传递的信息\\
 
 \end{longtable}
 
@@ -143,7 +157,7 @@
 
 为了解决上述问题，实现捕获邻居实体中关系相关的特定特征的同时，兼顾不同类别关系之间的共通特征，NATLP提出了一种关系特定的邻居实体信息构造方法，具体如图所示。
 
-首先，相比于大多数方法采用的实体和关系嵌入拼接之后再线性转换的构造方式，NATLP模型选择将实体和嵌入重塑为二维张量之后再对其进行卷积操作。相比于线性转换，卷积神经网络更擅长捕捉局部模式，通过卷积操作，模型可以有效地提取实体和关系之间的局部交互特征；此外，由于权重共享的特性，卷积神经网络在模型参数上更加高效，使得模型能够用更少的参数完成信息的构建，减少模型过拟合的风险，加快模型训练的过程。而相比于一维卷积，二维卷积能够提升实体和关系嵌入之间的特征交互，从而更丰富的特征。为了进一步的提升实体和关系之间的交互，NATLP采用了棋盘式的特征重组方式来进行二维张量的重塑，如图所示:
+首先，相比于大多数方法采用的实体和关系嵌入拼接之后再线性转换的构造方式，NATLP模型选择将实体和嵌入重塑为二维张量之后再对其进行卷积操作。相比于线性转换，卷积神经网络更擅长捕捉局部模式，通过卷积操作，模型可以有效地提取实体和关系之间的局部交互特征；此外，由于权重共享的特性，卷积神经网络在模型参数上更加高效，使得模型能够用更少的参数完成信息的构建，减少模型过拟合的风险，加快模型训练的过程。而相比于一维卷积，二维卷积能够提升实体和关系嵌入之间的特征交互，从而更丰富的特征。为了进一步的提升实体和关系之间的交互，NATLP采用了棋盘式的特征重组方式来进行二维张量的重塑，实体中的每一个特征分量能够和四个关系的特征分量进行交互，如图所示:
 
 \begin{figure}[htb]
   \centerline{\includegraphics[width=0.8\textwidth]{pic/cross_conv.pdf}}
@@ -156,5 +170,23 @@
 \begin{equation}
   \phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) 
 \end{equation}
-其中$\phi_{chk}$代表棋盘式特征重组，
+其中$\phi_{chk}$代表棋盘式特征重组，$\boldsymbol{e} \in \mathbb{R} ^d$为实体$e$的嵌入表示，$\boldsymbol{r} \in \mathbb{R}^d$为关系$r$的嵌入表示，$d$为嵌入的维度。
 
+将实体和关系嵌入表示重塑为二维张量之后，NATLP会对其进行循环卷积操作:
+\begin{equation}
+  \phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_r
+\end{equation}
+
+其中$\circledast$代表循环卷积。相比于普通的卷积操作，循环卷积能够捕捉更多的特征交互。卷积完成后，NATLP将卷积的输出重组为一维向量，再经过线性变化之后就可以得到邻居实体向中心实体传递的信息$m_{e,r} \in \mathbb{R} ^d$：
+\begin{equation}
+  m_{e,r}=f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_r \right)\right)\mathbf{W}_r\right)
+\end{equation}
+其中$f(\cdot )$代表ReLU激活函数，$vec(\cdot)$代表将卷积的输出重整为一维向量的操作。
+
+为了让模型能够充分捕获关系对于实体消息传递的影响，NATLP采用参数生成网络来为卷积层和全连接层生成关系对应的特定参数$\omega_r$和$\mathbf{W}_r$。同时，为了显示地捕捉不同关系之间的共性，NATLP引入了一个全局关系嵌入$\boldsymbol{r}_{global}$参与网络参数的生成:
+\begin{gather}
+  \omega_r = \mbox{Re3D}\left(\mathbf{M}_{conv}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right) \\
+  \mathbf{W}_r = \mbox{Re2D}\left(\mathbf{M}_{fc}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right)
+\end{gather}
+
+其中$\mathbf{M}_{conv} \in \mathcal{R}^{n_{conv}\times k_{size} \times k_{size} \times d}$为卷积层参数生成网络，$n_{conv}$为卷积核的数量，$k_{size}$为卷积核的边长，$\mathbf{M}_{fc}$为全连接层参数生成网络，$\mbox{Re3D}(\cdot)$和$\mbox{Re2D}(\cdot)$代表将参数生成网络的输出重整为卷积层和全连接层参数需要的三维张量和二维张量的形式。$\boldsymbol{r}_{global}$为全局关系嵌入。通过全局关系嵌入$\boldsymbol{r}_{global}$，模型能够捕捉到不同关系之间的共同特征，当部分关系种类训练数据较少时，模型通过全局关系嵌入也能获得不错的泛化能力。
