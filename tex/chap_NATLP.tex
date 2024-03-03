@@ -100,12 +100,23 @@
   $n_{conv}$ &卷积核的数量\\
   $\omega_r$ & 特定于关系$r$的卷积层参数\\
   $\mathbf{W}_r$ &特定于关系$r$的全连接层参数\\
-  $\mathbf{M}_{conv}$ & 卷积层参数生成网络\\
-  $\mathbf{M}_{fc}$ & 全连接层参数生成网络\\
+  $\mathbf{W}_{conv}$ & 卷积层参数生成网络\\
+  $\mathbf{W}_{fc}$ & 全连接层参数生成网络\\
   $\boldsymbol{r}_{global}$ & 全局关系嵌入\\
   $\mbox{Re3D}(\cdot)$ & 一维向量转化为三维张量\\
   $\mbox{Re2D}(\cdot)$ & 一维向量转化为二维张量\\
-  $m_{e,r}$ & 邻居实体$e$通过关系$r$传递的信息\\
+  $\boldsymbol{m}_{e,r}$ & 邻居实体$e$通过关系$r$传递的信息\\
+  $\boldsymbol{e}_{cls}$ & 特殊嵌入Class Token\\
+  $\mathbf{TE}$ & 类型嵌入\\
+  $a_{ij}$ & 第i个输入和第j个输入之间的注意力得分\\
+  $dis(e_i,e_j)$ & 实体$e_i$与实体$e_j$之间最短路径的距离\\
+  $deg(e)$ & 实体$e$的节点度数\\
+  $\boldsymbol{o}_t$ & 模型预测的候选实体的嵌入\\
+  $\ast $ & 普通卷积操作\\
+  $\sigma $ & sigmoid激活函数\\
+  $p$ & 三元组正确概率\\
+  $L$ & 模型损失\\
+  $t_i$ & 第i个三元组的标签\\
 
 \end{longtable}
 
@@ -122,7 +133,13 @@
 
 \subsection{模型总体结构}
 
-本节主要对提出的用于链路预测的基于邻域感知的Transformer模型NATLP的总体结构进行介绍。NATLP整体为编码器-解码器架构，编码器部分主要由关系特定的邻居信息构造模块和邻域感知Transformer模块组成，解码器部分则采用了基于卷积神经网络的知识图谱嵌入方法进行了实现。模型整体架构如图所示。
+本节主要对提出的用于链路预测的基于邻域感知的Transformer模型NATLP的总体结构进行介绍。NATLP整体为编码器-解码器架构，编码器部分主要由关系特定的邻居信息构造模块和邻域感知Transformer模块组成，解码器部分则采用了基于卷积神经网络的知识图谱嵌入方法进行了实现。模型整体架构如图\ref{architecture}所示。
+
+\begin{figure}[htb]
+  \centerline{\includegraphics[width=1\textwidth]{pic/architecture.pdf}}
+  \caption{关系特定的邻居实体信息构造}
+  \label{architecture}
+\end{figure}
 
 编码器的主要作用是将模型输入的实体和关系转化为对应的嵌入，并学习其中蕴含的语义信息和结构信息并编码成向量形式，是模型的核心部分。在NATLP中，模型的输入主要包括待预测的三元组及其局部邻域，编码器首先会根据中心实体和邻居之间相连的关系种类，为每一个邻居实体构造关系特定的邻居消息；随后的邻域感知Transformer模块综合学习构造的邻居信息、中心实体本身的信息以及局部邻域的结构信息，并完成编码。
 
@@ -155,9 +172,15 @@
 
 可以发现，除了R-GCN\upcite{R-GCN}之外，其余的方法对于实体通过不同关系传递的信息，采用的都是同样的网络参数进行编码。但是，同一个实体和不同的关系相连，表达的语义信息可能完全不一样。例如（姚明，出生于，上海）和（姚明，职业，篮球运动员），传递的信息就有着很大不同。采用同样的参数进行编码，会导致模型难以捕获实体中和不同关系相关的特定特征。针对关系的这个特点，R-GCN模型为每个关系都定义了单独的网络参数，但是这样的方法也存在问题：一方面，每类关系的网络参数需要单独进行学习，对于数量较少的关系可能会出现训练不充分的情况；另一方面，这样的方法会容易导致关系之间的内在相关性被忽略。TransCoRe\upcite{TransCoRe}对TransE/TransH/TransR学习到的关系嵌入进行了分析，发现关系之间的相关性通过嵌入表示上的低秩结构显示出来，即不同种类的关系之间存在某种共同的特点。
 
-为了解决上述问题，实现捕获邻居实体中关系相关的特定特征的同时，兼顾不同类别关系之间的共通特征，NATLP提出了一种关系特定的邻居实体信息构造方法，具体如图所示。
+为了解决上述问题，实现捕获邻居实体中关系相关的特定特征的同时，兼顾不同类别关系之间的共通特征，NATLP提出了一种关系特定的邻居实体信息构造方法，具体如图\ref{build_information}所示。
 
-首先，相比于大多数方法采用的实体和关系嵌入拼接之后再线性转换的构造方式，NATLP模型选择将实体和嵌入重塑为二维张量之后再对其进行卷积操作。相比于线性转换，卷积神经网络更擅长捕捉局部模式，通过卷积操作，模型可以有效地提取实体和关系之间的局部交互特征；此外，由于权重共享的特性，卷积神经网络在模型参数上更加高效，使得模型能够用更少的参数完成信息的构建，减少模型过拟合的风险，加快模型训练的过程。而相比于一维卷积，二维卷积能够提升实体和关系嵌入之间的特征交互，从而更丰富的特征。为了进一步的提升实体和关系之间的交互，NATLP采用了棋盘式的特征重组方式来进行二维张量的重塑，实体中的每一个特征分量能够和四个关系的特征分量进行交互，如图所示:
+\begin{figure}[htb]
+  \centerline{\includegraphics[width=0.9\textwidth]{pic/build_information.pdf}}
+  \caption{关系特定的邻居实体信息构造}
+  \label{build_information}
+\end{figure}
+
+首先，相比于大多数方法采用的实体和关系嵌入拼接之后再线性转换的构造方式，NATLP模型选择将实体和嵌入重塑为二维张量之后再对其进行卷积操作。相比于线性转换，卷积神经网络更擅长捕捉局部模式，通过卷积操作，模型可以有效地提取实体和关系之间的局部交互特征；此外，由于权重共享的特性，卷积神经网络在模型参数上更加高效，使得模型能够用更少的参数完成信息的构建，减少模型过拟合的风险，加快模型训练的过程。而相比于一维卷积，二维卷积能够提升实体和关系嵌入之间的特征交互，从而更丰富的特征。为了进一步的提升实体和关系之间的交互，NATLP采用了棋盘式的特征重组方式来进行二维张量的重塑，实体中的每一个特征分量能够和四个关系的特征分量进行交互，如图\ref{cross_conv}所示:
 
 \begin{figure}[htb]
   \centerline{\includegraphics[width=0.8\textwidth]{pic/cross_conv.pdf}}
@@ -177,16 +200,86 @@
   \phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_r
 \end{equation}
 
-其中$\circledast$代表循环卷积。相比于普通的卷积操作，循环卷积能够捕捉更多的特征交互。卷积完成后，NATLP将卷积的输出重组为一维向量，再经过线性变化之后就可以得到邻居实体向中心实体传递的信息$m_{e,r} \in \mathbb{R} ^d$：
+其中$\circledast$代表循环卷积。相比于普通的卷积操作，循环卷积能够捕捉更多的特征交互。卷积完成后，NATLP将卷积的输出重组为一维向量，再经过线性变化之后就可以得到邻居实体向中心实体传递的信息$\boldsymbol{m}_{e,r} \in \mathbb{R} ^d$：
 \begin{equation}
-  m_{e,r}=f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_r \right)\right)\mathbf{W}_r\right)
+  \boldsymbol{m}_{e,r}=f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_r \right)\right)\mathbf{W}_r\right)
 \end{equation}
 其中$f(\cdot )$代表ReLU激活函数，$vec(\cdot)$代表将卷积的输出重整为一维向量的操作。
 
 为了让模型能够充分捕获关系对于实体消息传递的影响，NATLP采用参数生成网络来为卷积层和全连接层生成关系对应的特定参数$\omega_r$和$\mathbf{W}_r$。同时，为了显示地捕捉不同关系之间的共性，NATLP引入了一个全局关系嵌入$\boldsymbol{r}_{global}$参与网络参数的生成:
 \begin{gather}
-  \omega_r = \mbox{Re3D}\left(\mathbf{M}_{conv}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right) \\
-  \mathbf{W}_r = \mbox{Re2D}\left(\mathbf{M}_{fc}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right)
+  \omega_r = \mbox{Re3D}\left(\mathbf{W}_{conv}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right) \\
+  \mathbf{W}_r = \mbox{Re2D}\left(\mathbf{W}_{fc}\left[\boldsymbol{r};\boldsymbol{r}_{global}\right]\right)
 \end{gather}
 
-其中$\mathbf{M}_{conv} \in \mathcal{R}^{n_{conv}\times k_{size} \times k_{size} \times d}$为卷积层参数生成网络，$n_{conv}$为卷积核的数量，$k_{size}$为卷积核的边长，$\mathbf{M}_{fc}$为全连接层参数生成网络，$\mbox{Re3D}(\cdot)$和$\mbox{Re2D}(\cdot)$代表将参数生成网络的输出重整为卷积层和全连接层参数需要的三维张量和二维张量的形式。$\boldsymbol{r}_{global}$为全局关系嵌入。通过全局关系嵌入$\boldsymbol{r}_{global}$，模型能够捕捉到不同关系之间的共同特征，当部分关系种类训练数据较少时，模型通过全局关系嵌入也能获得不错的泛化能力。
+其中$\mathbf{W}_{conv} \in \mathcal{R}^{n_{conv}\times k_{size} \times k_{size} \times d}$为卷积层参数生成网络，$n_{conv}$为卷积核的数量，$k_{size}$为卷积核的边长，$\mathbf{W}_{fc}$为全连接层参数生成网络，$\mbox{Re3D}(\cdot)$和$\mbox{Re2D}(\cdot)$代表将参数生成网络的输出重整为卷积层和全连接层参数需要的三维张量和二维张量的形式。$\boldsymbol{r}_{global}$为全局关系嵌入。通过全局关系嵌入$\boldsymbol{r}_{global}$，模型能够捕捉到不同关系之间的共同特征，当部分关系种类训练数据较少时，模型通过全局关系嵌入也能获得不错的泛化能力。
+
+\subsection{邻域感知Transformer模块}
+
+完成关系特定的邻居实体信息构造之后，NATLP下一步的任务是利用Transformer模型来挖掘局部邻域蕴含的语义和结构信息，并编码成向量形式，提供给解码器进行解码。
+
+给定一个待遇测的事实三元组$(s,r,?)$，其中头实体即中心实体$s$有$n$个邻居实体，$e_i$、$r_i$为中心实体的邻居实体和对应的相连的关系，有$\forall  i\in\left[1,n\right] $，$(s,r_i,e_i) \in \mathcal{T}^\prime $，则在完成关系特定的邻居实体信息构造之后，邻域感知Transformer模块的输入可以表示为以下形式：
+\begin{gather}
+  \mathbf{M}_{input}=\left[\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right] \\
+  \varPhi \left(e,r\right) = f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_{r} \right)\right)\mathbf{W}_{r}\right)\\
+  \boldsymbol{m}_{e_i,r_i}=\varPhi \left(e_i,r_i\right)
+\end{gather}
+其中$s$为中心实体的嵌入表示，$\boldsymbol{m}_{e_i,r_i}$为实体$e_i$通过关系$r_i$传递的信息。
+
+此外，为了防止在解码的时候模型对某个特定的输入具有偏向性，模型在输入序列的头部添加了一个特殊的嵌入Class Token，表示为$\boldsymbol{e}_{cls}$。Class Token不基于任意的输入内容，在训练之前进行随机的初始化，并且随着网络的训练不断更新，能够在一定程度上编码整个知识图谱的统计特性。最终，在Transformer的输出中，Class Token对应的输出向量被用作代表整个输入序列的特征表示，传递给解码器。为了帮助模型在Class Token、中心实体嵌入表示和邻居实体传递的消息之间进行区分，受到BERT\upcite{BERT}模型的启发，NATLP为以上三类输入分配了可学习的类型嵌入，则邻域感知Transformer模块的最终输入可以表示为：
+\begin{gather}
+  \mathbf{M}_{input}^\prime = \left[\boldsymbol{e}_{cls},\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right]\\
+  \mathbf{M}_{input} = \mathbf{M}_{input}^\prime + \mathbf{TE}
+\end{gather}
+其中$\mathbf{TE}$代表可学习的类型嵌入。
+
+在完成输入的构造之后，NATLP将利用Transformer的自注意力机制来学习输入中的信息。原始版本的Transformer的第$i$个输入和第$j$个输入之间的注意力分数$a_{ij}$计算公式为：
+\begin{equation}
+  \label{attention_score}
+  a_{ij}=\frac{(\boldsymbol{m}_iW_Q)(\boldsymbol{m}_jW_K)^T}{\sqrt{d}}
+\end{equation}
+这样的计算方式给Transformer带来的最大优势是让其具备了捕捉输入中全局信息的能力。在Transformer的每一层中，所有的输入都能够接收并处理来自输入序列中任何位置的信息。然而，这样的方式也带来了副作用：输入序列中的结构信息丢失了，在处理邻居实体传递的信息时，模型无法捕捉到邻居实体之间的直接联系，因此模型需要想办法明确区分不同的位置信息或者分辨不同输入之间的位置相关性。在处理序列数据时，可以采用为不同位置的输入分配不同的位置向量的方法解决这个问题，但这种方法并不适合知识图谱这种非欧结构的数据。
+
+为了让Transformer能够捕获中心实体局部邻域中的图结构数据，本文提出了一种节点距离编码，模型根据节点之间在图谱中的最短距离来辅助计算输入之间的注意力分数。一般来说，实体应该更关注距离较近的其他实体。具体来说，当计算注意力时，模型额外添加一个基于实体节点间最短距离的偏置项：
+\begin{equation}
+  a_{ij}=\frac{(\boldsymbol{m}_iW_Q)(\boldsymbol{m}_jW_K)^T}{\sqrt{d}}+\frac{1}{dis(e_i,e_j)}
+\end{equation}
+其中$dis(e_i,e_j)$为知识图谱中实体$e_i$和$e_j$之间的最短路径的距离。通过添加额外的辅助项，距离越近的实体之间计算得到的注意力得分越高。
+
+此外，在公式\ref{attention_score}中注意力分数是基于输入信息之间的语义相关性计算的，但是知识图谱中实体的节点度数也是重要的结构信息，它衡量了实体在知识图谱中的重要性。例如，在社交网络知识图谱中，拥有大量关注者的明星的权重应该更高。因此在注意力计算中，节点度数也应该被纳入考虑。具体来说，NATLP在注意力计算中额外添加一个节点度数的辅助项：
+\begin{equation}
+  a_{ij}=\frac{(\boldsymbol{m}_iW_Q)(\boldsymbol{m}_jW_K)^T}{\sqrt{d}}+1-\frac{1}{\lg (deg_{e_i})\cdot \lg (deg_{e_j})}
+\end{equation}
+其中$deg_{e_i}$为实体$e_i$的节点度数。两个实体的节点度数越高，注意力得分越高。通过这样的方式，模型能够在注意力机制中同时捕获语义相关性和节点的重要性。
+
+最终，领域感知Transformer模块的自注意力计算方式为：
+\begin{equation}
+  a_{ij}=\frac{(\boldsymbol{m}_iW_Q)(\boldsymbol{m}_jW_K)^T}{\sqrt{d}}+\frac{1}{dis(e_i,e_j)}+1-\frac{1}{\lg (deg_{e_i})\cdot \lg (deg_{e_j})}
+\end{equation}
+模型取Transformer最后一层的输出中Class Token对应位置的输出向量$\boldsymbol{T}_{cls}$作为整个编码器的最终输出。
+
+
+\subsection{基于卷积神经网络的解码器}
+
+解码器的主要任务是根据邻域感知Transformer模块的输出来计算待遇测三元组正确的概率，对链路预测任务的效果进行评估。在知识图谱补全任务中，一般采用传统的知识图谱嵌入方法作为解码器，它们结构简单，计算效率高，可解释性强。常见的解码器有基于翻译的方法如TransE\upcite{TransE}、基于张量分解的方法DistMult\upcite{DistMult}以及基于卷积神经网络的方法ConvE\upcite{ConvE}。在这之中性能最好，最常被使用的解码器是ConvE，因此NATLP也采用ConvE作为解码器。
+
+给定待遇测的事实三元组$(s,r,?)$和编码器的输出$\boldsymbol{T}_{cls}$，ConvE解码器先计算得到模型预测的候选实体的嵌入$\boldsymbol{o}_{t}$:
+\begin{equation}
+  \boldsymbol{o}_{t}=f\left(vec\left(f\left(\left[\boldsymbol{T}_{cls};\boldsymbol{r}\right]\ast \omega\right)\right)\mathbf{W}\right)
+\end{equation}
+其中$\ast$代表卷积操作。随后对于任意一个候选实体$e_t$，模型将$\boldsymbol{o}_{t}$与$e_t$的嵌入$\boldsymbol{e}_{t}$进行点积后并经过sigmoid激活函数后得到$e_t$正确的概率：
+\begin{equation}
+  p_{e_t} = \sigma(\boldsymbol{o}_{t}\cdot \boldsymbol{e}_{t}^T)
+\end{equation}
+其中$\sigma(\cdot)$为sigmoid激活函数。
+
+获得所有候选实体的得分后，模型采用交叉熵损失函数计算任务损失：
+\begin{equation}
+  L = -\frac{1}{N}\sum\limits_{i}t_ilog(p_i)+(1-t_i)log(1-p_i)
+\end{equation}
+$t_i$为第i个候选实体组成的三元组是否正确的标签，$p_i$是模型预测的第i个候选实体组成的三元组是否正确的概率。
+
+
+\section{本章小结}
+
+本章对NATLP模型的整体架构和实现细节进行了详细介绍。首先对当前基于图神经网络的方法存在的部分问题以及Transformer在知识图谱嵌入领域中应用的限制进行了介绍；随后给出了模型中涉及到的数学符号的详细定义；之后介绍了模型的整体架构组成；最后，对NATLP中的关键设计细节进行了具体的说明，包括（1）关系特定了邻居实体信息构造，利用参数生成网络生成关系特定的网络参数，学习关系对于实体信息传递的作用，并利用全局关系嵌入捕捉不同关系之间的共性。（2）邻域感知Transformer模块，通过最短距离编码和度数编码在自注意力机制计算时融合图结构信息，捕捉邻居消息之间的互相依赖，更好地适应知识图谱的图结构形式。（3）基于卷积神经网络的解码器。利用基于卷积神经网络的方法ConvE进行解码，并计算任务的交叉熵损失。
