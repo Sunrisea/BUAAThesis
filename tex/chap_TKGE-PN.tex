@@ -97,12 +97,18 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
 
 \subsection{模型总体结构}
 
-本节主要对提出的基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法TKGE-PN的总体结构进行介绍。和NATLP不同的是，TKGE-PN并没有采用编码器-解码器架构，而是利用Transformer自身的强大表达能力直接对目标实体的嵌入进行预测，这样的方式的优点是模型的性能不会受限于用作解码器的基于图神经网络的知识图谱嵌入方法的限制。
-
-TKGE-PN模型主要由三个部分组成，首先是基于有偏随机游走的图路径采样算法，以中心实体为起点在图谱中采样多条图路径；随后Path-Transformer路径编码模块负责学习图路径中蕴含的长距离的语义信息并转换为向量表示；Neighbor-Transformer局部邻域编码模块接收来自Path-Transformer的输入，整合待遇测事实三元组以及多条图路径所构成上下文邻域信息并预测三元组得分。模型架构如图\ref{TKGE-PN_architecture}所示。
+本节主要对提出的基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法TKGE-PN的总体结构进行介绍。模型架构如图\ref{TKGE-PN_architecture}所示。
 
 \begin{figure}[htb]
-  \centerline{\includegraphics[width=1\textwidth]{pic/TKGE-PN_architecture.pdf}}
-  \caption{TKGE-PN模型整体架构}
-  \label{TKGE-PN_architecture}
-\end{figure}
+    \centerline{\includegraphics[width=0.65\textwidth]{pic/TKGE-PN_architecture.pdf}}
+    \caption{TKGE-PN模型整体架构}
+    \label{TKGE-PN_architecture}
+  \end{figure}
+
+和NATLP不同，TKGE-PN并没有采用编码器-解码器架构，而是利用Transformer自身的强大表达能力直接对目标实体的嵌入进行预测，这样的方式的优点是模型的性能不会受限于用作解码器的基于图神经网络的知识图谱嵌入方法的限制。
+
+
+
+TKGE-PN模型主要由三个部分组成，首先是基于有偏随机游走的图路径采样算法，以中心实体为起点在图谱中采样多条图路径；随后Path-Transformer路径编码模块负责学习图路径中蕴含的长距离的语义信息并转换为向量表示；Neighbor-Transformer局部邻域编码模块接收来自Path-Transformer的输入，整合待遇测事实三元组以及多条图路径所构成上下文邻域信息并预测三元组得分。
+
+
