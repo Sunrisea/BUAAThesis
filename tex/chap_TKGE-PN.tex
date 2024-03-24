@@ -69,6 +69,15 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
   $T$ & 图路径的长度\\
   $P$ & 知识图谱中的图路径\\
   $\mathcal{N}_s$ & 实体 $s$的一阶邻居节点集合\\
+  $\mu_{depth}(e_{i+1})$ & 候选实体$e_{i+1}$的深度偏差\\
+  $\mu_{degree}(e_{i+1})$ & 候选实体$e_{i+1}$的度数偏差\\
+  $\alpha$ & 控制深度偏差的权重\\
+  $\beta$ & 控制度数偏差的权重\\
+  $p_{sample}$ & 采样过程中实体被选中的概率\\
+  $e_m,r_m$ & 掩蔽实体关系预测任务中被掩蔽的实体或关系\\
+  $\mathbf{M}_{input}^{P},\mathbf{M}_{output}^{P}$ & Path-Transformer模块的输入和输出\\
+  $\boldsymbol{e}_{mask}$ & 掩蔽占位嵌入\\
+  $\boldsymbol{e}_{query}$ & 查询向量\\
   $d$ & 嵌入维度\\
   $\phi_{chk}$ & 棋盘式特征重组\\
   $\circledast$ & 循环卷积操作\\
@@ -76,14 +85,18 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
   $vec(\cdot)$ & 二维张量转化为一维向量\\
   $\omega_r$ & 特定于关系$r$的卷积层参数\\
   $\mathbf{W}_r$ &特定于关系$r$的全连接层参数\\
-  $\boldsymbol{e}_{cls}$ & 特殊嵌入Class Token\\
+  $\boldsymbol{e}_{cls}$ & Path-Transformer特殊嵌入Class Token\\
+  $\boldsymbol{e}_{gcls}$ & Neighbor-Transformer特殊嵌入Global Class Token\\
   $\mathbf{TE}$ & 类型嵌入\\
+  $\mathbf{PE}$ & 位置嵌入\\
   $a_{ij}$ & 第i个输入和第j个输入之间的注意力得分\\
   $dis(e_i,e_j)$ & 实体$e_i$与实体$e_j$之间最短路径的距离\\
   $deg(e)$ & 实体$e$的节点度数\\
   $\boldsymbol{o}_t$ & 模型预测的候选实体的嵌入\\
   $\sigma $ & sigmoid激活函数\\
   $p$ & 三元组正确概率\\
+  $L_{MERP}$ & 掩蔽实体关系预测任务的损失\\
+  $L_{LP}$ & 链路预测任务损失\\
   $L$ & 模型损失\\
   $t_i$ & 第i个三元组的标签\\
 
@@ -102,16 +115,12 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
 
 本节主要对提出的基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法TKGE-PN的总体结构进行介绍。模型架构如图\ref{TKGE-PN_architecture}所示。
 
-
-
 和NATLP不同，TKGE-PN并没有采用编码器-解码器架构，而是利用Transformer自身的强大表达能力直接对目标实体的嵌入进行预测，这样的方式的优点是模型可以充分发挥自注意力机制的强大表达能力，其性能不会受限于用作解码器的基于图神经网络的知识图谱嵌入方法的限制。
-
-
 
 TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有偏随机游走的图路径采样算法，主要职责是以中心实体为起点在图谱中采样多条图路径；随后第二部分Path-Transformer路径编码模块负责学习采样到的图路径中蕴含的长距离的语义信息并将其转换为向量表示；最后Neighbor-Transformer局部邻域编码模块接收来自Path-Transformer的输入，整合待遇测事实三元组中的信息以及多条图路径所构成上下文邻域信息，并以此预测三元组得分。
 
 \begin{figure}[htbp]
-  \centerline{\includegraphics[width=0.85\textwidth]{pic/TKGE-PN_architecture.pdf}}
+  \centerline{\includegraphics[width=0.65\textwidth]{pic/TKGE-PN_architecture.pdf}}
   \caption{TKGE-PN模型整体架构}
   \label{TKGE-PN_architecture}
 \end{figure}
@@ -135,9 +144,113 @@ TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有�
 
 此外，为了避免随机采样的图路径之间出现路径重复而导致信息冗余的情况，对于同一个头实体节点$s$，采样模块确保采样到的不同图路径中的前三个元素组成的事实三元组唯一，即对于不同图路径$P_i=<s,r_1^{i},e_1^{i},...,r_T^{i},e_T^{i}>$和$P_j=<s,r_1^{j},e_1^{j},...,r_T^{j},e_T^{j}>$，有$(s, r_1, e_1)\neq(s, r_2, e_2)$，其中$e_1^{i},e_1^{j}\in \mathcal{N}_s$，$\mathcal{N}_s$为实体 $s$的一阶邻居节点组成的集合。这样的采样方式不仅保证了采样到的图路径之间有足够的区分度，还让采样到的路径覆盖了中心实体的一阶邻域，通过所有采样的图路径，模型就能学习到中心实体的局部邻域信息，实现长短距离依赖的同时学习。
 
-为了确保采样到的图路径能够帮助模型进行链路预测任务，TKGE-PN的图路径采样模块采用有偏随机游走算法来决定图路径中每一跳选中的实体和关系，实现高质量的图路径采样。为了能够更好的捕获长距离的依赖，TKGE-PN希望采样到的路径能够更加的远离起始的头节点，即采样深度更大一些。在路径采样模块中，我们利用深度偏差来控制这一点。具体来说，假设在图路径采样的过程中，起始节点为$s$，当前选中的实体为$e_i$，上一跳实体为$e_{i-1}$，下一跳的候选实体$e_{i+1}$为$e_i$的一阶邻居，则深度偏差$\mu_{depth}(e_{i+1})$的计算方式为:
+为了确保采样到的图路径能够帮助模型进行链路预测任务，TKGE-PN的图路径采样模块采用有偏随机游走算法来决定图路径中每一跳选中的实体和关系，实现高质量的图路径采样。为了能够更好的捕获长距离的依赖，TKGE-PN希望采样到的路径能够更加的远离起始的头实体，即采样深度更大一些。为了实现这一点，在进行路径采样的过程中，模型提出了深度偏差来控制路径采样的过程。具体来说，假设在图路径采样的过程中，起始节点为$s$，当前选中的实体为$e_i$，上一跳实体为$e_{i-1}$，下一跳的候选实体$e_{i+1}$为$e_i$的一阶邻居，则深度偏差$\mu_{depth}(e_{i+1})$的计算方式为:
 \begin{equation}
   \mu_{depth}(e_{i+1})=1-\alpha\cdot\frac{1}{dis(s,e_{i+1})}
 \end{equation}
-其中$dis(s,e_{i+1})$为实体$s$与实体$e_{i+1}$之间最短路径的距离，$\alpha$为控制采样过程中路径深度的超参数，为了获得深度更大的路径，一般设置为$\alpha>0$。
+其中$dis(s,e_{i+1})$为实体$s$与实体$e_{i+1}$之间最短路径的距离，$\alpha$为控制采样过程中路径深度的超参数，为了获得深度更大的路径，一般设置为$\alpha>0$，这样候选实体距离起始实体的最短距离越大，则在计算采样概率时的深度偏差越大。图\ref{depth_bias}说明了一个具体的实例。
 
+\begin{figure}[htbp]
+  \centerline{\includegraphics[width=0.5\textwidth]{pic/depth_bias.pdf}}
+  \caption{图路径采样过程中的深度偏差}
+  \label{depth_bias}
+\end{figure}
+
+除了路径深度之外，在图路径采样的过程中，TKGE-PN还将实体的节点度数纳入了考虑。作为知识图谱中一种重要的结构信息，实体的节点度数反映了实体在整个知识图谱中的全局重要性，实体的节点度数越高，说明该实体连接的其他实体和关系越多，蕴含的信息越丰富，应该越重要，为了提高链路预测的准确性，在采样的过程中，节点度数较高的实体采样的权重应该更高。为了实现这一点，模型在路径采样过程中引入了度数偏差。对于候选实体$e_{i+1}$，度数偏差$\mu_{degree}(e_{i+1})$的计算方式如下：
+\begin{gather}
+  \mu_{degree}(e_{i+1})=\lg(deg_{(e_{i+1})})
+\end{gather}
+其中$deg_{(e_{i+1})}$为候选实体$e_{i+1}$的度数。此外，我们认为，如果一个实体相邻的实体的节点度数很高，那么该实体的重要性应该也会受到邻居实体的影响随之增加，因为经过该节点可以获取到重要性较高的实体节点的信息，因此在计算度数偏差时TKGE-PN将相邻实体的节点度数也纳入了考虑，有：
+\begin{gather}
+  \mu_{degree}(e_{i+1})=\frac{1}{2}\lg(deg_{e_{i+1}})+\frac{1}{2\|\mathcal{N}_{e_{i+1}}\|}\sum_{e_k\in\mathcal{N}_{e_{i+1}}}\lg(deg_{e_k})
+\end{gather}
+
+最终，我们可以得到在图路径采样的过程中，下一跳候选实体$e_{i+1}$被选中的未正则化的概率计算公式为：
+\begin{gather}
+  \mu_i = \mu_{depth}(e_{i+1})+\beta\cdot\mu_{degree}(e_{i+1})\\
+  p_{sample}(e_{i+1})=\left\{
+      \begin{aligned}
+          &\mu_i &&\quad (e_i,r_i,e_{i+1})\in \mathcal{T}^{\prime} \\
+          &0 &&\quad otherwise
+      \end{aligned}
+  \right.
+\end{gather}
+其中$\beta$为控制采样过程中度数偏差的权重。
+
+\subsection{Path-Transformer路径编码模块}
+
+通过基于有偏随机游走的采样算法，TKGE-PN模型获得了若干条图路径用于链路预测任务。但是这些采样到的图路径无法直接使用，还需要Path-Transformer路径编码模块学习其中蕴含的语义信息并转换为对应的向量表示。和处理局部邻域结构不一样的是，图路径天然具有序列数据的形式，而Transformer被认为是建模序列数据的最强大的神经网络，因此原始的Transformer网络就能够很好的挖掘路径中实体与实体、实体与关系之间的长短距离依赖，而无需对网络结构进行额外的改造。
+
+给定一条长度为$T$的图路径$P=<s,r_1,e_1,...,r_T,e_T>$，Path-Transformer路径编码模块的输入主要由以下几个部分组成：图路径嵌入表示$\mathbf{M}_{path} $，以及一个可学习的特殊嵌入Class Token的向量表示$\mathbf{e}_{cls}$用于获取所有输入的统计特性，因此路径编码模块的输入表示为：
+\begin{gather}
+  \mathbf{M}_{path} = [\boldsymbol{e}_s,\boldsymbol{r}_1,\boldsymbol{e}_1,...,\boldsymbol{r}_T,\boldsymbol{e}_T]\\
+  \mathbf{M}_{path}^{\prime} = [\boldsymbol{e}_{cls},\mathbf{M}_{path}]
+\end{gather}
+其中$\boldsymbol{e}_{cls}\in\mathbb{R}^d$，$\mathbf{M}_{path} \in \mathbb{R}^{(2T+1)\times d}$。$\mathbf{M}_{path}$由图路径中包含的所有的实体及关系对应的嵌入构成，$\boldsymbol{e},\boldsymbol{r} \in \mathbb{R}^d$ 代表分别代表实体和关系嵌入，$d$则为嵌入向量维度的大小。同样的，和NATLP类似，Path-Transformer采用类型嵌入来帮助模型区分实体嵌入，关系嵌入以及特殊嵌入向量$\boldsymbol{e}_{cls}$。此外，由于图路径是序列数据，Path-Transformer采用可学习的位置位置来识别图路径中实体和关系之间的顺序关系，因此Path-Transformer的最终输入表示为：
+\begin{equation}
+  \mathbf{M}_{input}^{P} = \mathbf{M}_{path}^{\prime}+\mathbf{TE} + \mathbf{PE}
+\end{equation}
+其中$\mathbf{TE}$ 为类型嵌入，$\mathbf{PE}$为位置嵌入。
+
+在完成输入构造后，Path-Transformer会利用自注意力机制学习图路径中的语义信息。设Path-Transformer模块最后一层的输出为$\mathbf{M}_{output}^{P}\in\mathbb{R}^{(2T+1)\times d}$，TKGE-PN取输出中特殊嵌入向量$\boldsymbol{e}_{cls}$对应位置的嵌入$\boldsymbol{e}_{path}\in\mathbb{R}^d$作为当前图路径的向量表示。
+
+Path-Transformer路径编码模块尝试从知识图谱图路径中挖掘长距离的依赖用于链路预测任务，但是相比于近距离的局部邻域，图路径中蕴含的长距离依赖反应的是实体之间间接的联系，容易在学习的过程中丢失，模型学习起来是更加困难的。针对这样的挑战，受到BERT\upcite{BERT}中掩蔽语言建模(Masked Language Model，MLM)预训练任务的启发,TKGE-PN提出了掩蔽实体关系预测(Masked Entity and Relation Prediction，MERP)任务，以加强Path-Transformer从图路径上下文中挖掘信息的能力。
+
+具体来说，对于输入的每一条图路径$P$，模型将会随机选择遮掩或者替换掉某个关系或者实体进行预测任务。以实体为例，在掩蔽替换阶段，被选中的实体$e_m$ 将会以一定概率被替换成特殊的掩蔽占位嵌入$e_{mask}$、其他的随机实体或者维持不变，模型使用超参数来调节以上三种情况的概率。而在预测阶段，模型取Path-Transformer输出嵌入矩阵$\mathbf{M}_{output}^{P}$中被选中的实体对应的嵌入$\boldsymbol{e}_{m}^\prime$来尝试辨认出被遮掩的正确实体$e_m$。具体来说，对于一个候选的实体$e_t$，模型将$\boldsymbol{e}_{m}^\prime$通过一个双层全连接层并计算$\boldsymbol{e}_{m}^\prime$与$\boldsymbol{e}_{t}$之间的余弦相似度来获得候选实体$e_t$的正确概率$p_m$：
+\begin{equation}
+  p_m(e_t)=\sigma((f(\boldsymbol{e}_m^\prime\mathbf{W}^{\prime})\mathbf{W}^{\prime\prime})\boldsymbol{e}_t)
+\end{equation}
+其中$f (\cdot)$和$\sigma(\cdot)$分别代表ReLU和sigmoid激活函数，$\mathbf{W}^{\prime}$和$\mathbf{W}^{\prime\prime}$分别为两个全连接层的参数。当被选中的元素为关系时，处理方法类似。最后TKGE-PN通过交叉熵损失函数，计算得到掩蔽实体关系预测任务的分类损失为:
+\begin{equation}
+  L_{P} = -\frac{1}{N}\sum\limits_{i}t_m^ilog(p_m^i)+(1-t_m^i)log(1-p_m^i)
+\end{equation}
+其中$t_m^i$为MERP任务中的分类标签，$p_m^i$为对应候选实体的正确概率。
+
+掩蔽实体关系预测任务加强了Path-Transformer挖掘图路径中语义信息的能力。在原本的训练过程中，由于近距离的依赖学习难度较低，模型可能会倾向于挖掘近距离的实体中蕴含的信息，而忽略了远距离的部分。而通过随机地对图路径中的元素进行掩蔽，模型无法再单纯地依赖某个特定的图路径元素；通过对掩蔽的元素进行预测，模型也确保了信息不会丢失。基于掩蔽实体关系预测任务，模型实现了对图路径中长短距离依赖信息的平衡。
+
+\subsection{Neighbor-Transformer局部邻域编码模块}
+
+给定一个待遇测的三元组$(s,r,?)$，通过基于有偏随机游走的图路径采样算法，模型已经获得了以头实体$s$为起点的多条图路径，数量等于头实体$s$的节点度数。通过对采样的规则进行限制，这些图路径覆盖了头实体$s$的一阶局部邻域。因此，Neighbor-Transformer局部邻域编码模块通过基于Path-Transformer学习到的所有的图路径表示，便能够同时结合知识图谱的局部邻域结构信息和图路径结构信息，在避免过平滑问题的同时实现对于长短距离依赖的同时学习，提高知识图谱补全任务的性能。
+
+Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部分：图路径嵌入矩阵$\mathbf{M}_{paths}$，查询嵌入$\boldsymbol{e}_{query}$以及一个可学习的特殊嵌入$\boldsymbol{e}_{gcls}$。$\mathbf{M}_{paths}\in\mathbb{R}^{N_p\times d}$由所有采样到的以头实体$s$为起点的图路径的嵌入表示组成，其中$N_p$为采样到的图路径的数量，有：
+\begin{equation}
+  \mathbf{M}_{paths}=\left[ \boldsymbol{e}_{P_1},\boldsymbol{e}_{P_2},...,\boldsymbol{e}_{P_{N_p}}\right]
+\end{equation}
+其中$\boldsymbol{e}_{P_i} \in \mathbb{R}^d$为第$i$条图路径的向量表示。为了能够发挥Transformer模型的表达能力，避免模型的性能被基于卷积神经网络的解码器限制，TKGE-PN抛弃了NALTP中采用的编码器-解码器架构，而是利用Transformer网络尝试直接拟合待遇测尾实体$o$的嵌入。查询向量$\boldsymbol{e}_{query}$的主要作用是向Transformer传递待遇测三元组的信息，让模型能够基于当前输入调整注意力分数的计算，提高模型链路预测的性能。$\boldsymbol{e}_{query}$由待预测三元组中头实体$s$和关系$r$对应的嵌入向量$\boldsymbol{s}$和$\boldsymbol{r}$计算得到，有：
+\begin{equation}
+  \boldsymbol{e}_{query}=\varPhi(\boldsymbol{s},\boldsymbol{r})
+\end{equation}
+其中$\boldsymbol{s},\boldsymbol{r}\in\mathbb{R}^d$，$\varPhi(\cdot)$为对应的运算函数，可以根据不同的场景选用不同的形式，例如向量相加，向量相乘，或者利用神经网络完成查询向量的构造。本文中采用的是NATLP中基于特定关系的消息构造方式，有：
+\begin{equation}
+  \varPhi \left(s,r\right) = f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{s},\boldsymbol{r}\right) \circledast \omega_{r} \right)\right)\mathbf{W}_{r}\right)
+\end{equation}
+
+特殊嵌入向量$\mathbf{e}_{gcls}$用于获取所有输入的统计特性，并且对应位置的输出将会被用于链路预测任务最后的概率计算。和NALTP类似，三种不同的类型嵌入被用来区分图路径嵌入矩阵$\mathbf{M}_{paths}$，查询嵌入$\boldsymbol{e}_{query}$以及$\boldsymbol{e}_{gcls}$。由于不同的图路径信息之间没有明显的相对位置关系，因此Neighbor-Transformer局部邻域编码模块中没有使用位置嵌入。最终，Neighbor-Transformer模块的输入表示为：
+\begin{gather}
+  \mathbf{M}_{neighbor}^{\prime}=[\boldsymbol{e}_{gcls},\boldsymbol{e}_{query},\mathbf{M}_{paths}]\\
+  \mathbf{M}_{input}^{N}=\mathbf{M}_{neighbor}^{\prime}+\mathbf{TE}
+\end{gather}
+
+和NATLP类似，考虑到图路径上的实体度数之和能够一定程度上反应图路径信息的重要性，在计算注意力分数时，Neighbor-Transformer将图路径的整体节点度数也纳入了考虑。具体的，Neighbor-Transformer在计算注意力得分时额外添加一个图路径节点度数的辅助项：
+\begin{gather}
+  a_{ij}=\frac{(\boldsymbol{e}_{P_i}W_Q)(\boldsymbol{e}_{P_j}W_K)^T}{\sqrt{d}}+1-\frac{1}{\lg (deg_{P_i})\cdot \lg (deg_{P_j})}\\
+  deg_{P_i}=\sum_{n = 1}^{T}  deg_{e_n}
+\end{gather}
+
+最后，TKGE-PN取最后一层输出中对应特殊嵌入向量$\boldsymbol{e}_{gcls}$对应位置的输出向量$\boldsymbol{T}_{GCLS}$来进行链路预测任务。对于任意一个候选实体$e_t$，模型将$\boldsymbol{T}_{GCLS}$与$e_t$的嵌入$\boldsymbol{e}_{t}$进行点积后并经过sigmoid激活函数后得到三元组$(s,r,e_t)$的得分$p$。获得所有候选实体的得分后，计算得到链路预测任务的交叉熵损失为：
+\begin{equation}
+  L_{LP} = -\frac{1}{N}\sum\limits_{i}t_ilog(p_i)+(1-t_i)log(1-p_i)
+\end{equation}
+最终，通过将链路预测任务的损失和掩蔽实体关系预测任务的损失相加，我们可以得到用于模型训练的最终损失函数：
+\begin{gather}
+  L_{MERP} = -\frac{1}{N_p}\sum\limits_{i}L_{p_{i}}\\
+  L=L_{LP}+L_{MERP}
+\end{gather}
+其中$L_{p_{i}}$是第$i$条图路径上掩蔽实体预测任务的损失。
+
+此外，为了避免出现模型训练和模型预测时的数据分布的不一致，在训练过程中模型将从头实体的邻域内移除真实的尾实体，避免训练期间模型总是可以从头实体的邻域内感知到真实的尾实体，而这种情况和预测时的实际情况不符。
+
+
+\section{本章小结}
+
+本章对TKGE-PN模型的整体架构和实现细节进行了详细介绍。首先对基于图神经网络的方法以及前文提出的NATLP模型依然存在的问题进行了介绍；随后给出了模型中涉及到的数学符号的详细定义；之后介绍了模型的整体架构组成；最后，对TKGE-PN中的关键设计细节进行了具体的说明，包括（1）基于有偏随机游走的图路径采样算法，将图路径的路径深度以及实体的节点度数纳入了考虑，用于采样高质量的图路径（2）Path-Transformer路径编码模块，通过掩蔽实体关系预测任务加强模型学习图路径中语义信息的能力，实现了长短距离依赖信息的平衡（3）Neighbor-Transformer局部邻域编码模块，结合待遇测的事实三元组，综合图路径结构信息和局部邻域结构信息完成链路预测任务。
