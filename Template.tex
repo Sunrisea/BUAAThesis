@@ -147,29 +147,44 @@
 %%=================================================================
 % 摘要-{中文}{英文}
 \Abstract{%
-  摘要是学位论文内容的简短陈述，应体现论文工作的核心思想。论文摘要应力求语言精炼准确。博士学位论文的中文摘要一般约800$\sim$1200字；硕士学位论文的中文摘要一般约500字。摘要内容应涉及本项科研工作的目的和意义、研究思想和方法、研究成果和结论。博士学位论文必须突出论文的创造性成果，硕士学位论文必须突出论文的新见解。
+知识图谱多个人工智能领域中得到了广泛的应用。但是，目前大多数的知识图谱是不完全的，因此知识图谱补全任务成为了热门的研究领域。知识图谱补全任务旨在预测知识图谱中缺失的三元组，目前的主流方案是知识图谱嵌入，将实体和关系投影到低维向量空间中以学习知识图谱中的隐含规律。许多现有的方法通过利用图谱的图结构信息获得优异的性能，其中最具代表性的为利用图谱中局部邻域结构的基于图神经网络的方法。但是一方面图神经网络其浅层的网络结构限制了模型的表达能力，另一方面存在的过度平滑问题也导致模型无法利用长距离的信息。Transformer是注意力机制方面里程碑式的工作，基于Transformer的模型变体在计算机视觉和编程语言领域中表现出了出色的性能。因此针对上述不足，本文研究基于Transformer的知识图谱补全方法，提出了基于领域感知的Transformer模型NATLP以及结合图路径和局部领域的Transformer模型TKGE-PN。本文的主要工作内容如下：
 
-  关键字是为用户查找文献，从文中选取出来揭示全文主体内容的一组词语或术语，应尽量采用词表中的规范词（参考相应的技术术语标准）。关键词一般3$\sim$5个，按词条的外延层次排列（外延大的排在前面）。关键词之间用逗号分开，最后一个关键词后不打标点符号。
+（1）针对基于图神经网络的知识图谱嵌入方法表达能力不足、无法捕捉邻居实体之间的相互依赖的问题，本文提出了基于领域感知的Transformer模型NATLP，通过关系特定的邻居实体信息构造建模了不同关系对于实体传递消息的影响，并对Transformer的自注意力计算机制进行了改造，使Transformer能够感知到局部邻域内的图结构数据，学习到邻居实体之间的相互依赖。
 
-  为了国际交流的需要，论文必须有英文摘要。英文摘要的内容及关键词应与中文摘要及关键词一致，要符合英语语法，语句通顺，文字流畅。英文和汉语拼音一律为Times New Roman体，字号与中文摘要相同。
+（2）针对基于图神经网络的方法以及NATLP无法学习到长距离依赖的问题，本文提出了结合图路径和局部领域的Transformer模型TKGE-PN。模型首先通过有偏随机游走算法以中心实体为起点采样多条图路径，其次通过基于Transformer的图路径编码模块学习图路径中的长距离依赖并转化为向量表示，最后局部邻域编码模块集合所有图路径向量结合局部邻域信息表示对三元组打分。在图路径编码的过程中，利用掩蔽实体关系预测任务增强模型对于长距离信息的学习能力。
+
+（3）在两个主流基准数据集FB15K-237和WN18RR上对提出的NATLP和TKGE-PN模型进行了实验，证明了本文提出的模型以及关键设计的有效性。
   }{%
-  What were you doing 500 years ago? Oh, that's right nothing, because you didn't exist yet. In fact, several generations of your family had yet to leave their mark on the world, but one very special shark may already have been swimming in the chilly North Atlantic at that time, and the incredible animal is somehow still alive today.
-
-  Scientists studying Greenland sharks observed the particularly old specimen just recently, and after studying it they've determined that the creature is approximately 272 to 512 years old. That's an absolutely insane figure, and if its age lands towards the higher end, it makes the animal the oldest observed living vertebrate on the entire planet.
-
-  Greenland sharks are an incredible species in a number of ways, but most notable is its longevity. The sharks are well over 100 years old before even reaching sexual maturity, and regularly live for centuries. This particularly old specimen, along with 27 others, were analyzed using radiocarbon dating. The reading came back at around 392 years, but potential margin of error means the animal's true age is somewhere between 272 and 512.
-
-  The shark, which is a female, measures an impressive 18 feet long. That's pretty large, but it might not sound particularly large for an ocean-dwelling creature that lives hundreds of years. That is, until you consider that the Greenland shark only grows around one centimeter per year. With that in mind, 18 feet is actually downright massive.
-
-  As for how this particular shark species manages to live so incredibly long, scientists attribute a lot of its longevity to its sluggish metabolism, as well as its environment. The frigid waters where the sharks thrive is thought to increase overall lifespan in a variety of ways. Past research has shown that cold environments can help slow aging, and these centuries-old sharks are most certainly benefiting from their chilly surroundings.
-
-  --- Online news {\it Scientists find incredible shark that may be over 500 years old and still kicking\/}, 12.16.2017. (http://bgr.com/2017/12/14/oldest-shark-greenland-512-years-old/).
+  Many existing knowledge graph embedding meth-
+ods achieve outstanding performance by exploiting the graph
+structure, among which graph neural network-based methods
+that utilize the local neighborhood are the most representative.
+However, the shallow network structure of graph neural networks
+limits the model’s expressiveness, and the existing problem of
+over-smoothing also prevents the model from capturing long-
+distance information. To address these issues, we propose a
+Transformer-based knowledge graph embedding method that
+combines graph paths and local neighborhood (TKGE-PN). First,
+it samples multiple graph paths by using a biased random
+walk algorithm starting from the central entity. Then these
+sampled paths are transformed into vector representations by
+a Transformer-based graph path encoding module. Finally, the
+local neighborhood encoding module aggregates all graph path
+vector representations to score triples. During the graph path
+encoding process, a masked entity relation prediction task is used
+to enhance the model’s ability to learn long-distance information.
+Experimental results show that on two standard datasets, FB15k-
+237 and WN18RR, the performance of TKGE-PN surpasses that
+of most existing models, demonstrating the effectiveness of our
+approach.
 }
 % 关键字-{中文}{英文}
 \Keyword{%
-    北航，学位论文，博士，硕士，中文，\LaTeX{}模板，\BUAAThesis{}
+    知识图谱，知识图谱补全，知识图谱嵌入，Transformer，图路径，局部邻域，
   }{%
-    News, BGR, Shark
+    Knowledge Graph, Knowledge Graph Completion,
+Knowledge Graph Embedding, Transformer, Graph Path, Local Neighborhood,
+
 }
 
 % 图标目录
