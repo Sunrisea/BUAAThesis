@@ -1,11 +1,11 @@
 \chapter{实验与验证}
 
-为了验证本课题提出的NATLP算法和TKGE-PN算法的有效性，本文对两个方法分别进行了实验验证。本章首先对实验方案设计进行了介绍，包括实验采用的数据集、实验环境、评估策略；随后分别介绍了两个方法的对比算法，并对实验结果进行了详细的分析，包括整体性能分析、关键设计分析以及超参数影响分析。
+为了验证本课题提出的NATLP算法的有效性，本文进行了实验验证。本章首先对NALTP的实验方案设计进行了介绍，包括实验采用的数据集、实验环境、评估策略；用来对比的基线算法以及模型在两个数据集上的超参数设置，并对实验结果进行了详细的分析，包括整体性能分析、关键设计分析以及超参数影响分析。
 
 \section{实验方案设计}
 
 \subsection{实验数据集}
-为了对NATLP模型和TKGE-PN模型进行评估，本文在两个标准基准数据集FB15k-237\upcite{FB15k-237}和WN18RR\upcite{ConvE}上进行了实验。FB15k-237是开源知识图谱Freebase\upcite{freebase}的子集，存储了有关电影、演员、奖项等等现实世界的常识信息的。WN18RR则是开源知识图谱WordNet\upcite{wordnet}的子集，包含了英文单词中的语义信息，例如同义、反义、单词概念的上下层等多种单词语义关系。为了避免测试集出现逆关系泄露的问题，两个数据集中所有的逆关系都已经被去除。两个数据集的统计数据如表\ref{dataset_statistics}所示，其中训练集用于模型参数训练，验证集用于模型超参数调优，测试集用于模型性能评估。值得注意的是，这两个数据集中的关系数量存在差异，FB15k-237包含了237种Freebase中的不同关系，而WN18RR的关系种类数量为11，总的来说，相比于FB15k-237，WN18RR数据集更加的稀疏。
+为了对NATLP模型进行评估，本文在两个标准基准数据集FB15k-237\upcite{FB15k-237}和WN18RR\upcite{ConvE}上进行了实验。FB15k-237是开源知识图谱Freebase\upcite{freebase}的子集，存储了有关电影、演员、奖项等等现实世界的常识信息的。WN18RR则是开源知识图谱WordNet\upcite{wordnet}的子集，包含了英文单词中的语义信息，例如同义、反义、单词概念的上下层等多种单词语义关系。为了避免测试集出现逆关系泄露的问题，两个数据集中所有的逆关系都已经被去除。两个数据集的统计数据如表\ref{dataset_statistics}所示，其中训练集用于模型参数训练，验证集用于模型超参数调优，测试集用于模型性能评估。值得注意的是，这两个数据集中的关系数量存在差异，FB15k-237包含了237种Freebase中的不同关系，而WN18RR的关系种类数量为11，总的来说，相比于FB15k-237，WN18RR数据集更加的稀疏。
 
 \begin{table}[htbp]
   \renewcommand\arraystretch{1.5}
@@ -52,4 +52,140 @@ MR代表了所有正确实体的平均排序位置，MR越小，说明正确实�
 
 \subsection{实验环境}
 
-实验中用到的服务器硬件和软件配置如表所示。硬件配置方面，实验所采用的服务器的处理器规格为
+本文采用的实验环境中的服务器硬件和软件配置如表\ref{environment}所示。硬件配置方面，实验所采用的服务器的处理器规格为Intel(R) Core(TM) i9-10920X CPU @ 3.50GHz，内存大小为128G，使用的显卡型号为GeForce RTX 4090，对应的显存大小为24G；软件配置方面，使用的操作系统为Ubuntu 5.4.0-74，采用的编程语言为Python，版本为3.10.9，使用的深度学习框架及其对应的版本为Pytorch 1.13.1。
+
+\begin{table}[htbp]
+    \renewcommand\arraystretch{1.5}
+    \caption{采用的实验环境}
+    \centering
+    \begin{tabular}{*{2}{c}}
+      \toprule
+      配置项目 & 版本/内容\\
+      \midrule
+      处理器  & Intel(R) Core(TM) i9-10920X CPU @ 3.50GHz \\
+      内存 & 128G\\
+      显卡 & GeForce RTX 4090\\
+      显存 & 24G\\
+      操作系统 & Ubuntu 5.4.0-74\\
+      编程语言 & Python 3.10.9\\
+      深度学习框架 & Pytorch 1.13.1\\
+      \bottomrule
+    \end{tabular}
+    \label{environment}
+\end{table}
+
+
+\subsection{对比算法}
+
+为了验证本文提出的NATLP方法在知识图谱补全任务上的有效性，实验部分本文选取了一些最具代表性的以及最先进的知识图谱补全方法作为基线模型与NATLP模型进行了对比实验，主要包含以下几类方法：
+
+(1)基于翻译的知识图谱嵌入模型，包括TransE\upcite{TransE}，RotatE\upcite{RotatE}。
+
+(2)基于张量分解的知识图谱嵌入模型，包括DistMult\upcite{DistMult}，ComplEx\upcite{ComplEx}。
+ 
+(3)基于卷积神经网络的模型，包括ConvE\upcite{ConvE}，ConvR\upcite{ConvR}。
+
+(4)基于图神经网络的知识图谱嵌入模型，包括R-GCN\upcite{R-GCN}，CompGCN\upcite{CompGCN}，KBGAT\upcite{KBGAT}，HKGN\upcite{HKGN}，SE-GNN\upcite{SE-GNN}以及MRGAT\upcite{MRGAT}。
+
+\subsection{超参数设置}
+
+NATLP模型在实验中采用的超参数是通过网格搜索在验证集上进行评估后得出的，主要涉及到的超参数有实体和关系嵌入的维度、关系特定的邻居实体信息构造中使用的卷积核的大小、卷积核的数量、不同神经网络层的Dropout概率、训练批次的大小、训练中的总迭代次数、训练中的最大学习率以及标签的平滑比例等。
+
+实验中采用了Adamax\upcite{Adamax}优化器结合动态学习率调整策略进行模型的训练。在总迭代次数的前10\%内，模型的学习率将从0线性提升到最高，并在剩余迭代次数内线性下降到0。为了防止模型出现过度自信的现象，训练过程中以0.1的比率进行了标签平滑。NATLP模型在两个数据集上的具体的超参数设置见表\ref{NALTP_hyperparameter}所示。
+
+\begin{table}[htbp]
+  \renewcommand\arraystretch{1.5}
+  \caption{NATLP模型超参数设置}
+  \centering
+  \begin{tabular}{*{3}{c}}
+    \toprule
+    超参数 & FB15k-237 & WN18RR\\
+    \midrule
+    实体和关系嵌入大小  & 320 & 320 \\
+    卷积核大小 & 3$\times$3 & 3$\times$3\\
+    卷积核数量 & 32 & 32\\
+    Transformer网络层数& 4 & 4\\
+    嵌入层Dropout概率 & 0.2 & 0.2\\
+    Transformer中的Dropout概率 & 0.6 & 0.6\\
+    训练批次大小 & 512 & 512\\
+    总迭代次数& 300 & 500 \\
+    最大学习率 & 0.001 & 0.02\\
+    标签平滑比例 & 0.1 & 0.1\\
+    \bottomrule
+  \end{tabular}
+  \label{NALTP_hyperparameter}
+\end{table}
+
+\section{实验结果与分析}
+
+\subsection{整体实验结果分析}
+
+不同模型在WN18RR数据集和FB15k-237数据集上的链路预测实验结果如表\ref{NATLP_result_tab}所示。文献\cite{49}在充分大的超参数搜索空间下采用统一的训练框架进行了大量的实验，探究了不同训练策略、模型架构和超参数搜索方法对于知识图谱嵌入模型性能的影响，发现如果选择合适的训练方法，许多浅层的知识图谱嵌入模型能够获得比原始文献中优秀得多的性能。因此TransE，RotatE，DistMult，ComplEx和ConvE模型在两个数据集上的实验结果直接选取文献\cite{49}中经过大量调参后的最优结果。另外，文献\cite{50}指出KBGAT中存在评估策略不当以及测试集数据泄露的问题，因此KBGAT的实验结果选取自文献\cite{50}中经过修正后的结果。
+
+\begin{table}[htbp]
+  \begin{center}
+      \caption{NATLP实验结果}
+      \renewcommand\arraystretch{1.5}
+      \setlength{\tabcolsep}{5pt}
+      \begin{tabular}{*{11}{c}}
+          \toprule
+          \multirow[vpos]{2}{*}[-0.8ex]{模型} & \multicolumn{5}{c}{WN18RR} & \multicolumn{5}{c}{FB15k-237}\\
+          \cmidrule(lr){2-6}\cmidrule(lr){7-11}
+          &MRR & MR & Hits@1 &Hits@3 & Hits@10&MRR & MR & Hits@1 &Hits@3 & Hits@10\\
+          \midrule
+          TransE&0.228&-&0.053&0.368&0.520&0.313&-&0.221&0.347&0.497\\
+          RotatE&0.478&-&0.439&0.494&0.553&0.333&	-&0.240&0.368&0.522\\
+          \cmidrule{1-11}
+          DistMult&0.452&-&0.413&0.466	&0.530	&0.343	&-	&0.250	&0.378	&0.531\\
+          ComplEx&0.475&-&0.438	&0.490	&0.547	&0.348	&-	&0.253	&0.384	&0.536\\
+          \cmidrule{1-11}
+          ConvE&0.442&-&0.411&0.451	&0.504&	0.339	&-&	0.248&	0.369	&0.521\\
+          ConvR&0.475&-&0.443&	0.489&	0.537&	0.350&	-&	0.261&	0.385&	0.528\\
+          \cmidrule{1-11}
+          R-GCN & -&-&-&-&-&0.248&-&0.153&0.258&0.414\\
+          CompGCN&0.479&3533&0.443	&0.494	&   0.546&	0.355	&197	&0.264	&0.390&	0.535\\
+          KBGAT&0.412&\textbf{1921}&-&	-&	0.554	&0.157	&270	&-&	-&	0.331\\
+          SE-GNN&0.484&3211&0.446&	\underline{0.509}&	\underline{0.572}	&\underline{0.365}& \textbf{157}	&\underline{0.271}	&\underline{0.399}	&\underline{0.549}\\
+          MRGAT&0.481&-&0.443&0.501&0.568&0.358	&-&0.266&0.386&0.542\\
+          HKGN&\underline{0.487}&\underline{2468}&\underline{0.448}&0.505&0.561&\underline{0.365}&194&\underline{0.271}&0.397&0.544\\
+          \cmidrule{1-11}
+          \textbf{NATLP}&\textbf{0.505}&2687&\textbf{0.465}&\textbf{0.519}&\textbf{0.576}&\textbf{0.374}&\underline{181}&\textbf{0.281}&\textbf{0.411}&\textbf{0.560}\\
+          % TKGE-PN&\textbf{0.510}&2540&\textbf{0.467}	&\textbf{0.522}	&\underline{0.590}	&\textbf{0.379}	&160	&\underline{0.288}	&\textbf{0.414}	&\textbf{0.562}\\
+          \bottomrule
+      \end{tabular}
+      \label{NATLP_result_tab}
+  \end{center}
+\end{table}
+
+表中加粗项为每项指标的最高值，下划线项为每项指标的次高值。从表\ref{NATLP_result_tab}中可以观察到，在两个基准数据集的绝大多数指标上，NATLP都取得了最优的效果，相对于次优结果，在FB15k-237数据集上，NATLP在MRR、Hits@1、Hits@3和Hits@10四个指标上分别取得了3.6\%，3.7\%， 1.9\%， 0.6\%的性能提升；在WN18RR数据集上，NATLP在MRR、Hits@1、Hits@3和Hits@10四个指标上分别取得了2.4\%，3.6\%， 3.0\%和2.0\%的性能提升，这表明本文提出的NALTP方法在链路预测任务上有着很好的表现，证明了NATLP模型的有效性。同样使用了注意力机制，相比于HKGN以及MRGAT等基于图神经网络的方法，NATLP有着可观的性能提升，证明了Transformer网络强大的表达能力以及在知识图谱嵌入领域的应用潜力。
+
+\subsection{模型关键设计分析}
+
+为了验证NATLP模型中关键设计：关系特定的邻居实体信息构造以及邻域感知Transformer模块的有效性，本文进行了多方面的对比实验来验证关键设计的效果。
+
+首先，为了验证关系特定的邻居实体信息构造中参数生成网络以及全局关系嵌入对于链路预测任务的作用，本文在两个数据集上分别以三种设置进行了消融实验，分别是（1）原始NATLP模型，未对模型进行任何改动；（2）消融了参数生成网络的NATLP模型，同一实体在不同关系下进行信息构造中共享完全相同的网络参数；（3）消融了全局关系嵌入的NATLP模型，参数生成网络仅依赖于关系嵌入进行参数生成。实验结果如表\ref{NATLP_ablation1}所示。
+
+\begin{table}[htbp]
+  \begin{center}
+      \caption{关系特定的邻居实体信息构造消融实验}
+      \setlength{\tabcolsep}{8pt}
+      \renewcommand\arraystretch{1.5}
+      % \renewcommand{\arraystretch}{1}
+      \begin{tabular}{*{7}{c}}
+          \toprule
+          数据集 & 模型设置 & MRR&MR&Hits@1&Hits@3&	Hits@10\\
+          \midrule
+          \multirow{3}{*}{WN18RR}&NATLP&0.505&2504&0.466&0.519&0.578\\
+          &消融参数生成网络&0.496&2399&0.456&0.512&0.575\\
+          &消融全局关系嵌入&0.503&2519&0.461&0.518&0.578\\
+          \cmidrule{1-7}
+          \multirow{3}{*}{FB15k-237}&NATLP&0.376&161&0.284&0.411&0.561\\
+          &消融参数生成网络&0.367&145&0.274&0.404&0.555\\
+          &消融全局关系嵌入&0.373&175&0.279&0.411&0.558\\
+          \bottomrule
+      \end{tabular}
+      \label{NATLP_ablation1}
+  \end{center}
+\end{table}
+
+
