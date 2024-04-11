@@ -244,7 +244,7 @@ PTransE模型将直接关系和间接关系一同考虑，所以基于翻译的�
 
 基于Transformer的知识图谱嵌入方法的核心思路是利用Transformer强大的表达能力来挖掘图谱中的语义和结构信息，以学习知识图谱的嵌入表示。Transformer模型的自注意力机制能够有效地捕捉实体之间的复杂关系和交互。还可以通过在Transformer中集成额外信息进一步加强实体和关系的表示。代表方法有HittER\upcite{HittER}和Relphormer\upcite{Relphormer}。
 
-Relphormer是一种为知识图谱嵌入任务而设计的基于Transformer的神经网络架构。为了解决知识图谱中实体与关系节点的异构性，Relphormer把实体和关系均视为相同的节点，有$ V=\mathcal{E} \cup \mathcal{R}$为节点集合，其中$\mathcal{E}$为实体集合，$\mathcal{R}$为关系集合，并用邻接矩阵$\mathbf{A} \in\left\{0,1\right\}^{\left\lvert V\right\rvert\times \left\lvert V\right\rvert} $来表示节点之间的连接关系，事实三元组表示为：$\mathcal{T} =(v_s,v_p,v_o)$，中心节点的局部领域为：
+Relphormer是一种为知识图谱嵌入任务而设计的基于Transformer的神经网络架构。为了解决知识图谱中实体与关系节点的异构性，Relphormer把实体和关系均视为相同的节点，有$ V=\mathcal{E} \cup \mathcal{R}$为节点集合，其中$\mathcal{E}$为实体集合，$\mathcal{R}$为关系集合，并用邻接矩阵$\mathbf{A} \in\left\{0,1\right\}^{\left\lvert V\right\rvert\times \left\lvert V\right\rvert} $来表示节点之间的连接关系，事实三元组表示为：$\mathcal{T} =(v_s,v_p,v_o)$，中心节点的局部邻域为：
 \begin{equation}
   \mathcal{T}_G = \mathcal{T}_c \cup \mathcal{T}_{context}, \ \mbox{where} \ \mathcal{T}_{context} =\left\{\mathcal{T}_i\in\mathcal{N} \right\} 
 \end{equation}
