@@ -147,13 +147,14 @@
 %%=================================================================
 % 摘要-{中文}{英文}
 \Abstract{%
-知识图谱多个人工智能领域中得到了广泛的应用。但是，目前大多数的知识图谱是不完全的，因此知识图谱补全任务成为了热门的研究领域。知识图谱补全任务旨在预测知识图谱中缺失的三元组，目前的主流方案是知识图谱嵌入，将实体和关系投影到低维向量空间中以学习知识图谱中的隐含规律。许多现有的方法通过利用图谱的图结构信息获得优异的性能，其中最具代表性的为利用图谱中局部邻域结构的基于图神经网络的方法。但是一方面图神经网络其浅层的网络结构限制了模型的表达能力，另一方面存在的过度平滑问题也导致模型无法利用长距离的信息。Transformer是注意力机制方面里程碑式的工作，基于Transformer的模型变体在计算机视觉和编程语言领域中表现出了出色的性能。因此针对上述不足，本文研究基于Transformer的知识图谱补全方法，提出了基于领域感知的Transformer模型NATLP以及结合图路径和局部邻域的Transformer模型TKGE-PN。本文的主要工作内容如下：
+知识图谱在多个人工智能领域中得到了广泛的应用。但是由于现实世界不断发展带来的知识的动态变化，即使是大规模知识图谱也难以囊括所有的知识，影响了知识图谱在下游任务中的应用，因此知识图谱补全任务成为了热门的研究领域。知识图谱补全任务旨在自动化预测知识图谱中缺失的三元组，目前的主流方案是知识图谱嵌入，将实体和关系投影到低维向量空间中以学习知识图谱中的隐含规律。许多现有的方法通过利用图谱的图结构信息获得优异的性能，其中最具代表性的为利用图谱中局部邻域结构的基于图神经网络的方法。但是一方面图神经网络其浅层的网络结构限制了模型的表达能力，另一方面存在的过度平滑问题也导致模型无法利用长距离的信息。Transformer是注意力机制方面里程碑式的工作，基于Transformer的模型变体在计算机视觉和编程语言领域中表现出了出色的性能。因此针对上述不足，本文研究基于Transformer的知识图谱补全方法，首先提出了基于领域感知的Transformer模型(Neighborhood Aware Transformer for Link Prediction, NATLP)，提高了模型的表达能力获得了更好的知识图谱补全性能，并在此基础上进一步提出了结合图路径和局部邻域的Transformer模型 (A Transformer-based Knowledge Graph Embedding Model Combining
+Graph Paths and Local Neighborhood，TKGE-PN)，实现了对于知识图谱中长短距离依赖的综合学习。本文的主要工作内容如下：
 
 （1）针对基于图神经网络的知识图谱嵌入方法表达能力不足、无法捕捉邻居实体之间的相互依赖的问题，本文提出了基于领域感知的Transformer模型NATLP，通过关系特定的邻居实体信息构造建模了不同关系对于实体传递消息的影响，并对Transformer的自注意力计算机制进行了改造，使Transformer能够感知到局部邻域内的图结构数据，学习到邻居实体之间的相互依赖。
 
 （2）针对基于图神经网络的方法以及NATLP无法学习到长距离依赖的问题，本文提出了结合图路径和局部领域的Transformer模型TKGE-PN。模型首先通过有偏随机游走算法以中心实体为起点采样多条图路径，其次通过基于Transformer的图路径编码模块学习图路径中的长距离依赖并转化为向量表示，最后局部邻域编码模块集合所有图路径向量结合局部邻域信息表示对三元组打分。在图路径编码的过程中，利用掩蔽实体关系预测任务增强模型对于长距离信息的学习能力。
 
-（3）在两个主流基准数据集FB15K-237和WN18RR上对提出的NATLP和TKGE-PN模型进行了实验，证明了本文提出的模型以及关键设计的有效性。
+论文在两个主流基准数据集FB15K-237和WN18RR上对提出的NATLP和TKGE-PN模型进行了实验，实验结果表明本文提出的两个模型在两个数据集上的多项指标超越了绝大部分基线模型，证明了本文提出的关键设计能够有效提高知识图谱补全任务的性能。
   }{%
   Given the widespread application of Knowledge Graphs (KGs) across multiple Artificial Intelligence domains, the incompleteness of most current knowledge graphs has made Knowledge Graph Completion (KGC) a hot research area. KGC aims to predict missing triples in a knowledge graph, and the current mainstream solution is Knowledge Graph Embeddings (KGE), which projects entities and relations into a low-dimensional vector space to learn the hidden patterns within the knowledge graph. Many existing methods achieve excellent performance by utilizing the graph structure information of the graph, among which the most representative is the method based on Graph Neural Networks (GNNs) that utilizes the local neighborhood structure in the graph. However, the shallow network structure of GNNs limits the model's expressive power on one hand, and on the other hand, the issue of over-smoothing also prevents the model from utilizing long-distance information. Transformer, a milestone work in the field of attention mechanisms, and its variants have shown outstanding performance in the fields of Computer Vision and Programming Languages. Therefore, to address the aforementioned deficiencies, this paper investigates Transformer-based methods for Knowledge Graph Completion, introducing a domain-aware Transformer model, NATLP, and a Transformer model that combines graph paths and local neighborhoods, TKGE-PN. The main contributions of this paper are as follows:
 
@@ -167,7 +168,7 @@
 }
 % 关键字-{中文}{英文}
 \Keyword{%
-    知识图谱，知识图谱补全，知识图谱嵌入，Transformer，图路径，局部邻域，
+    知识图谱，知识图谱补全，知识图谱嵌入，Transformer，图路径，局部邻域
   }{%
     Knowledge Graph, Knowledge Graph Completion,
 Knowledge Graph Embedding, Transformer, Graph Path, Local Neighborhood
