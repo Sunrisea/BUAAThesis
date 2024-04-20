@@ -7,7 +7,7 @@
 \section{现有问题分析}
 NATLP模型对传统的Transformer模型的自注意力机制的计算方式进行改进，捕获了中心实体局部邻域内的结构信息，将Transformer模型应用到了知识图谱补全中，解决了先前基于图神经网络的方法模型表达能力差、对邻居实体之间相互依赖学习不足的问题。
 
-但是，NATLP模型依然存在缺陷，由于依然基于中心实体的局部邻域进行推理，NATLP并没有解决基于图神经网络的知识图谱嵌入方法对于于长距离依赖学习不足的缺点。在知识图谱中，长距离的含义是实体间通过边连接需要经过多个中间节点。长距离依赖反映出实体之间较为间接的联系，这种联系在理解实体间复杂关系的层面上是非常重要的。例如，某一个历史人物与某一个现代组织之间可能存在长距离依赖，尽管他们之间直接的联系很少，但通过一系列历史事件和影响，可以构建出两者之间的联系，因此捕捉长距离依赖有益于推理和查询知识图谱的高阶模式。
+但是，NATLP模型依然存在缺陷，由于依然基于中心实体的局部邻域进行推理，NATLP并没有解决基于图神经网络的知识图谱嵌入方法对于长距离依赖学习不足的缺点。在知识图谱中，长距离的含义是实体间通过边连接需要经过多个中间节点。长距离依赖反映出实体之间较为间接的联系，这种联系在理解实体间复杂关系的层面上是非常重要的。例如，某一个历史人物与某一个现代组织之间可能存在长距离依赖，尽管他们之间直接的联系很少，但通过一系列历史事件和影响，可以构建出两者之间的联系，因此捕捉长距离依赖有益于推理和查询知识图谱的高阶模式。
 
 基于图神经网络的方法主要是通过利用中心实体的局部邻域中蕴含的信息来完成知识图谱的补全。每层图神经网络只能学习到中心实体的一跳邻居的信息，这导致模型能够很好的捕捉知识图谱中的短距离依赖，而对于实体和实体之间的长距离依赖的学习不够充分。虽然其可以通过堆叠多层图神经网络让中心实体感知到距离更远的其他实体，但这样的方式只在层数较低（例如一到两层）时有效，之后随着层数的进一步增加，模型的性能反而会出现快速的下降，这主要是由过平滑问题（over-smoothing）导致的，即因为感受野的重叠而导致不同节点的表示过于相似无法进行区分。文献\cite{over-smoothing}对这种现象进行了系统和定量的研究，通过引入定量指标，发现导致过平滑的关键因素是节点接收到的有效信息与噪声比例过低，结果如图\ref{information-noise}所示，该图来自于文献\cite{over-smoothing}原文。在每层神经网络中，节点都会聚合其所有邻居节点的信息并传递给下一层，这导致模型引入了大量的噪声信息。因此基于图神经网络的方法一般只能捕捉单个实体附近1-2跳内的局部信息，而缺乏利用长距离乃至全局信息的能力。
 \begin{figure}[htb]
@@ -16,7 +16,7 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
   \label{information-noise}
 \end{figure}
 
-为了解决以上问题，本文提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同三元组收尾相连组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相对于局部邻域，图路径能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。结合图路径和邻域信息，模型能够更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP类似，和GNN浅层的神经网络结构相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN以中心实体作为起点，采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer和邻域信息编码模块Neighbor-Transformer对图谱中的长距离和短距离结构信息进行编码。此外针对相比于近距离的信息，长距离信息学习更为困难的问题，本文为图路径编码模块设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
+为了解决以上问题，本文提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同三元组收尾相连组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相对于局部邻域，图路径能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。结合图路径和邻域信息，模型能够在更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP类似，和GNN浅层的神经网络结构相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN以中心实体作为起点，采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer和邻域信息编码模块Neighbor-Transformer对图谱中的长距离和短距离结构信息进行编码。此外针对相比于近距离的信息，长距离信息学习更为困难的问题，本文为图路径编码模块设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
 
 \begin{figure}[htb]
     \centerline{\includegraphics[width=0.5\textwidth]{pic/long-term-dependency.pdf}}
@@ -146,7 +146,7 @@ TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有�
 
 此外，为了避免随机采样的图路径之间出现路径重复而导致信息冗余的情况，对于同一个头实体节点$s$，采样模块确保采样到的不同图路径中的前三个元素组成的事实三元组唯一，即对于不同图路径$P_i=<s,r_1^{i},e_1^{i},...,r_T^{i},e_T^{i}>$和$P_j=<s,r_1^{j},e_1^{j},...,r_T^{j},e_T^{j}>$，有$(s, r_1, e_1)\neq(s, r_2, e_2)$，其中$e_1^{i},e_1^{j}\in \mathcal{N}_s$，$\mathcal{N}_s$为实体 $s$的一阶邻居节点组成的集合。这样的采样方式不仅保证了采样到的图路径之间有足够的区分度，还让采样到的路径覆盖了中心实体的一阶邻域，通过所有采样的图路径，模型就能学习到中心实体的局部邻域信息，实现长短距离依赖的同时学习。
 
-为了确保采样到的图路径能够帮助模型进行链路预测任务，TKGE-PN的图路径采样模块采用有偏随机游走算法来决定图路径中每一跳选中的实体和关系，实现高质量的图路径采样。为了能够更好的捕获长距离的依赖，TKGE-PN希望采样到的路径能够更加的远离起始的头实体，即采样深度更大一些。为了实现这一点，在进行路径采样的过程中，模型提出了深度偏差来控制路径采样的过程。具体来说，假设在图路径采样的过程中，起始节点为$s$，当前选中的实体为$e_i$，上一跳实体为$e_{i-1}$，下一跳的候选实体$e_{i+1}$为$e_i$的一阶邻居，则深度偏差$\mu_{depth}(e_{i+1})$的计算方式为:
+为了确保采样到的图路径能够帮助模型进行链路预测任务，TKGE-PN的图路径采样模块采用有偏随机游走算法来决定图路径中每一跳选中的实体和关系，实现高质量的图路径采样。为了能够更好的捕获长距离的依赖，TKGE-PN希望采样到的路径能够更加得远离起始的头实体，即采样深度更大一些。为了实现这一点，在进行路径采样的过程中，模型提出了深度偏差来控制路径采样的过程。具体来说，假设在图路径采样的过程中，起始节点为$s$，当前选中的实体为$e_i$，上一跳实体为$e_{i-1}$，下一跳的候选实体$e_{i+1}$为$e_i$的一阶邻居，则深度偏差$\mu_{depth}(e_{i+1})$的计算方式为:
 \begin{equation}
   \mu_{depth}(e_{i+1})=1-\alpha\cdot\frac{1}{dis(s,e_{i+1})}
 \end{equation}
@@ -162,12 +162,12 @@ TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有�
 \begin{gather}
   \mu_{degree}(e_{i+1})=\lg(deg_{(e_{i+1})})
 \end{gather}
-其中$deg_{(e_{i+1})}$为候选实体$e_{i+1}$的度数。此外，我们认为，如果一个实体相邻的实体的节点度数很高，那么该实体的重要性应该也会受到邻居实体的影响随之增加，因为经过该节点可以获取到重要性较高的实体节点的信息，因此在计算度数偏差时TKGE-PN将相邻实体的节点度数也纳入了考虑，有：
+其中$deg_{(e_{i+1})}$为候选实体$e_{i+1}$的度数。此外，本文认为，如果一个实体相邻的实体的节点度数很高，那么该实体的重要性应该也会受到邻居实体的影响随之增加，因为经过该节点可以获取到重要性较高的实体节点的信息，因此在计算度数偏差时TKGE-PN将相邻实体的节点度数也纳入了考虑，有：
 \begin{gather}
   \mu_{degree}(e_{i+1})=\frac{1}{2}\lg(deg_{e_{i+1}})+\frac{1}{2\|\mathcal{N}_{e_{i+1}}\|}\sum_{e_k\in\mathcal{N}_{e_{i+1}}}\lg(deg_{e_k})
 \end{gather}
 
-最终，我们可以得到在图路径采样的过程中，下一跳候选实体$e_{i+1}$被选中的未正则化的概率计算公式为：
+最终，模型可以得到在图路径采样的过程中，下一跳候选实体$e_{i+1}$被选中的未正则化的概率，具体计算公式为：
 \begin{gather}
   \mu_i = \mu_{depth}(e_{i+1})+\beta\cdot\mu_{degree}(e_{i+1})\\
   p_{sample}(e_{i+1})=\left\{
@@ -188,7 +188,7 @@ TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有�
   \mathbf{M}_{path} = [\boldsymbol{e}_s,\boldsymbol{r}_1,\boldsymbol{e}_1,...,\boldsymbol{r}_T,\boldsymbol{e}_T]\\
   \mathbf{M}_{path}^{\prime} = [\boldsymbol{e}_{cls},\mathbf{M}_{path}]
 \end{gather}
-其中$\boldsymbol{e}_{cls}\in\mathbb{R}^d$，$\mathbf{M}_{path} \in \mathbb{R}^{(2T+1)\times d}$。$\mathbf{M}_{path}$由图路径中包含的所有的实体及关系对应的嵌入构成，$\boldsymbol{e},\boldsymbol{r} \in \mathbb{R}^d$ 代表分别代表实体和关系嵌入，$d$则为嵌入向量维度的大小。同样的，和NATLP类似，Path-Transformer采用类型嵌入来帮助模型区分实体嵌入，关系嵌入以及特殊嵌入向量$\boldsymbol{e}_{cls}$。此外，由于图路径是序列数据，Path-Transformer采用可学习的位置位置来识别图路径中实体和关系之间的顺序关系，因此Path-Transformer的最终输入表示为：
+其中$\boldsymbol{e}_{cls}\in\mathbb{R}^d$，$\mathbf{M}_{path} \in \mathbb{R}^{(2T+1)\times d}$。$\mathbf{M}_{path}$由图路径中包含的所有的实体及关系对应的嵌入构成，$\boldsymbol{e},\boldsymbol{r} \in \mathbb{R}^d$ 代表分别代表实体和关系嵌入，$d$则为嵌入向量维度的大小。同样的，和NATLP类似，Path-Transformer采用类型嵌入来帮助模型区分实体嵌入，关系嵌入以及特殊嵌入向量$\boldsymbol{e}_{cls}$。此外，由于图路径是序列数据，Path-Transformer采用可学习的位置嵌入来识别图路径中实体和关系之间的顺序关系，因此Path-Transformer的最终输入表示为：
 \begin{equation}
   \mathbf{M}_{input}^{P} = \mathbf{M}_{path}^{\prime}+\mathbf{TE} + \mathbf{PE}
 \end{equation}
@@ -196,7 +196,7 @@ TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有�
 
 在完成输入构造后，Path-Transformer会利用自注意力机制学习图路径中的语义信息。设Path-Transformer模块最后一层的输出为$\mathbf{M}_{output}^{P}\in\mathbb{R}^{(2T+1)\times d}$，TKGE-PN取输出中特殊嵌入向量$\boldsymbol{e}_{cls}$对应位置的嵌入$\boldsymbol{e}_{path}\in\mathbb{R}^d$作为当前图路径的向量表示。
 
-Path-Transformer路径编码模块尝试从知识图谱图路径中挖掘长距离的依赖用于链路预测任务，但是相比于近距离的局部邻域，图路径中蕴含的长距离依赖反应的是实体之间间接的联系，容易在学习的过程中丢失，模型学习起来是更加困难的。针对这样的挑战，受到BERT\upcite{BERT}中掩蔽语言建模(Masked Language Model，MLM)预训练任务的启发,TKGE-PN提出了掩蔽实体关系预测(Masked Entity and Relation Prediction，MERP)任务，以加强Path-Transformer从图路径上下文中挖掘信息的能力。
+Path-Transformer路径编码模块尝试从知识图谱图路径中挖掘长距离的依赖用于链路预测任务，但是相比于近距离的局部邻域，图路径中蕴含的长距离依赖反映的是实体之间间接的联系，容易在学习的过程中丢失，模型学习起来是更加困难的。针对这样的挑战，受到BERT\upcite{BERT}中掩蔽语言建模(Masked Language Model，MLM)预训练任务的启发,TKGE-PN提出了掩蔽实体关系预测(Masked Entity and Relation Prediction，MERP)任务，以加强Path-Transformer从图路径上下文中挖掘信息的能力。
 
 具体来说，对于输入的每一条图路径$P$，模型将会随机选择遮掩或者替换掉某个关系或者实体进行预测任务。以实体为例，在掩蔽替换阶段，被选中的实体$e_m$ 将会以一定概率被替换成特殊的掩蔽占位嵌入$e_{mask}$、其他的随机实体或者维持不变，模型使用超参数来调节以上三种情况的概率。而在预测阶段，模型取Path-Transformer输出嵌入矩阵$\mathbf{M}_{output}^{P}$中被选中的实体对应的嵌入$\boldsymbol{e}_{m}^\prime$来尝试辨认出被遮掩的正确实体$e_m$。具体来说，对于一个候选的实体$e_t$，模型将$\boldsymbol{e}_{m}^\prime$通过一个双层全连接层并计算$\boldsymbol{e}_{m}^\prime$与$\boldsymbol{e}_{t}$之间的余弦相似度来获得候选实体$e_t$的正确概率$p_m$：
 \begin{equation}
@@ -233,7 +233,7 @@ Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部
   \mathbf{M}_{input}^{N}=\mathbf{M}_{neighbor}^{\prime}+\mathbf{TE}
 \end{gather}
 
-和NATLP类似，考虑到图路径上的实体度数之和能够一定程度上反应图路径信息的重要性，在计算注意力分数时，Neighbor-Transformer将图路径的整体节点度数也纳入了考虑。具体的，Neighbor-Transformer在计算注意力得分时额外添加一个图路径节点度数的辅助项：
+和NATLP类似，考虑到图路径上的实体度数之和能够一定程度上反映图路径信息的重要性，在计算注意力分数时，Neighbor-Transformer将图路径的整体节点度数也纳入了考虑。具体的，Neighbor-Transformer在计算注意力得分时额外添加一个图路径节点度数的辅助项：
 \begin{gather}
   a_{ij}=\frac{(\boldsymbol{e}_{P_i}W_Q)(\boldsymbol{e}_{P_j}W_K)^T}{\sqrt{d}}+1-\frac{1}{\lg (deg_{P_i})\cdot \lg (deg_{P_j})}\\
   deg_{P_i}=\sum_{n = 1}^{T}  deg_{e_n}
@@ -243,7 +243,7 @@ Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部
 \begin{equation}
   L_{LP} = -\frac{1}{N}\sum\limits_{i}t_ilog(p_i)+(1-t_i)log(1-p_i)
 \end{equation}
-最终，通过将链路预测任务的损失和掩蔽实体关系预测任务的损失相加，我们可以得到用于模型训练的最终损失函数：
+最终，通过将链路预测任务的损失和掩蔽实体关系预测任务的损失相加，模型可以得到用于模型训练的最终损失，具体计算函数为：
 \begin{gather}
   L_{MERP} = -\frac{1}{N_p}\sum\limits_{i}L_{p_{i}}\\
   L=L_{LP}+L_{MERP}
