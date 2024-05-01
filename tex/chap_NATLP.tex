@@ -1,9 +1,9 @@
-\chapter{基于邻域感知的Transformer模型}
+\chapter{基于邻域感知Transformer的知识图谱补全模型}
 
 
 % 本章主要对基于邻域感知的Transformer模型NATLP的总体设计和模块的具体实现进行了介绍。主要包括对现存基于图神经网络方法存在问题的分析、模型的总体框架设计、关系特定的邻居实体信息构造设计以及融合图结构信息的自注意力机制的改进。
 
-相较于传统的知识图谱嵌入方法，基于图神经网络的知识图谱嵌入方法通过聚合局部邻域信息获得了很大的性能提升。但是图神经网络采用的聚合方式忽略了邻居节点信息之间的潜在关联，并且模型结构较为简单。针对以上问题，本文尝试利用Transformer模型来提高模型的表达能力，完成知识图谱补全任务，提出了一种基于邻域感知的Transformer模型用于链路预测任务(Neighborhood Aware Transformer for Link Prediction, NATLP)。
+相较于传统的知识图谱嵌入方法，基于图神经网络的知识图谱嵌入方法通过聚合局部邻域信息获得了很大的性能提升。但是图神经网络采用的聚合方式忽略了邻居节点信息之间的潜在关联，并且模型结构较为简单。针对以上问题，本文尝试利用Transformer模型来提高模型的表达能力，完成知识图谱补全任务，提出了一种基于邻域感知Transformer的知识图谱补全模型(Neighborhood Aware Transformer for Link Prediction, NATLP)。
 % Transformer网络虽然在自然语言处理（NLP）领域取得了巨大成功，但在直接应用到图表示学习（Graph Representation Learning）领域时会遇到一系列挑战和困难。图表示学习涉及到处理图数据，图数据具有非欧几里得结构，这与NLP中处理的序列数据（一维结构）有本质区别。下面列举了一些Transformer在图表示学习中面临的主要困难：
 
 % 1. **非序列结构**：图是一种无序的数据结构，节点之间的关系是通过边来定义的，并且没有固定的顺序。相比之下，Transformer网络原本是为处理序列数据设计的，它使用位置编码来保留序列中元素的顺序信息。在图中，节点没有自然的顺序，因此Transformer网络无法直接使用位置编码来捕捉节点间的结构关系。
@@ -46,7 +46,7 @@
 
 此外，在知识图谱中，边，即关系，反映着实体和实体之间不同的交互方式，蕴含着丰富的语义信息。两个实体之间连接的关系不同，传递的信息可能是千差万别的，因此如何采用合适的方式来对利用关系信息，体现关系对于消息传递的影响十分重要。但标准的Transformer模型并没有直接的方式来编码和使用边的信息。部分利用Transformer来进行知识图谱表示学习的模型例如Relphormer\upcite{Relphormer}将知识图谱中的实体和关系视为地位相同的节点，采用同样的方式进行处理，这样的方式虽然解决了边的表示问题，但没有考虑到知识图谱中实体和关系的差异性，没有考虑到关系对于实体消息传递的独特作用。
 
-为了解决上述问题，本章提出了一种基于邻域感知的Transformer模型用于链路预测任务(Neighborhood Aware Transformer for Link Prediction, NATLP)。首先，在模型输入信息构造阶段，为了充分建模不同关系对于实体传递消息的影响，模型基于关系生成特定的网络参数，实现关系特定的邻居信息构造。其次，为了让Transformer能够更好地处理图结构数据，模型对Transformer的自注意力机制进行了改造，提出了一种融合图结构的自注意力机制，使得Transformer能够学习到输入消息之间的互相依赖。
+为了解决上述问题，本章提出了一种基于邻域感知Transformer的知识图谱补全模型(Neighborhood Aware Transformer for Link Prediction, NATLP)。首先，在模型输入信息构造阶段，为了充分建模不同关系对于实体传递消息的影响，模型基于关系生成特定的网络参数，实现关系特定的邻居信息构造。其次，为了让Transformer能够更好地处理图结构数据，模型对Transformer的自注意力机制进行了改造，提出了一种融合图结构的自注意力机制，使得Transformer能够学习到输入消息之间的互相依赖。
 
 \section{NATLP模型设计}
 
@@ -135,7 +135,7 @@
 
 \subsection{模型总体结构}
 
-本节主要对提出的用于链路预测的基于邻域感知的Transformer模型NATLP的总体结构进行介绍。NATLP整体为编码器-解码器架构，编码器部分主要由关系特定的邻居信息构造模块和邻域感知Transformer模块组成，解码器部分则采用了基于卷积神经网络的知识图谱嵌入方法进行了实现。模型整体架构如图\ref{architecture}所示。
+本节主要对提出的用于链路预测的基于邻域感知Transformer的知识图谱补全模型NATLP的总体结构进行介绍。NATLP整体为编码器-解码器架构，编码器部分主要由关系特定的邻居信息构造模块和邻域感知Transformer模块组成，解码器部分则采用了基于卷积神经网络的知识图谱嵌入方法进行了实现。模型整体架构如图\ref{architecture}所示。
 
 \begin{figure}[htb]
   \centerline{\includegraphics[width=1\textwidth]{pic/architecture.pdf}}
@@ -254,7 +254,7 @@
 \end{equation}
 其中$deg_{e_i}$为实体$e_i$的节点度数。两个实体的节点度数越高，注意力得分越高。通过这样的方式，模型能够在注意力机制中同时捕获语义相关性和节点的重要性。
 
-最终，领域感知Transformer模块的自注意力计算方式为：
+最终，邻域域感知Transformer模块的自注意力计算方式为：
 \begin{equation}
   a_{ij}=\frac{(\boldsymbol{m}_iW_Q)(\boldsymbol{m}_jW_K)^T}{\sqrt{d}}+\frac{1}{dis(e_i,e_j)}+1-\frac{1}{\lg (deg_{e_i})\cdot \lg (deg_{e_j})}
 \end{equation}
