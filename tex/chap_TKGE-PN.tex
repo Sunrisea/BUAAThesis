@@ -16,7 +16,7 @@ NATLP模型对传统的Transformer模型的自注意力机制的计算方式进�
   \label{information-noise}
 \end{figure}
 
-为了解决以上问题，本文提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同三元组收尾相连组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相对于局部邻域，图路径能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。结合图路径和邻域信息，模型能够在更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP类似，和GNN浅层的神经网络结构相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN以中心实体作为起点，采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer和邻域信息编码模块Neighbor-Transformer对图谱中的长距离和短距离结构信息进行编码。此外针对相比于近距离的信息，长距离信息学习更为困难的问题，本文为图路径编码模块设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
+为了解决以上问题，本文提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同三元组首尾相连组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相对于局部邻域，图路径能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。结合图路径和邻域信息，模型能够在更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP类似，和GNN浅层的神经网络结构相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN以中心实体作为起点，采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer和邻域信息编码模块Neighbor-Transformer对图谱中的长距离和短距离结构信息进行编码。此外针对相比于近距离的信息，长距离信息学习更为困难的问题，本文为图路径编码模块设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
 
 \begin{figure}[htb]
     \centerline{\includegraphics[width=0.5\textwidth]{pic/long-term-dependency.pdf}}
