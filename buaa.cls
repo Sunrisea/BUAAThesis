@@ -409,12 +409,16 @@
 \captionsetup[figure][bi-second]{name=Fig.}   %设置图的英文前缀
 \captionsetup[table][bi-second]{name=Tab.}   %设置表的英文前缀
 
-\captionsetup[figure][bi]{
-  position=bottom,  format=tabfigformat,
-  justification=centerlast}
+\captionsetup[figure]{
+  position=bottom, margin=0mm, format=tabfigformat,
+  aboveskip=6pt, belowskip=-10pt, justification=centerlast}
 \captionsetup[table][bi]{
   position=top,  format=tabfigformat,
    justification=centerlast}
+
+% \setlength{\abovedisplayskip}{3pt} %%% 3pt 个人觉得稍妥，可自行设置
+
+% \setlength{\belowdisplayskip}{3pt}
 
 %出现在页面中间的浮动对象与上下方文本之间的垂直距离
 %缺省为 12pt plus 2pt minus 2pt。
