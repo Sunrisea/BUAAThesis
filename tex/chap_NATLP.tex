@@ -138,7 +138,7 @@
 本节主要对提出的用于链路预测的基于邻域感知Transformer的知识图谱补全模型NATLP的总体结构进行介绍。NATLP整体为编码器-解码器架构，编码器部分主要由关系特定的邻居信息构造模块和邻域感知Transformer模块组成，解码器部分则采用了基于卷积神经网络的知识图谱嵌入方法进行了实现。模型整体架构如图\ref{architecture}所示。
 
 \begin{figure}[htb]
-  \centerline{\includegraphics[width=1\textwidth]{pic/architecture.pdf}}
+  \centerline{\includegraphics[width=0.9\textwidth]{pic/architecture.pdf}}
   \caption{NATLP模型整体架构}
   \label{architecture}
 \end{figure}
@@ -177,7 +177,7 @@
 为了解决上述问题，实现捕获邻居实体中关系相关的特定特征的同时，兼顾不同类别关系之间的共通特征，NATLP提出了一种关系特定的邻居实体信息构造方法，具体如图\ref{build_information}所示。
 
 \begin{figure}[htb]
-  \centerline{\includegraphics[width=0.9\textwidth]{pic/build_information.pdf}}
+  \centerline{\includegraphics[width=0.8\textwidth]{pic/build_information.pdf}}
   \caption{关系特定的邻居实体信息构造}
   \label{build_information}
 \end{figure}
@@ -229,10 +229,16 @@
 其中$s$为中心实体的嵌入表示，$\boldsymbol{m}_{e_i,r_i}$为实体$e_i$通过关系$r_i$传递的信息。
 
 此外，为了防止在解码的时候模型对某个特定的输入具有偏向性，模型在输入序列的头部添加了一个特殊的嵌入Class Token，表示为$\boldsymbol{e}_{cls}$。Class Token不基于任意的输入内容，在训练之前进行随机的初始化，并且随着网络的训练不断更新，能够在一定程度上编码整个知识图谱的统计特性。最终，在Transformer的输出中，Class Token对应的输出向量被用作代表整个输入序列的特征表示，传递给解码器。为了帮助模型在Class Token、中心实体嵌入表示和邻居实体传递的消息之间进行区分，受到BERT\upcite{BERT}模型的启发，NATLP为以上三类输入分配了可学习的类型嵌入，则邻域感知Transformer模块的最终输入可以表示为：
-\begin{gather}
-  \mathbf{M}_{input}^\prime = \left[\boldsymbol{e}_{cls},\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right]\\
+\begin{equation}
+  \mathbf{M}_{input}^\prime = \left[\boldsymbol{e}_{cls},\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right]
+\end{equation}
+\begin{equation}
   \mathbf{M}_{input} = \mathbf{M}_{input}^\prime + \mathbf{TE}
-\end{gather}
+\end{equation}
+% \begin{gather}
+%   \mathbf{M}_{input}^\prime = \left[\boldsymbol{e}_{cls},\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right]\\
+%   \mathbf{M}_{input} = \mathbf{M}_{input}^\prime + \mathbf{TE}
+% \end{gather}
 其中$\mathbf{TE}$代表可学习的类型嵌入。
 
 在完成输入的构造之后，NATLP将利用Transformer的自注意力机制来学习输入中的信息。原始版本的Transformer的第$i$个输入和第$j$个输入之间的注意力分数$a_{ij}$计算公式为：
