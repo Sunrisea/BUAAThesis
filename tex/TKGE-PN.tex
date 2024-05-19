@@ -289,7 +289,7 @@ Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部
 
 （3）基于图路径的嵌入模型，主要是利用知识图谱的图路径结构学习图谱中的长距离依赖来进行知识图谱补全，包括RSN\upcite{RSN}和Interstellar\upcite{Interstellar}。这类方法的缺点是学习了图路径信息而忽略了实体节点的局部邻域结构，忽略了丰富的近距离信息。
 
-（4）基于Transformer的嵌入模型，这类方法的主要思想是利用Transformer模型强大的表达能力来进行知识图谱补全任务，大致可以分为两类，一类主要利用预训练语言模型来学习知识图谱中自然语言文本中的语义，主要包括KG-BERT\upcite{KG-BERT}。另一类则是基于图谱本身的三元组信息来进行链路预测，包括HittER\upcite{HittER}，StAR\upcite{StAR}和Relphormer\upcite{Relphormer}，以及本文先前提出的NALTP模型。这类方法的缺点是模型复杂度较高，模型训练时间长，训练和推理的资源消耗较大。
+（4）基于Transformer的嵌入模型，这类方法的主要思想是利用Transformer模型强大的表达能力来进行知识图谱补全任务，大致可以分为两类，一类主要利用预训练语言模型来学习知识图谱中自然语言文本中的语义，主要包括KG-BERT\upcite{KG-BERT}。另一类则是基于图谱本身的三元组信息来进行链路预测，包括HittER\upcite{HittER}，StAR\upcite{StAR}和Relphormer\upcite{Relphormer}，本文先前提出的NALTP模型以及本节提出的TKGE-PN模型也属于此类。这类方法的有点是表达能力强，性能相对来说最为优异，缺点是模型复杂度较高，模型训练时间长，训练和推理的资源消耗较大。
 
 \subsection{模型超参数设置}
 
