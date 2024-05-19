@@ -442,6 +442,34 @@ Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部
 
 从图\ref{tkge_experiment}中实验结果可以发现，随着头实体和尾实体之间最短距离的增加，模型的平均倒数排名MRR指标出现了明显的下降，进一步的说明推断图谱中实体之间的长距离关系是一件非常困难的任务。 此外，可以注意到的是，相比于消融了Path-Transformer图路径编码模块的模型，学习了图路径信息的原始TKGE-PN模型在长距离的样本上性能表现更好，特别是在头尾实体间最短距离为3-6的样本上，证明了知识图谱图路径信息能够帮助模型有效捕捉实体间的长距离依赖，推断实体间的长距离的关联，有效提高模型在部分场景下的知识图谱补全任务的性能表现。
 
+\subsection{TKGE-PN模型超参数影响分析}
+
+和NATLP类似，为了探究实体和关系嵌入维度对模型知识图谱补全任务性能的影响，本文在FB15k-237和WN18RR数据集的验证集上进行了实验，实体关系嵌入维度分别取$d \in \left[100,200,300,400,500\right] $，具体的实验结果如表\ref{dimension_2}所示。
+
+\begin{table}[htbp]
+    \begin{center}
+        \caption{实体和关系嵌入维度对于TKGE-PN模型性能的影响}
+        %\setlength{\tabcolsep}{12pt}
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{*{5}{c}}
+            \toprule
+            嵌入维度& \multicolumn{2}{c}{WN18RR} & \multicolumn{2}{c}{FB15k-237}\\
+            \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+            $d$&MRR&Hits@10&MRR&Hits@10\\
+            \midrule
+            100	&0.503&0.579&0.375&0.559\\
+            200	&0.506&0.583&0.376&0.560\\
+            300	&\textbf{0.509}&\textbf{0.587}&\textbf{0.379}&0.562\\
+            400	&0.506&\textbf{0.587}&0.377&\textbf{0.563}\\
+            500	&0.507&0.583&0.378&0.554\\
+            \bottomrule
+        \end{tabular}
+        \label{dimension_2}
+    \end{center}
+\end{table}
+
+
+从实验结果中可以观察到，总体而言，模型性能变化并不明显，证明了TKGE-PN模型的鲁棒性。另一方面，随着实体和关系嵌入维度的上升，模型性能呈现出先上升后下降的趋势。这是由于当嵌入维度较小时，TKGE-PN模型的表达能力会受到一定的限制，而在嵌入维度增大超过适宜范围后，参数量过大会导致计算复杂度提高，性能下降。
 
 \section{本章小结}
 
