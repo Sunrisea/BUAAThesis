@@ -6,9 +6,9 @@
 
 谷歌的研究团队于2017年提出的Transformer\upcite{Transformer}网络则是注意力机制方面里程碑式的工作。Transformer网络设计之初主要用于处理序列数据，在Transformer出现之前，序列数据的处理通常依赖于循环神经网络(RNN)及其变体，例如长短期记忆网络(LSTM)和门控递归单元(GRU)。RNN及其变体在处理序列数据时能够保持一定程度的历史信息，但存在一定的问题：由于对序列数据进行逐步处理，RNN在训练过程中容易出现梯度消失或者梯度爆炸的问题，特别是在处理长序列数据时。逐步处理也限制了模型的并行计算能力，导致训练效率低下。此外，尽管LSTM和GRU通过特殊的门控机制改善了长距离依赖问题，但当序列长度过高时，模型依然难以捕捉到距离较远的依赖关系。
 
-Transformer网络通过使用自注意力(Self-Attention)机制解决了上述问题，在自注意力机制中，输入数据中的任意一个位置都能够直接感知到其它位置的信息，因此相比于传统的RNN结构，自注意力能够更加直接地捕捉到序列中长距离的依赖关系；自注意力机制允许模型在处理数据时并行计算各个位置的注意力分数，与RNN逐步计算的方式相比，可以显著提高模型的计算效率；自注意力机制通过学习输入序列中不同位置之间的动态相关性，能够根据特定的任务自适应地调整注意力分布。
+Transformer\upcite{Transformer}网络通过使用自注意力(Self-Attention)机制解决了上述问题，在自注意力机制中，输入数据中的任意一个位置都能够直接感知到其它位置的信息，因此相比于传统的RNN结构，自注意力能够更加直接地捕捉到序列中长距离的依赖关系；自注意力机制允许模型在处理数据时并行计算各个位置的注意力分数，与RNN逐步计算的方式相比，可以显著提高模型的计算效率；自注意力机制通过学习输入序列中不同位置之间的动态相关性，能够根据特定的任务自适应地调整注意力分布。
 
-Transformer网络中的自注意力机制的核心为缩放点积注意力机制，结构如图\ref{DotProductAttention}所示。
+Transformer\upcite{Transformer}网络中的自注意力机制的核心为缩放点积注意力机制，结构如图\ref{DotProductAttention}所示。
 \begin{figure}[htbp]
   \vspace{-0.8cm}
   \centerline{\includegraphics[width=0.250\textwidth]{pic/DotProductAttention.png}}
@@ -46,11 +46,11 @@ Transformer网络中的自注意力机制的核心为缩放点积注意力机制
 \end{figure}
 \section{基于Transformer的图表示学习方法}
 
-图被广泛用于连接数据的网络结构表示，在社交系统、生态系统、生物网络、知识图谱等领域中都有广泛的应用。图表示学习方法将图的特征转化为低维嵌入空间中的向量。由于Transformer在计算机视觉和自然语言处理等领域展现出了出色的性能，近来，已经有大量的基于Transformer的模型被用于编码图结构数据。GraphTrans\upcite{GraphTrans}利用Transformer的自注意力机制学习图中的长距离的成对关系，并设计了一种读出机制以获得全局图嵌入。Grover\upcite{Grover}设计了节点级、边级和图级的自监督任务，能够从未标记的数据中学习图的结构和语义信息。Graphormer\upcite{Graphormer}对Transformer的注意力计算方式进行了改造，并从数学上证明了许多流行的图神经网络变体可以被视为Graphormer的特殊情况。
+图被广泛用于连接数据的网络结构表示，在社交系统、生态系统、生物网络、知识图谱等领域中都有广泛的应用。图表示学习方法将图的特征转化为低维嵌入空间中的向量。由于Transformer\upcite{Transformer}在计算机视觉和自然语言处理等领域展现出了出色的性能，近来，已经有大量的基于Transformer的模型被用于编码图结构数据。GraphTrans\upcite{GraphTrans}利用Transformer的自注意力机制学习图中的长距离的成对关系，并设计了一种读出机制以获得全局图嵌入。Grover\upcite{Grover}设计了节点级、边级和图级的自监督任务，能够从未标记的数据中学习图的结构和语义信息。Graphormer\upcite{Graphormer}对Transformer的注意力计算方式进行了改造，并从数学上证明了许多流行的图神经网络变体可以被视为Graphormer的特殊情况。
 
-Graphormer认为Transformer设计之初是为了建模序列数据，为了让其能够在图结构上实现最好效果，关键是要将图的结构信息恰当的融合到模型之中。Graphormer结合了几种有效的结构编码方法来利用这些信息。
+Graphormer\upcite{Graphormer}认为Transformer设计之初是为了建模序列数据，为了让其能够在图结构上实现最好效果，关键是要将图的结构信息恰当的融合到模型之中。Graphormer结合了几种有效的结构编码方法来利用这些信息。
 
-Graphormer认为Transformer模型中的注意力机制会基于节点的语义相似度计算注意力分布，因此提出了基于节点的出度和入度中心性编码来捕获知识图谱的节点重要性，其中$x_i$是节点表征，$z^-_{deg^-(v_i)}$和$z^+_{deg^+(v_i)}$是代表节点出度和入度的可学习表征：
+Graphormer\upcite{Graphormer}认为Transformer模型中的注意力机制会基于节点的语义相似度计算注意力分布，因此提出了基于节点的出度和入度中心性编码来捕获知识图谱的节点重要性，其中$x_i$是节点表征，$z^-_{deg^-(v_i)}$和$z^+_{deg^+(v_i)}$是代表节点出度和入度的可学习表征：
 \begin{equation}
   h_i^{(0)}=x_i+z^-_{deg^-(v_i)}+z^+_{deg^+(v_i)}
 \end{equation}
@@ -60,7 +60,7 @@ Transformer模型在处理长序列文本时，会通过位置编码来学习文
 \end{equation}
 这种编码方式的优势在于$b_{\varPhi (v_i,v_j)}$提供了一个对于图中的每个节点的全局的空间信息。
 
-关系信息对于图中的节点表征至关重要，Graphormer模型为了将关系信息加入到注意力中，引入了关系编码$c_{ij}$,表示的是节点$v_i$和$v_j$之间最短路径上所有关系表征的平均值，如下图公式所示：
+关系信息对于图中的节点表征至关重要，Graphormer\upcite{Graphormer}模型为了将关系信息加入到注意力中，引入了关系编码$c_{ij}$,表示的是节点$v_i$和$v_j$之间最短路径上所有关系表征的平均值，如下图公式所示：
 \begin{equation}
   A_{ij}=\frac{(h_iW_Q)(h_jW_K)^T}{\sqrt{d}}+b_{\varPhi (v_i,v_j)}+c_{ij},\ \mbox{where} \ c_{ij} = \frac{1}{N}\sum_{n=1}^Nx_{e_n}(w_n^E)^T
 \end{equation}
@@ -77,11 +77,11 @@ TransE\upcite{TransE}模型于2013年被提出，是基于翻译的知识图谱�
   \boldsymbol{h}+\boldsymbol{r}\approx \boldsymbol{t}
 \end{equation}
 
-而在TransE的训练和评估过程中，对于训练集中的每一个正样本事实三元组$(h,r,t)$，TransE会通过随机替换头尾实体的方式，生成对应的负样本参与训练，这样的策略也成为了后续许多知识图谱嵌入方法的训练和评估策略。最终，对于扩充后的训练集中的每一个三元组$(h,r,t)$，TransE模型会计算$\boldsymbol{h}+\boldsymbol{r}$和$\boldsymbol{t}$之间的距离的L2范数作为衡量标准：
+而在TransE\upcite{TransE}的训练和评估过程中，对于训练集中的每一个正样本事实三元组$(h,r,t)$，TransE会通过随机替换头尾实体的方式，生成对应的负样本参与训练，这样的策略也成为了后续许多知识图谱嵌入方法的训练和评估策略。最终，对于扩充后的训练集中的每一个三元组$(h,r,t)$，TransE模型会计算$\boldsymbol{h}+\boldsymbol{r}$和$\boldsymbol{t}$之间的距离的L2范数作为衡量标准：
 \begin{equation}
   d_r(h,t)=\left\lVert \boldsymbol{h}+\boldsymbol{r} - \boldsymbol{t}\right\rVert 
 \end{equation}
-对于正样本，TransE期望得到的距离尽可能得小，负样本得到的距离尽可能的大，最终得到TransE模型的损失函数：
+对于正样本，TransE\upcite{TransE}期望得到的距离尽可能得小，负样本得到的距离尽可能的大，最终得到TransE模型的损失函数：
 \begin{equation}
   \mathcal{L} =\sum_{(h,r,t)\in S}\sum_{(h^\prime,r,t^\prime)\in S^\prime_{(h,r,t)}}\left[\gamma +d_r(h,t)-d_r(h^\prime,t^\prime)\right] 
 \end{equation}
@@ -89,13 +89,13 @@ TransE\upcite{TransE}模型于2013年被提出，是基于翻译的知识图谱�
 
 在基于张量分解的方法中，最为经典的是RESCAL\upcite{RESCAL}方法。给定一个知识图谱，RESCAL将其形式化为一个三阶张量${\mathcal{X} \in \mathbb{R}^{N \times N \times M}}$ ，其中$N$是实体的数量，$M$为关系种类的数量，张量的每一个切片$\mathcal{X}_k$对应于第$k$种关系的邻居矩阵，代表知识图谱中该种关系下实体之间的连接情况，如果实体$i$与实体$j$之间存在关系$k$，那么$\mathcal{X}_{ijk}$的值为1，否则为0。
 
-RESCAL假设每个实体$i$都可以通过一个向量$a_i \in \mathbb{R}^R$来表示，每类关系$k$由一个二维矩阵$R_k \in  \mathbb{R}^{R \times R}$表示，其中$R$为预定义的嵌入维度。RESCAL通过以下公式对张量$\mathcal{X}$进行分解：
+RESCAL\upcite{RESCAL}假设每个实体$i$都可以通过一个向量$a_i \in \mathbb{R}^R$来表示，每类关系$k$由一个二维矩阵$R_k \in  \mathbb{R}^{R \times R}$表示，其中$R$为预定义的嵌入维度。RESCAL通过以下公式对张量$\mathcal{X}$进行分解：
 \begin{equation}
   \mathcal{X}_k \approx A R_k A^T, \ \mbox{for} \ k=1,\ldots, m
 \end{equation}
 其中$A = [a_1,\ldots,a_N]$是实体嵌入矩阵。
 
-RESCAL模型的训练目标是最小化张量$\mathcal{X}$与通过学习到的实体和关系表示重建的张量之间的差异，因此模型的损失函数为：
+RESCAL\upcite{RESCAL}模型的训练目标是最小化张量$\mathcal{X}$与通过学习到的实体和关系表示重建的张量之间的差异，因此模型的损失函数为：
 \begin{equation}
   \min_{A,R_k} = f(A,R_k)+g(A,R_k)
 \end{equation}
@@ -107,13 +107,13 @@ $g$为模型的正则项：
 \begin{equation}
   g(A,R_k)=\frac{1}{2}\lambda \left(\left\lVert A\right\rVert^2_F+\sum_k\left\lVert R_k\right\rVert^2_F  \right) 
 \end{equation}
-其中$\left\lVert \cdot \right\rVert _F $为Frobenius范数，$\lambda$为正则化参数，用于防止过拟合。RESCAL首次提出了基于张量分解的知识图谱嵌入方法，但也存在缺陷，用二维矩阵表示关系的方法使得RESCAL在处理大规模知识图谱时的计算成本和存储需求可能非常巨大，因此后续提出的一系列基于张量分解的方法在RESCAL的基础上进行了改进。
+其中$\left\lVert \cdot \right\rVert _F $为Frobenius范数，$\lambda$为正则化参数，用于防止过拟合。RESCAL\upcite{RESCAL}首次提出了基于张量分解的知识图谱嵌入方法，但也存在缺陷，用二维矩阵表示关系的方法使得RESCAL在处理大规模知识图谱时的计算成本和存储需求可能非常巨大，因此后续提出的一系列基于张量分解的方法在RESCAL的基础上进行了改进。
 
 早期的基于神经网络的方法主要是采用多层神经网络来尝试直接拟合知识图谱。NTN\upcite{NTN}模型是一种用于知识图谱嵌入的神经网络架构，于2013年被提出。NTN通过引入张量运算和多层神经网络进行非线性特征变换来学习实体关系的语义信息，提高了模型的表达能力，克服了之前的知识图谱嵌入方法的限制。
 
-NTN模型采用低维向量代表实体，实体之间的关系则用一个三维张量进行表示。和RESCAL模型类似，NTN引入了双线性张量操作。它通过在实体之间进行张量运算来捕捉实体之间的复杂交互关系，但是在NTN中还使用了基于多层神经网络的框架，相比于RESCAL，提供了更加丰富的线性特征表达能力。
+NTN\upcite{NTN}模型采用低维向量代表实体，实体之间的关系则用一个三维张量进行表示。和RESCAL\upcite{RESCAL}模型类似，NTN引入了双线性张量操作。它通过在实体之间进行张量运算来捕捉实体之间的复杂交互关系，但是在NTN中还使用了基于多层神经网络的框架，相比于RESCAL，提供了更加丰富的线性特征表达能力。
 
-在训练和评估过程中，NTN通过以下公式来对事实三元组进行打分：
+在训练和评估过程中，NTN\upcite{NTN}通过以下公式来对事实三元组进行打分：
 \begin{equation}
   f(h,r,t) = u_r^T \tanh\left(v_h^T M_r v_t + W_r^1v_h + W_r^2v_t + b_r\right) 
 \end{equation}
@@ -121,13 +121,13 @@ NTN模型采用低维向量代表实体，实体之间的关系则用一个三�
 
 而随着卷积神经网络在计算机视觉领域大获成功，在知识图谱嵌入领域中也涌现出了以ConvE\upcite{ConvE}为代表的基于卷积神经网络的知识图谱嵌入方法。ConvE将设计和关系的嵌入表示重塑为二维矩阵，并用卷积神经网络来捕获实体和关系之间的复杂交互。具体来说，ConvE模型的具体计算步骤如下：
 
-首先，对于给定的头实体$h$和关系$r$，ConvE将它们的嵌入重塑为二维形式，并拼接成一个二维矩阵：
+首先，对于给定的头实体$h$和关系$r$，ConvE\upcite{ConvE}将它们的嵌入重塑为二维形式，并拼接成一个二维矩阵：
 \begin{equation}
   \left[\overline{\boldsymbol{h}};\overline{\boldsymbol{r}}\right] 
 \end{equation}
 其中$\left[;\right]$表示拼接操作，$\overline{\boldsymbol{h}}$和$\overline{\boldsymbol{t}}$表示头实体嵌入$\boldsymbol{h}$和关系嵌入$\boldsymbol{t}$重塑后的二维形式。
 
-接下来ConvE对得到的二维矩阵进行卷积操作，应用ReLU激活函数$f$后得到的特征图为：
+接下来ConvE\upcite{ConvE}对得到的二维矩阵进行卷积操作，应用ReLU激活函数$f$后得到的特征图为：
 \begin{equation}
   f\left(\left[\overline{\boldsymbol{h}};\overline{\boldsymbol{r}}\right]\ast \omega\right)
 \end{equation}
@@ -141,7 +141,7 @@ NTN模型采用低维向量代表实体，实体之间的关系则用一个三�
 \end{equation}
 其中$\boldsymbol{t}$为尾实体嵌入。
 
-最后，ConvE模型采用交叉熵损失函数对模型进行训练：
+最后，ConvE\upcite{ConvE}模型采用交叉熵损失函数对模型进行训练：
 \begin{equation}
   \mathcal{L} (p,t)=-\frac{1}{N}\sum_i(t_i\cdot \log (p_i)+(1-t_i)\cdot\log(1-p_i))
 \end{equation}
@@ -155,15 +155,15 @@ NTN模型采用低维向量代表实体，实体之间的关系则用一个三�
 
 R-GCN\upcite{R-GCN}第一个在知识图谱嵌入领域应用图神经网络的方法。传统的图卷积网络主要设计用来处理无向图或者单一关系类型的图，但是这种方法无法直接应用于知识图谱，因为其忽略了图谱中边上的多种关系类型信息。而R-GCN则将图卷积神经网络扩展到了可以处理具有多种关系类型的图数据。R-GCN为图谱中的每种关系类型引入了一个单独的权重矩阵，每个关系类型在聚合邻居信息时能产生不同的影响，从而能够学习到每种关系特定的模式。R-GCN还在知识图谱中为每个实体添加了一个特殊类型的自环边，允许每个节点保留自身的信息，自环边在更新节点表示时作为单独的一种关系处理，也有自己的权重矩阵。
 
-R-GCN整体为编码器-解码器架构，使用改造后的图卷积神经网络作为编码器，使用DistMult方法作为链路预测任务的解码器，使用softmax函数来作为实体分类任务的解码器。
+R-GCN\upcite{R-GCN}整体为编码器-解码器架构，使用改造后的图卷积神经网络作为编码器，使用DistMult\upcite{DistMult}方法作为链路预测任务的解码器，使用softmax函数来作为实体分类任务的解码器。
 
-具体来说，R-GCN的传播层用数学公式表示如下：
+具体来说，R-GCN\upcite{R-GCN}的传播层用数学公式表示如下：
 \begin{equation}
   h_i^{l+1}=\sigma \left(\sum_{r\in\mathcal{R}}\sum_{j\in\mathcal{N}_i^r}\frac{1}{c_{i,r}}W_r^lh_j^l+W_0^lh_i^l  \right) 
 \end{equation}
 其中$h_i^{l+1}$是第$i$个节点在经过第$l+1$层传播层更新后的表示，$\mathcal{N}_i^r$是节点$i$通过关系$r$相连接的邻居节点集合，$c_{i,r}$是归一化因子，一般设置为$c_{i,r}=\left\lvert\mathcal{N}_i^r\right\rvert$。
 
-获得聚合后的实体表示后，R-GCN使用DistMult方法对三元组进行打分:
+获得聚合后的实体表示后，R-GCN\upcite{R-GCN}使用DistMult\upcite{DistMult}方法对三元组进行打分:
 \begin{equation}
   f(s,r,o)=e_s^TR_re_o
 \end{equation}
@@ -177,7 +177,7 @@ R-GCN整体为编码器-解码器架构，使用改造后的图卷积神经网�
 
 受到注意力机制在计算机视觉领域和自然语言处理领域的成功的启发，还有一部分基于图神经网络的方法尝试融合注意力机制。KBGAT\upcite{KBGAT}首次将图注意力网络用于知识图谱嵌入任务，RGHAT\upcite{RGHAT}使用实体和关系分层的方式对邻居的注意力进行了细分。
 
-RGHAT采用了一个创新的层次化注意力机制来充分利用实体的本地邻域信息，主要分为两层：关系级注意力根据不同关系对于中心实体重要性的不同为实体的每个邻接关系分配不同的权重；实体级注意力在关系级注意力的基础上进一步评估每个关系下邻居实体的重要性并分配对应的注意力分数。
+RGHAT\upcite{RGHAT}采用了一个创新的层次化注意力机制来充分利用实体的本地邻域信息，主要分为两层：关系级注意力根据不同关系对于中心实体重要性的不同为实体的每个邻接关系分配不同的权重；实体级注意力在关系级注意力的基础上进一步评估每个关系下邻居实体的重要性并分配对应的注意力分数。
 
 对于中心实体$h$，邻接关系$r$的关系级注意力$\alpha_{h,r}$的计算方式如下：
 \begin{gather}
@@ -197,13 +197,13 @@ RGHAT采用了一个创新的层次化注意力机制来充分利用实体的本
   \mu_{h,r,t} = \alpha_{h,r} \cdot \beta_{r,t}
 \end{equation}
 
-获得注意力得分之后，RGHAT在每一层中对邻居信息进行聚合，结合中心实体自身的嵌入得到该层的输出：
+获得注意力得分之后，RGHAT\upcite{RGHAT}在每一层中对邻居信息进行聚合，结合中心实体自身的嵌入得到该层的输出：
 \begin{gather}
   \hat{\mathbf{h}} = \sum_{r\in \mathcal{N}_h } \sum_{t\in\mathcal{N}_{h,r}}\mu_{h,r,t}\mathbf{b}_{h,r,t}\\
   \mathbf{h}^{'}  = \frac{1}{2}\left(\sigma(\mathbf{W}_3(\mathbf{h}+\hat{\mathbf{h}}))+\sigma(\mathbf{W}_4(\mathbf{h}\odot\hat{\mathbf{h}}))\right)
 \end{gather}
 
-RGHAT还采用了多头注意力机制：
+RGHAT\upcite{RGHAT}还采用了多头注意力机制：
 \begin{equation}
   \mathbf{h}^{'}=\mathop{\Vert}\limits_{k=1}^{K}\mathbf{h}^{'}_k
 \end{equation}
@@ -213,22 +213,22 @@ RGHAT还采用了多头注意力机制：
 
 和基于图神经网络的方法利用中心实体的局部邻域进行链路预测不同，基于图路径的方法则尝试学习图谱中的路径信息来捕获实体与实体之间的长距离依赖，PTransE\upcite{PTransE}、RSN\upcite{RSN}和Interstellar\upcite{Interstellar}模型均属于此类，其中PTransE是其中较早的方法。
 
-PTransE建立在TransE模型的基础上，并增加了考虑实体间多步关系路径的能力。PTransE的主要贡献在于它不仅仅考虑实体之间的直接关系，还考虑通过其他实体间接连接的路径，从而捕获更丰富的语义信息。
+PTransE\upcite{PTransE}建立在TransE\upcite{TransE}模型的基础上，并增加了考虑实体间多步关系路径的能力。PTransE的主要贡献在于它不仅仅考虑实体之间的直接关系，还考虑通过其他实体间接连接的路径，从而捕获更丰富的语义信息。
 
 在PTransE中，路径由一系列关系构成，定义为：
 \begin{equation}
   \mathbf{p} = \mathbf{r}_1\circ \cdots \circ \mathbf{r}_l
 \end{equation}
-其中$\circ$表示关系的串联。PTransE模型尝试学习路径$\mathbf{p}$的表示，可以通过多种方式实现，例如通过关系向量的相加、乘积或者利用循环神经网络来进行学习，目的是最小化以下距离函数：
+其中$\circ$表示关系的串联。PTransE\upcite{PTransE}模型尝试学习路径$\mathbf{p}$的表示，可以通过多种方式实现，例如通过关系向量的相加、乘积或者利用循环神经网络来进行学习，目的是最小化以下距离函数：
 \begin{equation}
   E(h,p,t)=\left\lVert \mathbf{p}-(\mathbf{t}-\mathbf{h})\right\rVert =\left\lVert \mathbf{p}-\mathbf{r}\right\rVert=E(p,r) 
 \end{equation}
 
-PTransE模型将直接关系和间接关系一同考虑，所以基于翻译的思想，以下距离函数也需要同时最小化：
+PTransE\upcite{PTransE}模型将直接关系和间接关系一同考虑，所以基于翻译的思想，以下距离函数也需要同时最小化：
 \begin{equation}
   E(h,r,t)=\left\lVert \mathbf{h}+\mathbf{r}-\mathbf{t}\right\rVert 
 \end{equation}
-最终，PTransE模型的损失函数为：
+最终，PTransE\upcite{PTransE}模型的损失函数为：
 \begin{equation}
   L(\mathbf{S})=\sum_{(h,r,t)\in \mathbf{S}}\left[L(h,r,t)+\frac{1}{Z}\sum_{p\in P(h,r)}R(p\vert h,t)L(p,r)\right] 
 \end{equation}
@@ -240,18 +240,18 @@ PTransE模型将直接关系和间接关系一同考虑，所以基于翻译的�
   L(p,r)=\sum_{(h,r^{'},t)\in \mathbf{S}^-}\left[\gamma +E(p,r)-E(p,r^{'})\right]_+
 \end{equation}
 
-通过结合直接关系和通过多步路径发现的间接关系，PTransE能够捕捉实体之间更为复杂的交互模式，从而提高知识图谱补全任务的性能。但是，PTransE没有考虑到路径中的实体信息，因此后面提出的基于路径的知识图谱补全方法对PTransE进行了改进。
+通过结合直接关系和通过多步路径发现的间接关系，PTransE\upcite{PTransE}能够捕捉实体之间更为复杂的交互模式，从而提高知识图谱补全任务的性能。但是，PTransE没有考虑到路径中的实体信息，因此后面提出的基于路径的知识图谱补全方法对PTransE进行了改进。
 \subsection{基于Transformer的知识图谱嵌入方法}
 
-基于Transformer的知识图谱嵌入方法的核心思路是利用Transformer强大的表达能力来挖掘图谱中的语义和结构信息，以学习知识图谱的嵌入表示。Transformer模型的自注意力机制能够有效地捕捉实体之间的复杂关系和交互。还可以通过在Transformer中集成额外信息进一步加强实体和关系的表示。代表方法有HittER\upcite{HittER}和Relphormer\upcite{Relphormer}。
+基于Transformer\upcite{Transformer}的知识图谱嵌入方法的核心思路是利用Transformer强大的表达能力来挖掘图谱中的语义和结构信息，以学习知识图谱的嵌入表示。Transformer模型的自注意力机制能够有效地捕捉实体之间的复杂关系和交互。还可以通过在Transformer中集成额外信息进一步加强实体和关系的表示。代表方法有HittER\upcite{HittER}和Relphormer\upcite{Relphormer}。
 
-Relphormer是一种为知识图谱嵌入任务而设计的基于Transformer的神经网络架构。为了解决知识图谱中实体与关系节点的异构性，Relphormer把实体和关系均视为相同的节点，有$ V=\mathcal{E} \cup \mathcal{R}$为节点集合，其中$\mathcal{E}$为实体集合，$\mathcal{R}$为关系集合，并用邻接矩阵$\mathbf{A} \in\left\{0,1\right\}^{\left\lvert V\right\rvert\times \left\lvert V\right\rvert} $来表示节点之间的连接关系，事实三元组表示为：$\mathcal{T} =(v_s,v_p,v_o)$，中心节点的局部邻域为：
+Relphormer\upcite{Relphormer}是一种为知识图谱嵌入任务而设计的基于Transformer的神经网络架构。为了解决知识图谱中实体与关系节点的异构性，Relphormer把实体和关系均视为相同的节点，有$ V=\mathcal{E} \cup \mathcal{R}$为节点集合，其中$\mathcal{E}$为实体集合，$\mathcal{R}$为关系集合，并用邻接矩阵$\mathbf{A} \in\left\{0,1\right\}^{\left\lvert V\right\rvert\times \left\lvert V\right\rvert} $来表示节点之间的连接关系，事实三元组表示为：$\mathcal{T} =(v_s,v_p,v_o)$，中心节点的局部邻域为：
 \begin{equation}
   \mathcal{T}_G = \mathcal{T}_c \cup \mathcal{T}_{context}, \ \mbox{where} \ \mathcal{T}_{context} =\left\{\mathcal{T}_i\in\mathcal{N} \right\} 
 \end{equation}
 由于Transformer是序列数据模型，Relphormer利用Triple2Seq算法对中心节点的局部邻域进行随机采样，抽取一部分邻接三元组并转化对应的为序列数据。
 
-由于知识图谱是图结构，为了防止局部邻域转化为序列数据后损失知识图谱的结构信息，Relphormer提出了一种结构强化的自注意力机制，当计算注意力分数时，额外添加一个偏差项：
+由于知识图谱是图结构，为了防止局部邻域转化为序列数据后损失知识图谱的结构信息，Relphormer\upcite{Relphormer}提出了一种结构强化的自注意力机制，当计算注意力分数时，额外添加一个偏差项：
 \begin{equation}
   a_{ij}=\frac{(\mathbf{h}_i\mathbf{W}_Q)(\mathbf{h}_j\mathbf{W}_K)}{\sqrt{d}}+\phi (i,j)
 \end{equation}
@@ -266,7 +266,7 @@ Relphormer是一种为知识图谱嵌入任务而设计的基于Transformer的�
 \end{equation}
 其中$\tau$为温度系数，$\boldsymbol{c}_t$为第$t$步采样到的样本的表示，$\mbox{sim}(\boldsymbol{c}_t,\boldsymbol{c}_{t-1})$为$\boldsymbol{c}_t$与$\boldsymbol{c}_{t-1}$之间的余弦相似度：$\frac{\boldsymbol{c}_t^T\boldsymbol{c}_{t-1}}{\left\lVert \boldsymbol{c}_{t}\right\rVert \cdot \left\lVert \boldsymbol{c}_{t-1}\right\rVert }$。
 
-受掩码语言模型例如BERT的启发，和之前的知识图谱嵌入方法不同，Relphormer采用了一种新的训练策略：随机掩盖输入序列中的特定节点，然后对其进行预测。具体来说，在训练过程中，随机遮掩中心三元组头实体或者尾实体，并利用剩余的节点序列$\mathcal{T}_M$和上下文邻接矩阵$\mathbf{A}_G$的情况下，预测缺失的部分$Y$:
+受掩码语言模型例如BERT\upcite{BERT}的启发，和之前的知识图谱嵌入方法不同，Relphormer\upcite{Relphormer}采用了一种新的训练策略：随机掩盖输入序列中的特定节点，然后对其进行预测。具体来说，在训练过程中，随机遮掩中心三元组头实体或者尾实体，并利用剩余的节点序列$\mathcal{T}_M$和上下文邻接矩阵$\mathbf{A}_G$的情况下，预测缺失的部分$Y$:
 \begin{equation}
   \begin{aligned}
     &\mathcal{T}_M = MASK(\mathcal{T}_G)\\
@@ -274,7 +274,7 @@ Relphormer是一种为知识图谱嵌入任务而设计的基于Transformer的�
   \end{aligned}
 \end{equation}
 
-最终，Relphormer模型的损失函数为：
+最终，Relphormer\upcite{Relphormer}模型的损失函数为：
 \begin{equation}
   \mathcal{L}_{all} = \mathcal{L}_{MKM}+\lambda \mathcal{L}_{contextual}
 \end{equation}
