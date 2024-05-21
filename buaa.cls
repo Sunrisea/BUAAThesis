@@ -838,7 +838,7 @@
     \zihao{-4} \songti
     \begin{tabular}{lrrrlrrr}
       作者姓名     &          \multicolumn{3}{l}{\@authorcn}                   & 申请学位级别        &   \multicolumn{3}{l}{
-        \@branch
+        % \@branch
         \ifthenelse{\equal{\@thesis}{master} \OR \equal{\@thesis}{professional}}{硕士}{
         \ifthenelse{\equal{\@thesis}{doctor} \OR \equal{\@thesis}{prodoctor}}{博士}{}}
       }       \\
