@@ -85,7 +85,7 @@
   $\mathcal{R}^{\prime}$   &   拓展后的关系集合      \\
   $\mathcal{T}^{-1}$   &   逆关系边集合      \\
   $\mathcal{T}^{\prime}$   &   拓展后的边集合      \\
-  $(s,r,?)$  &   待遇测的三元组      \\
+  $(s,r,?)$  &   待预测的三元组      \\
   $s$   &   头实体即中心实体      \\
   $o$   &   尾实体即目标实体      \\
   $e$   &   实体      \\
@@ -220,7 +220,7 @@
 
 完成关系特定的邻居实体信息构造之后，NATLP下一步的任务是利用Transformer模型来挖掘局部邻域蕴含的语义和结构信息，并编码成向量形式，提供给解码器进行解码。
 
-给定一个待遇测的事实三元组$(s,r,?)$，其中头实体即中心实体$s$有$n$个邻居实体，$e_i$、$r_i$为中心实体的邻居实体和对应的相连的关系，有$\forall  i\in\left[1,n\right] $，$(s,r_i,e_i) \in \mathcal{T}^\prime $，则在完成关系特定的邻居实体信息构造之后，邻域感知Transformer模块的输入可以表示为以下形式：
+给定一个待预测的事实三元组$(s,r,?)$，其中头实体即中心实体$s$有$n$个邻居实体，$e_i$、$r_i$为中心实体的邻居实体和对应的相连的关系，有$\forall  i\in\left[1,n\right] $，$(s,r_i,e_i) \in \mathcal{T}^\prime $，则在完成关系特定的邻居实体信息构造之后，邻域感知Transformer模块的输入可以表示为以下形式：
 \begin{gather}
   \mathbf{M}_{input}=\left[\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right] \\
   \varPhi \left(e,r\right) = f\left(vec\left(f\left(\phi_{chk}\left(\boldsymbol{e},\boldsymbol{r}\right) \circledast \omega_{r} \right)\right)\mathbf{W}_{r}\right)\\
@@ -271,7 +271,7 @@
 
 解码器的主要任务是根据邻域感知Transformer模块的输出来计算待预测三元组正确的概率，对链路预测任务的效果进行评估。在知识图谱补全任务中，一般采用传统的知识图谱嵌入方法作为解码器，它们结构简单，计算效率高，可解释性强。常见的解码器有基于翻译的方法如TransE\upcite{TransE}、基于张量分解的方法DistMult\upcite{DistMult}以及基于卷积神经网络的方法ConvE\upcite{ConvE}。在这之中性能最好，最常被使用的解码器是ConvE，因此NATLP也采用ConvE作为解码器。
 
-给定待遇测的事实三元组$(s,r,?)$和编码器的输出$\boldsymbol{T}_{cls}$，ConvE解码器先计算得到模型预测的候选实体的嵌入$\boldsymbol{o}_{t}$:
+给定待预测的事实三元组$(s,r,?)$和编码器的输出$\boldsymbol{T}_{cls}$，ConvE解码器先计算得到模型预测的候选实体的嵌入$\boldsymbol{o}_{t}$:
 \begin{equation}
   \boldsymbol{o}_{t}=f\left(vec\left(f\left(\left[\boldsymbol{T}_{cls};\boldsymbol{r}\right]\ast \omega\right)\right)\mathbf{W}\right)
 \end{equation}

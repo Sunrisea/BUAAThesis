@@ -16,13 +16,15 @@ NATLP模型将Transformer模型应用到了知识图谱补全任务中，对传�
   \label{information-noise}
 \end{figure}
 
-为了解决以上问题，本文尝试引入知识图谱图路径信息学习知识图谱中的长距离依赖，在NATLP模型的基础上，进一步提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种其他的表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同的三元组首尾相连所组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相比于局部邻域，图路径的形势天然适合学习远距离的关系，能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。在现有的知识图谱嵌入方法中，便有不少研究尝试通过图路径信息来学习图谱中的长距离依赖，例如RSN\cite{RSN}和Interstellar\cite{Interstellar}，但这些方法却忽略了中心实体丰富的局部邻域，在近距离依赖的学习上有着很大的不足。因此，本文尝试结合图路径和局部邻域两类图结构信息，使得模型能够在更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP模型类似的是，和图神经网络浅层的网络结构以及简单的信息聚合方式相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN模型以中心实体作为起点，首先采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer学习图路径中的语义信息并转化为向量表示，最后通过Neighbor-Transformer局部邻域编码模块将图谱中的长距离和短距离依赖进行结合。此外由于相比于近距离的信息，长距离信息反映的是实体之间间接的联系，学习更为困难，因此针对这个问题，本文在Path-Transformer图路径编码模块中设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
-
+为了解决以上问题，本文尝试引入知识图谱图路径信息学习知识图谱中的长距离依赖，在NATLP模型的基础上，进一步提出了一种基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法(A Transformer-based Knowledge Graph Embedding Model Combining Graph Paths and Local Neighborhood，TKGE-PN)。基于图神经网络的方法的成功证明了实体的局部邻域蕴含了丰富的信息，但知识图谱的结构信息除了图神经网络使用的局部邻域之外还有多种其他的表达形式，例如图路径以及子图。在知识图谱中，图路径被定义为图谱中的实体-关系链，由不同的三元组首尾相连所组成，例如(Yao Ming, Born In, Shanghai, City Of, China)。相比于局部邻域，图路径的形势天然适合学习远距离的关系，能够帮助模型更好地捕获实体和实体之间长距离的依赖，如图\ref{long-term-dependency}所示。
 \begin{figure}[htb]
-    \centerline{\includegraphics[width=0.5\textwidth]{pic/long-term-dependency.pdf}}
-    \caption{知识图谱中的短距离信息和长距离信息}
-    \label{long-term-dependency}
-  \end{figure}
+  \centerline{\includegraphics[width=0.5\textwidth]{pic/long-term-dependency.pdf}}
+  \caption{知识图谱中的短距离信息和长距离信息}
+  \label{long-term-dependency}
+\end{figure}
+
+
+因此在现有的知识图谱嵌入方法中，便有不少研究尝试通过图路径信息来学习图谱中的长距离依赖，例如RSN\upcite{RSN}和Interstellar\upcite{Interstellar}，但这些方法却忽略了中心实体丰富的局部邻域，在近距离依赖的学习上有着很大的不足。因此，本文尝试结合图路径和局部邻域两类图结构信息，使得模型能够在更好地学习长短距离依赖的同时避免过度平滑问题的出现。同样的，和NATLP模型类似的是，和图神经网络浅层的网络结构以及简单的信息聚合方式相比，Transformer的自注意力机制能够给模型带来更强大的表达能力。本文提出的TKGE-PN模型以中心实体作为起点，首先采用有偏随机游走算法对图路径进行采样，并通过基于Transformer的图路径编码模块Path-Transformer学习图路径中的语义信息并转化为向量表示，最后通过Neighbor-Transformer局部邻域编码模块将图谱中的长距离和短距离依赖进行结合。此外由于相比于近距离的信息，长距离信息反映的是实体之间间接的联系，学习更为困难，因此针对这个问题，本文在Path-Transformer图路径编码模块中设计了一个掩蔽实体关系预测任务，以确保模型能够充分学习图路径之间的长距离依赖。
 
 \section{TKGE-PN模型设计}
 
@@ -60,7 +62,7 @@ NATLP模型将Transformer模型应用到了知识图谱补全任务中，对传�
   $\mathcal{R}^{\prime}$   &   拓展后的关系集合      \\
   $\mathcal{T}^{-1}$   &   逆关系边集合      \\
   $\mathcal{T}^{\prime}$   &   拓展后的边集合      \\
-  $(s,r,?)$  &   待遇测的三元组      \\
+  $(s,r,?)$  &   待预测的三元组      \\
   $s$   &   头实体即中心实体      \\
   $o$   &   尾实体即目标实体      \\
   $e$   &   实体      \\
@@ -128,15 +130,17 @@ NATLP模型将Transformer模型应用到了知识图谱补全任务中，对传�
 
 本节主要对提出的基于Transformer的结合图路径和局部邻域的知识图谱嵌入方法TKGE-PN的总体结构进行介绍。模型整体架构如图\ref{TKGE-PN_architecture}所示。
 
-和NATLP不同的是，TKGE-PN模型并没有采用传统的编码器-解码器架构，而是利用Transformer自身的强大表达能力直接对目标实体的嵌入进行预测。相比于原先的方法，这样的架构最大的优点是模型可以充分发挥Transformer自注意力机制的强大表达能力，其性能不会被用作解码器的基于卷积神经网络的知识图谱嵌入方法所限制。
-
-TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有偏随机游走的图路径采样算法，主要职责是以中心实体为起点在图谱中采样多条图路径；随后第二部分Path-Transformer路径编码模块负责学习采样到的图路径中蕴含的长距离的语义信息并将其转换为向量表示；最后Neighbor-Transformer局部邻域编码模块接收来自Path-Transformer的输入，整合待预测事实三元组中的信息以及多条图路径所构成上下文邻域信息，实现图路径以及局部邻域结构信息的结合，并以此预测事实三元组的得分。
 
 \begin{figure}[htbp]
   \centerline{\includegraphics[width=0.9\textwidth]{pic/TKGE-PN.pdf}}
   \caption{TKGE-PN模型整体架构}
   \label{TKGE-PN_architecture}
 \end{figure}
+
+和NATLP不同的是，TKGE-PN模型并没有采用传统的编码器-解码器架构，而是利用Transformer自身的强大表达能力直接对目标实体的嵌入进行预测。相比于原先的方法，这样的架构最大的优点是模型可以充分发挥Transformer自注意力机制的强大表达能力，其性能不会被用作解码器的基于卷积神经网络的知识图谱嵌入方法所限制。
+
+TKGE-PN模型主要由三个核心部分组成。首先第一部分是基于有偏随机游走的图路径采样算法，主要职责是以中心实体为起点在图谱中采样多条图路径；随后第二部分Path-Transformer路径编码模块负责学习采样到的图路径中蕴含的长距离的语义信息并将其转换为向量表示；最后Neighbor-Transformer局部邻域编码模块接收来自Path-Transformer的输入，整合待预测事实三元组中的信息以及多条图路径所构成上下文邻域信息，实现图路径以及局部邻域结构信息的结合，并以此预测事实三元组的得分。
+
 
 \subsection{基于有偏随机游走的图路径采样算法}
 
@@ -402,35 +406,37 @@ Neighbor-Transformer局部邻域编码模块的输入主要包含以下几个部
 
 此外，对于图路径采样策略，论文还进一步探究了不同路径深度偏差$\alpha$下TKGE-PN模型的性能表现。深度偏差$\alpha$较小时路径采样偏向于围绕中心实体进行，深度偏差$\alpha$较大时则更注重于捕捉远距离的依赖。根据实验结果，论文发现当深度偏差$\alpha\in\left[0.6,0.8\right] $时模型的性能表现最好。本文认为当深度偏差控制在这个区间内时，模型能够比较好的兼顾长短距离的信息。
 
+而在训练和推理时间方面，由于模型复杂度较高，基于Transformer的知识图谱嵌入方法训练和推理所消耗的时间普遍高于传统的知识图谱嵌入方法以及基于图神经网络的嵌入方法。以TKGE-PN模型和基于神经网络的方法KBGAT模型为例，在采用相同的训练环境以及相同的批处理数量的情况下，在WN18RR数据集上TKGE-PN模型训练一个迭代所消耗的时间大约是KBGAT模型的2-3倍左右。
+
 \subsection{模型关键设计分析}
 
 为了验证TKGE-PN模型中局部邻域、图路径信息以及掩蔽实体关系预测任务对于知识图谱嵌入的作用，论文在两个数据集上分别以四种设置进行了消融实验，分别是未消融任何部分的TKGE-PN模型、去除了局部邻域编码模块、去除掩蔽实体关系预测任务以及同时去除图路径编码模块和掩蔽实体关系预测任务，实验结果如表\ref{ablation_tab}所示。
 
-\begin{table}[htbp]
-    \begin{center}
-        \caption{TKEG-PN消融实验结果}
-        \setlength{\tabcolsep}{10pt}
-        \renewcommand{\arraystretch}{1.5}
-        \begin{tabular}{*{7}{c}}
-            \toprule
-            数据集 & 模型 & MRR&MR&Hits@1&Hits@3&	Hits@10\\
-            \midrule
-            \multirow{4}{*}{WN18RR}&TKGE-PN&0.509&2610&0.467&0.525&0.588\\
-            &Path+MERP&0.487&2752&0.445&0.504&0.567\\
-            &Neighbor&0.497&2806&0.459&0.512&0.570\\
-            &Neigbor+Path&0.502&2636&0.461&0.521&0.579\\
-            \cmidrule{1-7}
-            \multirow{4}{*}{FB15k-237}&TKGE-PN&0.380&156&0.289&0.415&0.563\\
-            &Path+MERP&0.367&144&0.278&0.406&0.555\\
-            &Neighbor&0.373&175&0.279&0.410&0.559\\
-            &Neigbor+Path&0.376&169&0.282&0.413&0.562\\
-            \bottomrule
-        \end{tabular}
-        \label{ablation_tab}
-    \end{center}
-\end{table}
-
 具体来说，去除局部邻域编码模块是通过限制路径采样数量为1来实现，而去除图路径编码模块则是通过限制路径采样长度为1实现，此时路径信息内只包含中心实体的一阶邻居，即一阶局部邻域信息。可以看到，无论是去除局部邻域编码模块，还是去除图路径编码模块，模型的效果都会出现明显的降低。实验证明了知识图谱中的这两种结构信息都能够帮助进行链路预测，仅依赖路径信息，模型无法从局部邻域内的丰富的实体和关系中学习到中心实体的综合性质；仅依赖局部邻域，则无法挖掘到中心实体和其他实体之间的远距离依赖。相对来说，去除局部邻域编码模块带来的性能下降更加的严重，这证明了局部邻域信息的重要性，也符合一般的直觉：距离中心实体更近的实体和关系更能反映中心实体的性质，蕴含的信息也更加容易学习。此外，论文发现在脱离掩蔽实体关系预测任务的情况下添加图路径信息而并不能带来明显的性能提升，这说明了图路径上长距离信息学习的困难性以及掩蔽实体关系预测对提升模型长距离信息学习能力的作用。总体来看，TKGE-PN模型任一部分的缺失都会导致模型的最终结果受到负面影响。
+
+\begin{table}[htbp]
+  \begin{center}
+      \caption{TKEG-PN消融实验结果}
+      \setlength{\tabcolsep}{10pt}
+      \renewcommand{\arraystretch}{1.5}
+      \begin{tabular}{*{7}{c}}
+          \toprule
+          数据集 & 模型 & MRR&MR&Hits@1&Hits@3&	Hits@10\\
+          \midrule
+          \multirow{4}{*}{WN18RR}&TKGE-PN&0.509&2610&0.467&0.525&0.588\\
+          &Path+MERP&0.487&2752&0.445&0.504&0.567\\
+          &Neighbor&0.497&2806&0.459&0.512&0.570\\
+          &Neigbor+Path&0.502&2636&0.461&0.521&0.579\\
+          \cmidrule{1-7}
+          \multirow{4}{*}{FB15k-237}&TKGE-PN&0.380&156&0.289&0.415&0.563\\
+          &Path+MERP&0.367&144&0.278&0.406&0.555\\
+          &Neighbor&0.373&175&0.279&0.410&0.559\\
+          &Neigbor+Path&0.376&169&0.282&0.413&0.562\\
+          \bottomrule
+      \end{tabular}
+      \label{ablation_tab}
+  \end{center}
+\end{table}
 
 为了进一步验证图路径信息在挖掘知识图谱中长距离依赖的作用，以及长距离依赖信息对于链路预测任务的帮助，本文将WN18RR验证集中的事实三元组按照头实体和尾实体之间的最短距离进行了划分，并在划分后的验证集上评估了消融了路径编码模块的TKGE-PN模型以及原始TKGE-PN模型的链路预测任务性能，具体的实验结果如图\ref{tkge_experiment}所示。
 

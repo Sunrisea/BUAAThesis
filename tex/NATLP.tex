@@ -86,7 +86,7 @@
   $\mathcal{R}^{\prime}$   &   拓展后的关系集合      \\
   $\mathcal{T}^{-1}$   &   逆关系边集合      \\
   $\mathcal{T}^{\prime}$   &   拓展后的边集合      \\
-  $(s,r,?)$  &   待遇测的三元组      \\
+  $(s,r,?)$  &   待预测的三元组      \\
   $s$   &   头实体即中心实体      \\
   $o$   &   尾实体即目标实体      \\
   $e$   &   实体      \\
@@ -221,7 +221,7 @@
 
 完成关系特定的邻居实体信息构造之后，NATLP下一步的任务是利用Transformer模型来挖掘局部邻域蕴含的语义和结构信息，并编码成向量形式，提供给解码器进行解码。
 
-给定一个待遇测的事实三元组$(s,r,?)$，其中头实体即中心实体$s$有$n$个邻居实体，$e_i$、$r_i$为中心实体的邻居实体和对应的相连的关系，有$\forall  i\in\left[1,n\right] $，$(s,r_i,e_i) \in \mathcal{T}^\prime $，则在完成关系特定的邻居实体信息构造之后，邻域感知Transformer模块的输入可以表示为以下形式：
+给定一个待预测的事实三元组$(s,r,?)$，其中头实体即中心实体$s$有$n$个邻居实体，$e_i$、$r_i$为中心实体的邻居实体和对应的相连的关系，有$\forall  i\in\left[1,n\right] $，$(s,r_i,e_i) \in \mathcal{T}^\prime $，则在完成关系特定的邻居实体信息构造之后，邻域感知Transformer模块的输入可以表示为以下形式：
 \begin{equation}
       \mathbf{M}_{input}=\left[\boldsymbol{s},\boldsymbol{m}_{e_1,r_1},\boldsymbol{m}_{e_2,r_2},...,\boldsymbol{m}_{e_n,r_n}\right]
 \end{equation}
@@ -281,7 +281,7 @@
 
 解码器的主要任务是根据邻域感知Transformer模块的输出来计算待预测三元组正确的概率，对链路预测任务的效果进行评估。在知识图谱补全任务中，一般采用传统的知识图谱嵌入方法作为解码器，它们结构简单，计算效率高，可解释性强。常见的解码器有基于翻译的方法如TransE\upcite{TransE}、基于张量分解的方法DistMult\upcite{DistMult}以及基于卷积神经网络的方法ConvE\upcite{ConvE}。在这之中性能最好，最常被使用的解码器是ConvE，因此NATLP也采用ConvE作为解码器。
 
-给定待遇测的事实三元组$(s,r,?)$和编码器的输出$\boldsymbol{T}_{cls}$，ConvE解码器先计算得到模型预测的候选实体的嵌入$\boldsymbol{o}_{t}$:
+给定待预测的事实三元组$(s,r,?)$和编码器的输出$\boldsymbol{T}_{cls}$，ConvE解码器先计算得到模型预测的候选实体的嵌入$\boldsymbol{o}_{t}$:
 \begin{equation}
   \boldsymbol{o}_{t}=f\left(vec\left(f\left(\left[\boldsymbol{T}_{cls};\boldsymbol{r}\right]\ast \omega\right)\right)\mathbf{W}\right)
 \end{equation}
@@ -519,30 +519,32 @@ NATLP模型在实验中采用的超参数是通过网格搜索在验证集上进
 
 在模型训练和预测过程所涉及到的众多超参数中，实体和关系的嵌入维度在一定程度上反映了TKGE-PN模型自身对实体和关系的建模能力。为了探究实体和关系嵌入维度对模型知识图谱补全任务性能的影响，本文在FB15k-237和WN18RR数据集的验证集上进行了实验，实体关系嵌入维度分别取$d \in \left[100,200,300,400,500\right] $，具体的实验结果如表\ref{dimension}所示。
 
-\begin{table}[htbp]
-    \begin{center}
-        \caption{实体和关系嵌入维度对于NATLP模型性能的影响}
-        %\setlength{\tabcolsep}{12pt}
-        \renewcommand{\arraystretch}{1.5}
-        \begin{tabular}{*{5}{c}}
-            \toprule
-            嵌入维度& \multicolumn{2}{c}{WN18RR} & \multicolumn{2}{c}{FB15k-237}\\
-            \cmidrule(lr){2-3}\cmidrule(lr){4-5}
-            $d$&MRR&Hits@10&MRR&Hits@10\\
-            \midrule
-            100	&0.502&0.577&0.371&0.555\\
-            200	&\textbf{0.504}&0.576&\textbf{0.375}&0.559\\
-            300	&\textbf{0.504}&\textbf{0.578}&0.374&\textbf{0.560}\\
-            400	&0.502&0.574&0.372&0.553\\
-            500	&0.503&0.572&0.373&0.554\\
-            \bottomrule
-        \end{tabular}
-        \label{dimension}
-    \end{center}
-\end{table}
 
 
 从实验结果中可以观察到，总体而言，实体和关系嵌入的维度大小虽然会影响模型性能，但是造成的性能变化并不限制，平均倒数排名MRR指标的变化范围主要集中在千分位上，说明NATLP模型对嵌入维度变化并不敏感，证明了模型的鲁棒性。另一方面，可以注意到，随着实体和关系嵌入维度的上升，模型性能会出现先上升后下降的趋势。这是由于当嵌入维度较小时，虽然并不明显，模型的表达能力会受到一定的限制，而当嵌入维度增加到一定程度后，模型整体的参数量和计算复杂度上升，性能出现下降。
+
+
+\begin{table}[htbp]
+  \begin{center}
+      \caption{实体和关系嵌入维度对于NATLP模型性能的影响}
+      %\setlength{\tabcolsep}{12pt}
+      \renewcommand{\arraystretch}{1.5}
+      \begin{tabular}{*{5}{c}}
+          \toprule
+          嵌入维度& \multicolumn{2}{c}{WN18RR} & \multicolumn{2}{c}{FB15k-237}\\
+          \cmidrule(lr){2-3}\cmidrule(lr){4-5}
+          $d$&MRR&Hits@10&MRR&Hits@10\\
+          \midrule
+          100	&0.502&0.577&0.371&0.555\\
+          200	&\textbf{0.504}&0.576&\textbf{0.375}&0.559\\
+          300	&\textbf{0.504}&\textbf{0.578}&0.374&\textbf{0.560}\\
+          400	&0.502&0.574&0.372&0.553\\
+          500	&0.503&0.572&0.373&0.554\\
+          \bottomrule
+      \end{tabular}
+      \label{dimension}
+  \end{center}
+\end{table}
 
 
 \section{本章小结}
